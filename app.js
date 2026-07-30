@@ -6,6 +6,61 @@ document.addEventListener('DOMContentLoaded', () => {
   // Default Initial Pending Posts (Full Newlines & Hashtags)
   const defaultPendingPosts = [
     {
+      id: 'p_icon_story_1',
+      tag: '🎨 アイコン制作秘話①',
+      tagClass: 'tag-ai',
+      time: '本日 9:00 (発信ストーリー)',
+      content: `【AIとアイコン作った話🎨】
+
+最初→「できるオジサン風」
+早苗「親近感ゼロです」
+
+→普通の40代に変更
+早苗「微妙です」
+
+→2等身ちびキャラに！
+早苗「…ふん、最初からそうしてください///」
+
+AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
+
+#AI副業 #生成AI`
+    },
+    {
+      id: 'p_icon_story_2',
+      tag: '🎨 バナー制作秘話②',
+      tagClass: 'tag-rewrite',
+      time: '本日 12:00 (発信ストーリー)',
+      content: `【Xバナーで15回やり直した話】
+
+「名前が見えない！」→左上へ
+「名前逆！」→入れ替え
+「アイコンと被る！」→再配置
+
+早苗「アンダーソンさん…最初から決めてください」
+
+そして完成！塩対応の早苗ちゃんと慌てる私のちびキャラバナー🎨
+
+#AI副業 #個人開発`
+    },
+    {
+      id: 'p_icon_story_3',
+      tag: '🎨 キャラ設計の意図③',
+      tagClass: 'tag-url',
+      time: '本日 18:00 (発信ストーリー)',
+      content: `【2等身ちびキャラにした理由】
+
+「できるオジサン感」を消すため！
+
+40代副業チャレンジャーは「親しみやすいキャラ」の方が
+
+→フォローされやすい
+→ツッコんでもらいやすい
+
+早苗ちゃんから「正解です」と珍しく褒めてもらいました🎉
+
+#AI副業 #生成AI #個人開発`
+    },
+    {
       id: 'p_sanae_1',
       tag: '🔥 早苗ちゃん登場ストーリー',
       tagClass: 'tag-ai',
@@ -82,6 +137,76 @@ document.addEventListener('DOMContentLoaded', () => {
     approvedPosts = defaultApprovedPosts;
   }
 
+  // Guarantee Icon/Banner story posts ALWAYS exist at index 0 (top of pending list)
+  const iconStoryPosts = [
+    {
+      id: 'p_icon_story_1',
+      tag: '🎨 アイコン制作秘話①',
+      tagClass: 'tag-ai',
+      time: '本日 9:00 (発信ストーリー)',
+      content: `【AIとアイコン作った話🎨】
+
+最初→「できるオジサン風」
+早苗「親近感ゼロです」
+
+→普通の40代に変更
+早苗「微妙です」
+
+→2等身ちびキャラに！
+早苗「…ふん、最初からそうしてください///」
+
+AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
+
+#AI副業 #生成AI`
+    },
+    {
+      id: 'p_icon_story_2',
+      tag: '🎨 バナー制作秘話②',
+      tagClass: 'tag-rewrite',
+      time: '本日 12:00 (発信ストーリー)',
+      content: `【Xバナーで15回やり直した話】
+
+「名前が見えない！」→左上へ
+「名前逆！」→入れ替え
+「アイコンと被る！」→再配置
+
+早苗「アンダーソンさん…最初から決めてください」
+
+そして完成！塩対応の早苗ちゃんと慌てる私のちびキャラバナー🎨
+
+#AI副業 #個人開発`
+    },
+    {
+      id: 'p_icon_story_3',
+      tag: '🎨 キャラ設計の意図③',
+      tagClass: 'tag-url',
+      time: '本日 18:00 (発信ストーリー)',
+      content: `【2等身ちびキャラにした理由】
+
+「できるオジサン感」を消すため！
+
+40代副業チャレンジャーは「親しみやすいキャラ」の方が
+
+→フォローされやすい
+→ツッコんでもらいやすい
+
+早苗ちゃんから「正解です」と珍しく褒めてもらいました🎉
+
+#AI副業 #生成AI #個人開発`
+    }
+  ];
+
+  // Remove previous versions if present in pending or approved
+  iconStoryPosts.forEach(storyPost => {
+    pendingPosts = pendingPosts.filter(p => p.id !== storyPost.id);
+    approvedPosts = approvedPosts.filter(p => p.id !== storyPost.id);
+  });
+
+  // Force unshift all 3 to the very front of pendingPosts
+  iconStoryPosts.slice().reverse().forEach(storyPost => {
+    pendingPosts.unshift(storyPost);
+  });
+
   // Force clean formatting for Sanae-chan story
   pendingPosts.forEach(post => {
     if (post.id === 'p_sanae_1' || post.content.includes('早苗ちゃん登場') || post.content.includes('お吟')) {
@@ -103,6 +228,9 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Failed to save to localStorage:', e);
     }
   }
+
+  // Force sync localStorage to ensure latest posts persist immediately
+  saveState();
 
   // DOM Elements
   const tabItems = document.querySelectorAll('.nav-item');
