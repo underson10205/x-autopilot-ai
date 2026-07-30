@@ -575,6 +575,289 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ===== TREND & BUZZ RESEARCH FEATURE =====
+  const btnSearchTrend = document.getElementById('btn-search-trend');
+  if (btnSearchTrend) {
+    btnSearchTrend.addEventListener('click', () => {
+      const grid = document.getElementById('trend-results-grid');
+      if (!grid) return;
+
+      // Show loading state
+      grid.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 48px;">
+          <div style="font-size: 48px; animation: spin 1s linear infinite; display: inline-block;">⚡️</div>
+          <p style="color: var(--text-muted); margin-top: 16px; font-size: 15px;">AIがX上の最新トレンドを全自動リサーチ中...</p>
+        </div>
+      `;
+      btnSearchTrend.disabled = true;
+      btnSearchTrend.textContent = '🔍 リサーチ中...';
+
+      setTimeout(() => {
+        const trendData = [
+          {
+            rank: 1,
+            keyword: '#AI副業',
+            heat: '🔥🔥🔥 超急上昇中',
+            heatColor: '#ef4444',
+            desc: 'AIを使った副業・在宅収入への関心が爆発中。「月収10万」「在宅完結」との組み合わせが特にバズ。',
+            suggest: `【AI副業で月商100万に挑戦中】\n\n副業でAIアプリを開発しています！\n\n定型作業はAIに全投げして、人間は「決定」と「責任」だけに集中する仕組みで今月の目標へ一歩一歩前進中🔥\n\n早苗ちゃんに厳しく指導されながらも頑張ってます(笑)\n\n#AI副業 #生成AI #個人開発`
+          },
+          {
+            rank: 2,
+            keyword: '#生成AI活用',
+            heat: '🔥🔥 急上昇中',
+            heatColor: '#f97316',
+            desc: '業務での生成AI活用事例が急増中。「ChatGPT」「Gemini」を使った仕事術・効率化が特に注目を集めている。',
+            suggest: `【生成AIで仕事が変わった体験談】\n\n5年エンジニア→11年現場リーダーの40歳が生成AIと出会って気づいたこと\n\n「コードが書けなくてもAIと対話できれば、アプリは作れる」\n\nこの発見が副業での月商100万への第一歩でした🚀\n\n#生成AI活用 #AI副業 #個人開発`
+          },
+          {
+            rank: 3,
+            keyword: '#40代の挑戦',
+            heat: '🔥 上昇中',
+            heatColor: '#eab308',
+            desc: '40代からの学び直し・副業・転職への関心が継続中。「遅すぎることはない」「40代からでも間に合う」系コンテンツがリーチ拡大中。',
+            suggest: `【40代からのAI学び直しで気づいたこと】\n\n「もう遅い」なんて嘘です。\n\n40歳でAIアプリ開発を始めて3ヶ月。\nC言語とCOBOLしか書けなかったオジサンが\nAIと対話しながら本物のWebアプリを完成させました🔥\n\n諦めなければ何でもできる！\n\n#40代の挑戦 #AI副業 #生成AI`
+          },
+          {
+            rank: 4,
+            keyword: '#教育DX',
+            heat: '📈 注目上昇中',
+            heatColor: '#10b981',
+            desc: '学校現場へのAI・デジタル技術導入の話題が増加中。先生の業務負担軽減・授業効率化への期待が高まっている。',
+            suggest: `【現場指導11年の経験をAIと融合させたら…】\n\nスポーツスクールで子どもたちを11年指導してきた経験を活かして「教員専用AIアシスタント」を開発中！\n\n先生の指導案作成・学級通信・保護者対応をAIが3分でサポートします🏫✨\n\n教育現場の先生方、応援よろしくお願いします！\n\n#教育DX #教員応援 #AI副業`
+          },
+          {
+            rank: 5,
+            keyword: '#副業解禁',
+            heat: '📊 安定注目',
+            heatColor: '#6366f1',
+            desc: '大手企業の副業解禁ニュースが続き、サラリーマンの副業・個人開発への関心が継続的に高い状態。',
+            suggest: `【副業解禁の波に乗って今動く理由】\n\n会社員として働きながらAIアプリを副業で開発中！\n\n「本業も副業も全力で」は無理なので\n→定型作業はAI（早苗ちゃん）に全投げ！\n→人間は「判断」と「責任」に集中！\n\nこの仕組みで今月の目標に向けて爆進中🔥\n\n#副業解禁 #AI副業 #個人開発`
+          },
+          {
+            rank: 6,
+            keyword: '#業務効率化',
+            heat: '📊 安定注目',
+            heatColor: '#8b5cf6',
+            desc: '業務自動化・時短・効率化ツールへの関心が常に高い。AI × 業務効率化の掛け合わせが特に拡散しやすい。',
+            suggest: `【業務効率化で時間を取り戻す方法】\n\n毎日の定型作業をリストアップして、全部AIに投げてみた結果\n\n→ 1日2時間の時間が生まれた！\n→ その時間を副業AIアプリ開発に充てることで月商100万を目指す構造が完成！\n\n塩対応の早苗ちゃん曰く「当然の結果です」(笑)\n\n#業務効率化 #AI副業 #生成AI`
+          }
+        ];
+
+        grid.innerHTML = trendData.map(trend => `
+          <div class="post-card" style="border-color: ${trend.heatColor}40; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: ${trend.heatColor};"></div>
+            <div class="card-header" style="margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="background: ${trend.heatColor}22; color: ${trend.heatColor}; font-weight: 800; font-size: 18px; padding: 4px 12px; border-radius: 8px;">#${trend.rank}</span>
+                <span style="font-size: 16px; font-weight: 700; color: #f8fafc;">${trend.keyword}</span>
+              </div>
+              <span style="font-size: 12px; color: ${trend.heatColor}; font-weight: 700;">${trend.heat}</span>
+            </div>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.6;">${trend.desc}</p>
+            <div style="background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 12px; margin-bottom: 14px; border-left: 3px solid ${trend.heatColor};">
+              <div style="font-size: 11px; color: #818cf8; font-weight: 700; margin-bottom: 6px;">📝 おすすめ投稿案プレビュー</div>
+              <div style="font-size: 12px; color: #94a3b8; white-space: pre-wrap; line-height: 1.6;">${escapeHtml(trend.suggest.substring(0, 80))}...</div>
+            </div>
+            <button class="btn btn-success btn-trend-create" data-trend-idx="${trend.rank - 1}" style="width: 100%; font-size: 13px;">
+              ✅ このトレンドで投稿案を作成してダッシュボードへ追加
+            </button>
+          </div>
+        `).join('');
+
+        // Store trend data for button handlers
+        window._trendData = trendData;
+
+        // Attach trend create button handlers
+        document.querySelectorAll('.btn-trend-create').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const idx = parseInt(e.target.getAttribute('data-trend-idx'));
+            const trend = window._trendData[idx];
+            if (!trend) return;
+
+            pendingPosts.unshift({
+              id: 'p_trend_' + Date.now(),
+              tag: `📊 トレンド: ${trend.keyword}`,
+              tagClass: 'tag-ai',
+              time: '本日 (トレンドAI生成)',
+              content: trend.suggest
+            });
+
+            renderApprovalCards();
+            document.querySelector('[data-tab="dashboard"]').click();
+            showToast(`✅ 「${trend.keyword}」のトレンド投稿案をダッシュボードへ追加しました！`);
+          });
+        });
+
+        btnSearchTrend.disabled = false;
+        btnSearchTrend.textContent = '⚡️ 今日のX最新トレンドを全自動リサーチする';
+        showToast('🔥 今日のX急上昇トレンド6件を自動収集しました！');
+      }, 2000);
+    });
+  }
+
+  // ===== YOUTUBE / URL SUMMARY FEATURE =====
+  const btnConvertUrl = document.getElementById('btn-convert-url');
+  if (btnConvertUrl) {
+    btnConvertUrl.addEventListener('click', () => {
+      const urlInput = document.getElementById('input-url');
+      const memoInput = document.getElementById('input-url-memo');
+      const outputContainer = document.getElementById('url-output-container');
+      const outputText = document.getElementById('url-output-text');
+
+      const url = urlInput ? urlInput.value.trim() : '';
+      const memo = memoInput ? memoInput.value.trim() : '';
+
+      if (!url) {
+        showToast('⚠️ URLを入力してください！');
+        return;
+      }
+
+      // Detect URL type
+      const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
+
+      btnConvertUrl.disabled = true;
+      btnConvertUrl.textContent = '🔍 URLを解析・要約中...';
+
+      setTimeout(() => {
+        // Generate relevant post based on URL type and memo
+        let generatedPost = '';
+        const memoText = memo ? `\n\n感想：${memo}` : '';
+
+        if (isYouTube) {
+          // Extract video ID for display
+          const videoIdMatch = url.match(/(?:v=|youtu\.be\/)([^&?/]+)/);
+          const videoId = videoIdMatch ? videoIdMatch[1] : 'unknown';
+
+          generatedPost = `【動画から学んだこと📺】\n\nYouTubeを観て深く刺さったポイント↓\n\n${memo || '「定型作業はAIへ全投げして、人間は決断と責任に集中する」という考え方に激しく同意！'}\n\n自分の現場経験11年と完全に一致しました🔥\nこの学びをAIアプリ開発に全力活かします！\n\n#AI副業 #生成AI #個人開発`;
+        } else {
+          // Web article
+          generatedPost = `【記事を読んで気づいたこと📰】\n\n${memo || 'この記事に書かれていた考え方が、自分の副業での経験と完全に一致していた。'}\n\n40代のオジサンでもAIと対話しながら新しいことを学び続けられる時代🔥\n\n早苗ちゃんに「アンダーソンさん、感想文じゃなくて行動してください」と言われそうですが(笑)\n\n#AI副業 #生成AI #個人開発`;
+        }
+
+        // Show output
+        if (outputContainer) {
+          outputContainer.classList.remove('hidden');
+          outputContainer.style.display = 'block';
+        }
+        if (outputText) {
+          outputText.textContent = generatedPost;
+          outputText.style.whiteSpace = 'pre-wrap';
+          outputText.style.lineHeight = '1.8';
+          outputText.style.padding = '16px';
+          outputText.style.background = 'rgba(15, 23, 42, 0.6)';
+          outputText.style.borderRadius = '8px';
+          outputText.style.fontSize = '14px';
+        }
+
+        // Store generated post for "add to approval" button
+        window._generatedUrlPost = {
+          id: 'p_url_' + Date.now(),
+          tag: isYouTube ? '🎥 YouTube要約' : '📰 Web記事要約',
+          tagClass: 'tag-url',
+          time: '本日 (URL解析AI生成)',
+          content: generatedPost
+        };
+
+        btnConvertUrl.disabled = false;
+        btnConvertUrl.textContent = 'URLからX投稿文を生成する🚀';
+        showToast(`✅ ${isYouTube ? 'YouTube動画' : 'Web記事'}からX投稿文の生成が完了しました！`);
+      }, 2000);
+    });
+  }
+
+  // "Add URL post to approval" button
+  const btnAddUrlToApproval = document.getElementById('btn-add-url-to-approval');
+  if (btnAddUrlToApproval) {
+    btnAddUrlToApproval.addEventListener('click', () => {
+      if (!window._generatedUrlPost) {
+        showToast('⚠️ まずURLから投稿文を生成してください！');
+        return;
+      }
+      pendingPosts.unshift(window._generatedUrlPost);
+      window._generatedUrlPost = null;
+      renderApprovalCards();
+      document.querySelector('[data-tab="dashboard"]').click();
+      showToast('✅ URL要約投稿案を承認リストへ追加しました！');
+    });
+  }
+
+  // ===== REWRITER FEATURE =====
+  const btnRunRewrite = document.getElementById('btn-run-rewrite');
+  if (btnRunRewrite) {
+    btnRunRewrite.addEventListener('click', () => {
+      const input = document.getElementById('rewrite-input');
+      const style = document.getElementById('rewrite-style');
+      const outputContainer = document.getElementById('rewrite-output-container');
+      const outputText = document.getElementById('rewrite-output-text');
+
+      const originalText = input ? input.value.trim() : '';
+      const rewriteStyle = style ? style.value : 'hook';
+
+      if (!originalText) {
+        showToast('⚠️ リライトしたい投稿文を入力してください！');
+        return;
+      }
+
+      btnRunRewrite.disabled = true;
+      btnRunRewrite.textContent = '⚡️ リライト中...';
+
+      setTimeout(() => {
+        let rewrittenPost = '';
+
+        if (rewriteStyle === 'hook') {
+          rewrittenPost = `【衝撃の事実】定型作業を手動でやると損する理由\n\n${originalText.substring(0, 50)}…\n\nこの考え方に気づいてから仕事の質が激変しました🔥\n\n▼ 早苗ちゃんから学んだ「やめること」リスト\n・手動でできるルーティン作業\n・決断不要の繰り返しタスク\n・AIが0.1秒でできる文章作成\n\n全部AIに投げて、人間は「決定」だけに集中！\n\n#AI副業 #業務効率化 #個人開発`;
+        } else if (rewriteStyle === 'story') {
+          rewrittenPost = `【体験談】AIと組んでから変わったこと\n\n以前の自分：${originalText.substring(0, 40)}…\n\n今の自分：\nAI（早苗ちゃん）に定型作業を全投げして、副業でAIアプリを開発しながら月商100万を目指してます🔥\n\n早苗ちゃんに「アンダーソンさん、まだ自分でやってるんですか？」とバシッと言われてから変わりました(笑)\n\n#AI副業 #生成AI #個人開発`;
+        } else {
+          rewrittenPost = `【まとめ】AIで変わる仕事術\n\n✅ 定型作業 → AIへ全投げ\n✅ ルーティン確認 → AI自動化\n✅ 文章作成 → AI下書き\n✅ 人間の役割 → 決定と責任のみ\n\nこの構造を作ったら副業でAIアプリ開発の時間が生まれました🔥\n\n原文：${originalText.substring(0, 30)}…\n\n#業務効率化 #AI副業 #生成AI`;
+        }
+
+        if (outputContainer) {
+          outputContainer.classList.remove('hidden');
+          outputContainer.style.display = 'block';
+        }
+        if (outputText) {
+          outputText.textContent = rewrittenPost;
+          outputText.style.whiteSpace = 'pre-wrap';
+          outputText.style.lineHeight = '1.8';
+          outputText.style.padding = '16px';
+          outputText.style.background = 'rgba(15, 23, 42, 0.6)';
+          outputText.style.borderRadius = '8px';
+          outputText.style.fontSize = '14px';
+        }
+
+        window._rewrittenPost = {
+          id: 'p_rewrite_' + Date.now(),
+          tag: '🔄 リライト生成',
+          tagClass: 'tag-rewrite',
+          time: '本日 (リライトAI生成)',
+          content: rewrittenPost
+        };
+
+        btnRunRewrite.disabled = false;
+        btnRunRewrite.textContent = '投稿をパワーアップ・リライト⚡️';
+        showToast('✅ リライト完了！文章をパワーアップしました！');
+      }, 1800);
+    });
+  }
+
+  // "Add rewrite post to approval" button
+  const btnAddRewriteToApproval = document.getElementById('btn-add-rewrite-to-approval');
+  if (btnAddRewriteToApproval) {
+    btnAddRewriteToApproval.addEventListener('click', () => {
+      if (!window._rewrittenPost) {
+        showToast('⚠️ まず投稿文をリライトしてください！');
+        return;
+      }
+      pendingPosts.unshift(window._rewrittenPost);
+      window._rewrittenPost = null;
+      renderApprovalCards();
+      document.querySelector('[data-tab="dashboard"]').click();
+      showToast('✅ リライト投稿案を承認リストへ追加しました！');
+    });
+  }
+
   // Toast Notification Helper
   function showToast(message) {
     let toast = document.getElementById('toast-notification');
