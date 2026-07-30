@@ -1,5 +1,5 @@
 /* ==========================================================================
-   X-AutoPilot AI Logic & Real X API 4-Keys Dispatch Integration
+   X-AutoPilot AI Logic & Real X API 4-Keys Dispatch Integration (Re-Dispatch Support)
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -232,11 +232,12 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="tag" style="background-color: rgba(16, 185, 129, 0.2); color: #34d399;">⏰ 送信予約中</span>
           `;
 
-          const postActionBtn = !post.posted ? `
-            <button class="btn btn-primary btn-dispatch-x" data-id="${post.id}" style="margin-bottom: 8px; width: 100%; background: linear-gradient(135deg, #1d9bf0, #0284c7);">
-              🚀 今すぐX（@us4Wy71DM6xpjtS）へ本物投稿送信
+          // Always allow sending or re-sending to X!
+          const postActionBtn = `
+            <button class="btn btn-primary btn-dispatch-x" data-id="${post.id}" style="margin-bottom: 8px; width: 100%; background: ${post.posted ? 'linear-gradient(135deg, #059669, #10b981)' : 'linear-gradient(135deg, #1d9bf0, #0284c7)'};">
+              ${post.posted ? '🔄 Xへもう一度テスト再投稿する' : '🚀 今すぐX（@us4Wy71DM6xpjtS）へ本物投稿送信'}
             </button>
-          ` : '';
+          `;
 
           return `
             <div class="post-card" id="approved-card-${post.id}" style="border-color: ${post.posted ? 'rgba(59, 130, 246, 0.4)' : 'rgba(16, 185, 129, 0.4)'};">
@@ -250,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ${mediaGenBtnHtml}
               ${postActionBtn}
               <div class="card-actions">
-                <button class="btn btn-secondary btn-unapprove" data-id="${post.id}">↩️ 未承認に戻す</button>
+                <button class="btn btn-secondary btn-unapprove" data-id="${post.id}">↩️ 未承認に戻す（未送信にリセット）</button>
                 <button class="btn btn-danger btn-delete-approved" data-id="${post.id}">🗑️ 予約取り消し（削除）</button>
               </div>
             </div>
@@ -541,10 +542,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function unapprovePost(id) {
     const post = approvedPosts.find(p => p.id === id);
     if (post) {
+      post.posted = false; // Reset posted status on unapprove!
       approvedPosts = approvedPosts.filter(p => p.id !== id);
       pendingPosts.unshift(post);
       renderApprovalCards();
-      showToast('↩️ 投稿を未承認リストに戻しました。');
+      showToast('↩️ 投稿を未承認リストに戻し、送信ステータスをリセットしました！');
     }
   }
 
