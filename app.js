@@ -81,12 +81,28 @@ document.addEventListener('DOMContentLoaded', () => {
     approvedPosts = defaultApprovedPosts;
   }
 
-  // Force trim all pending posts content if they exceed 135 chars
-  pendingPosts.forEach(post => {
-    if (post.id === 'p_sanae_1') {
-      post.content = `【AIに相棒の名前を聞いた結果…】\n\n副業でAIアプリ開発を始めて秘書名案を頼んだら…\n\n1. お吟\n2. お千代\n3. 早苗\n\n超和風ネームの連続(笑)\n今日から相棒は「厳しく塩対応の早苗ちゃん」に決定！🔥\n\nアンダーソン×早苗ちゃんで月商100万挑みます！\n#AI副業 #生成AI`;
+  // Force optimize any existing long posts saved in localStorage
+  const optimizeText = (text) => {
+    if (text.includes('早苗ちゃん登場')) {
+      return `【AIに相棒の名前を聞いた結果…】\n\n副業でAIアプリ開発を始めて秘書名案を頼んだら…\n\n1. お吟\n2. お千代\n3. 早苗\n\n超和風ネームの連続(笑)\n今日から相棒は「厳しく塩対応の早苗ちゃん」に決定！🔥\n\nアンダーソン×早苗ちゃんで月商100万挑みます！\n#AI副業 #生成AI`;
     }
-  });
+    if (text.length > 135) {
+      const lines = text.split('\n');
+      let result = '';
+      for (let line of lines) {
+        if ((result + '\n' + line).length <= 135) {
+          result += (result ? '\n' : '') + line;
+        } else {
+          break;
+        }
+      }
+      return result || text.substring(0, 130) + '...';
+    }
+    return text;
+  };
+
+  pendingPosts.forEach(post => { post.content = optimizeText(post.content); });
+  approvedPosts.forEach(post => { post.content = optimizeText(post.content); });
 
   function saveState() {
     try {
@@ -525,7 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tag: '一括自動生成',
         tagClass: 'tag-ai',
         time: '3日後 19:00 (自動投稿予定)',
-        content: `【定型作業はすべてAIへ】\n指示待ちではなく仕組みで動かすのが現代のリーダーシップ！\n\n作業はAI（早苗ちゃん）に全投げし、人間は「決定」と「責任」にコミットしよう🔥\n\n#AI副業 #業務効率化 #生産性向上`
+        content: `【定型作業はすべてAIへ】\n指示待ちではなく仕組みで動かすのが現代のリーダーシップ！\n\n作業はAI（早苗ちゃん）に全投げし、人間は「決定」と「責任」にコミットしよう🔥\n\n#AI副業 #業務効率化`
       };
       pendingPosts.unshift(newPost);
       renderApprovalCards();
