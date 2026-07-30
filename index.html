@@ -58,7 +58,10 @@
         <h1 id="page-title">承認待ち投稿ダッシュボード</h1>
         <p class="subtitle">AIが自動生成した投稿案を「承認」して一括配信設定</p>
       </div>
-      <div class="header-actions">
+      <div class="header-actions" style="display: flex; gap: 12px; align-items: center;">
+        <span id="sync-status-badge" class="badge-sync" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+          <span>☁️ PC・スマホ同期中</span>
+        </span>
         <button id="btn-quick-generate" class="btn btn-primary">
           <span>✨ 今週の投稿を一括自動生成</span>
         </button>
@@ -239,9 +242,34 @@
           <textarea rows="4" id="setting-persona">アンダーソン（40歳）。サービス系企業で業務効率化＆現場リーダー2年(現場対応11年)｜元SE5年。「定型業務はAIに任せ、人間は意思決定と責任に集中する」を軸に、月商100万のAIプロダクトを構築中。冗談を言ったりボケたりするのが好きな愛されオジサン。論理的だけど親しみやすくお茶目。</textarea>
         </div>
 
+        <!-- Cloud Sync Panel -->
+        <div class="panel" style="background-color: var(--bg-dark); border: 1px solid #10b981; margin-top: 20px;">
+          <h3 style="font-size: 16px; margin-bottom: 12px; color: #34d399;">☁️ PC・スマホ リアルタイム全自動同期（クラウドSync）</h3>
+          <p class="panel-desc" style="margin-bottom: 16px;">PCで作成・承認した投稿や設定を、スマホからでも同じ内容で確認・送信できるようにクラウドで自動同期します。</p>
+
+          <div class="form-group">
+            <label>同期用アカウントID（PC・スマホで同じIDを入力してください）</label>
+            <input type="text" id="sync-account-id" value="akizuki_anderson_sync_100" placeholder="例: akizuki_anderson_sync_100">
+          </div>
+
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button id="btn-manual-sync-pull" class="btn btn-primary" style="background: #10b981;">
+              📥 クラウドから最新データを読み込む (スマホ→PC / PC→スマホ)
+            </button>
+            <button id="btn-manual-sync-push" class="btn btn-secondary">
+              📤 現在のデータをクラウドへ手動保存
+            </button>
+          </div>
+        </div>
+
         <div class="panel" style="background-color: var(--bg-dark); border: 1px solid var(--primary); margin-top: 20px;">
-          <h3 style="font-size: 16px; margin-bottom: 12px; color: #60a5fa;">🔑 X API 4大キー設定（本物自動投稿用）</h3>
-          <p class="panel-desc" style="margin-bottom: 16px;">X Developer Portal の「Keys and Tokens」から取得した4つのキーを入力して保存してください。</p>
+          <h3 style="font-size: 16px; margin-bottom: 12px; color: #60a5fa;">🔑 Gemini / OpenAI & X API 4大キー設定</h3>
+          <p class="panel-desc" style="margin-bottom: 16px;">本物のAI生成・要約・X自動投稿を使用するためのAPIキーを設定できます。</p>
+
+          <div class="form-group">
+            <label>Gemini / OpenAI API Key（高精度AIリアル生成・要約用）</label>
+            <input type="password" id="gemini-api-key" placeholder="AI API Key (AI_KEY_...) を入力...">
+          </div>
 
           <div class="form-group">
             <label>1. API Key (Consumer Key)</label>
@@ -264,7 +292,7 @@
           </div>
 
           <button id="btn-save-api-keys" class="btn btn-primary">
-            🔑 X API 4大キーを保存する
+            🔑 全APIキー＆同期設定を保存する
           </button>
         </div>
       </div>
