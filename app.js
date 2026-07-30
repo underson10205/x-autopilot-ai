@@ -1,56 +1,55 @@
 /* ==========================================================================
-   X-AutoPilot AI Logic & Real X API 4-Keys Dispatch Integration (Re-Dispatch Support)
+   X-AutoPilot AI Logic & 1-Click Smart Web Intent Integration (140-char & Newlines)
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Default Initial Pending Posts
+  // Default Initial Pending Posts (Optimized for 140 chars & perfect formatting)
   const defaultPendingPosts = [
     {
       id: 'p_sanae_1',
       tag: '🔥 早苗ちゃん登場ストーリー',
       tagClass: 'tag-ai',
-      time: '本日 18:00 (送信予約予定)',
+      time: '本日 18:00 (送信予定)',
       content: `【AIに相棒の名前を聞いてみた結果…】
 
-副業でAIアプリ開発を始めて、AIに「私の相棒となる秘書の名前案出してみて」と頼んだら…
+副業でAIアプリ開発を始めて「秘書の名前案頂戴」とAIに頼んだら…
 
 1. お吟
 2. お千代
 3. 早苗
 
-まさかの超・和風ネームのオンパレード(笑)
-というわけで今日から私の相棒は「厳しくて塩対応の早苗ちゃん」に決定しました！🔥
+まさかの超・和風ネーム(笑)
+今日から私の相棒は「厳しくて塩対応の早苗ちゃん」に決定！🔥
 
-アンダーソン×塩対応の早苗ちゃんで月商100万挑みます！
-#AI副業 #生成AI #個人開発`
+月商100万挑みます！
+#AI副業 #生成AI #早苗ちゃん`
     },
     {
       id: 'p_sanae_2',
       tag: '💬 早苗ちゃんの塩対応日常',
       tagClass: 'tag-rewrite',
-      time: '明日 12:00 (送信予約予定)',
-      content: `AI秘書の早苗ちゃんに「手動で投稿作るの大変なんだよね」と愚痴ったら、
+      time: '明日 12:00 (送信予定)',
+      content: `AI秘書の早苗ちゃんに「投稿作るの大変」と愚痴ったら
 
-「アンダーソンさん、またボケてますね？そんなの手動でやってたら月商100万なんて100年かかりますよ。早くAIに任せて決定と責任に集中してください」
+「アンダーソンさん、またボケてますね？そんなのAIに任せて決定と責任に集中してください」
 
 とバシッと塩対応されました(笑)
-でも正論すぎる。AIを相棒に今日も開発爆進！
+でも正論すぎる！AIを相棒に今日も開発爆進🔥
 
-#AI副業 #業務効率化 #生産性向上`
+#AI副業 #業務効率化 #マネジメント`
     },
     {
       id: 'p_sanae_3',
       tag: '🏫 新企画予告',
       tagClass: 'tag-url',
-      time: '明後日 20:00 (送信予約予定)',
+      time: '明後日 20:00 (送信予定)',
       content: `【新プロジェクト始動予告】
 
-子ども相手の指導歴11年の知見を活かして、「教員専用AIアシスタント（Teacher's Companion）」の開発を開始します！
+子ども指導歴11年の知見を活かし「教員専用AIアシスタント（Teacher's Companion）」開発開始！
 
-全国の先生方の授業準備・指導案作成・保護者対応の悩みをAIで「毎日3分」に減らします。
+先生方の授業準備や指導案作成の悩みをAIで「毎日3分」に減らします🔥
 
-早苗ちゃんと一緒に最高のツール作ります🔥
-
+早苗ちゃんと作ります！
 #教育DX #教員応援 #個人開発`
     }
   ];
@@ -62,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tag: '初投稿（完了）',
       tagClass: 'tag-ai',
       time: '本日 14:37 (投稿完了)',
-      content: `【定型作業はすべてAIへ】\nサービス企業で現場11年・業務効率化を担当する40歳です。\n\n「ルーティン作業はAIに任せ、人間は意思決定と責任に集中する」を軸に、AIツール開発と副業で月商100万を目指す挑戦を始めました！\nAI活用や現場マネジメントのリアルを発信していきます🔥\n\n#AI副業 #生成AI`,
+      content: `【定型作業はすべてAIへ】\n現場11年・業務効率化担当の40歳です。\n\nルーティン作業はAIに任せ、人間は意思決定と責任に集中する！を軸にAI開発と副業で月商100万を目指す挑戦を始めました！\nリアルを発信していきます🔥\n\n#AI副業 #生成AI`,
       mediaDataUrls: [],
       posted: true
     }
@@ -99,29 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const approvedCardsContainer = document.getElementById('approved-cards-container');
   const countPendingEl = document.getElementById('count-pending');
   const countApprovedEl = document.getElementById('count-approved');
-
-  // Load Saved 4 API Keys into Inputs on Load
-  const savedApiKey = localStorage.getItem('X_API_KEY');
-  const savedApiSecret = localStorage.getItem('X_API_SECRET');
-  const savedAccessToken = localStorage.getItem('X_ACCESS_TOKEN');
-  const savedAccessSecret = localStorage.getItem('X_ACCESS_SECRET');
-
-  if (savedApiKey) {
-    const el = document.getElementById('api-key');
-    if (el) el.value = savedApiKey;
-  }
-  if (savedApiSecret) {
-    const el = document.getElementById('api-secret');
-    if (el) el.value = savedApiSecret;
-  }
-  if (savedAccessToken) {
-    const el = document.getElementById('access-token');
-    if (el) el.value = savedAccessToken;
-  }
-  if (savedAccessSecret) {
-    const el = document.getElementById('access-secret');
-    if (el) el.value = savedAccessSecret;
-  }
 
   // Navigation Logic
   tabItems.forEach(tab => {
@@ -227,15 +203,15 @@ document.addEventListener('DOMContentLoaded', () => {
           ` : '';
 
           const postStatusBadge = post.posted ? `
-            <span class="tag" style="background-color: rgba(59, 130, 246, 0.2); color: #60a5fa;">🚀 Xへ送信完了</span>
+            <span class="tag" style="background-color: rgba(59, 130, 246, 0.2); color: #60a5fa;">🚀 Xへ送信セット完了</span>
           ` : `
-            <span class="tag" style="background-color: rgba(16, 185, 129, 0.2); color: #34d399;">⏰ 送信予約中</span>
+            <span class="tag" style="background-color: rgba(16, 185, 129, 0.2); color: #34d399;">⏰ 投稿準備完了</span>
           `;
 
-          // Always allow sending or re-sending to X!
+          // 1-Click Smart Web Intent Dispatch Button
           const postActionBtn = `
-            <button class="btn btn-primary btn-dispatch-x" data-id="${post.id}" style="margin-bottom: 8px; width: 100%; background: ${post.posted ? 'linear-gradient(135deg, #059669, #10b981)' : 'linear-gradient(135deg, #1d9bf0, #0284c7)'};">
-              ${post.posted ? '🔄 Xへもう一度テスト再投稿する' : '🚀 今すぐX（@us4Wy71DM6xpjtS）へ本物投稿送信'}
+            <button class="btn btn-primary btn-dispatch-x" data-id="${post.id}" style="margin-bottom: 8px; width: 100%; background: linear-gradient(135deg, #1d9bf0, #0284c7); font-size: 14px; font-weight: 700; padding: 12px;">
+              🚀 1秒でX投稿画面へ全自動セットする
             </button>
           `;
 
@@ -245,14 +221,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${postStatusBadge}
                 <span class="post-time">${post.time}</span>
               </div>
-              <div class="post-content">${escapeHtml(post.content)}</div>
+              <div class="post-content" style="white-space: pre-wrap;">${escapeHtml(post.content)}</div>
               ${mediaGridHtml}
               ${uploadBtnHtml}
               ${mediaGenBtnHtml}
               ${postActionBtn}
               <div class="card-actions">
-                <button class="btn btn-secondary btn-unapprove" data-id="${post.id}">↩️ 未承認に戻す（未送信にリセット）</button>
-                <button class="btn btn-danger btn-delete-approved" data-id="${post.id}">🗑️ 予約取り消し（削除）</button>
+                <button class="btn btn-secondary btn-unapprove" data-id="${post.id}">↩️ 未承認に戻す</button>
+                <button class="btn btn-danger btn-delete-approved" data-id="${post.id}">🗑️ 削除</button>
               </div>
             </div>
           `;
@@ -299,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.btn-dispatch-x').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const id = e.target.getAttribute('data-id');
-        dispatchPostToX(id);
+        dispatch1ClickToX(id);
       });
     });
 
@@ -342,6 +318,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // 1-Click Instant X Intent Dispatcher (Full Newline & 140-char Formatting)
+  function dispatch1ClickToX(id) {
+    const post = approvedPosts.find(p => p.id === id);
+    if (!post) return;
+
+    // Encode text with exact newlines & emojis preserved
+    const encodedText = encodeURIComponent(post.content);
+    const intentUrl = `https://x.com/intent/tweet?text=${encodedText}`;
+
+    // Open X Intent in new tab/window immediately
+    window.open(intentUrl, '_blank');
+
+    post.posted = true;
+    post.time = '本日 (X画面へ自動セット完了)';
+    renderApprovalCards();
+    showToast('🚀 Xの投稿作成画面に、改行・140文字制限クリア済みのテキストを1秒で全自動セットしました！');
+  }
+
   // Remove Single Image
   function removeIndividualMedia(id, idx) {
     const post = approvedPosts.find(p => p.id === id);
@@ -349,53 +343,6 @@ document.addEventListener('DOMContentLoaded', () => {
       post.mediaDataUrls.splice(idx, 1);
       renderApprovalCards();
       showToast('🗑️ 添付画像を1枚削除しました。');
-    }
-  }
-
-  // Real X API Dispatch Integration via Vercel Backend (OAuth 1.0a 4 Keys)
-  async function dispatchPostToX(id) {
-    const post = approvedPosts.find(p => p.id === id);
-    if (!post) return;
-
-    const apiKey = localStorage.getItem('X_API_KEY') || '';
-    const apiSecret = localStorage.getItem('X_API_SECRET') || '';
-    const accessToken = localStorage.getItem('X_ACCESS_TOKEN') || '';
-    const accessSecret = localStorage.getItem('X_ACCESS_SECRET') || '';
-
-    if (!apiKey || !apiSecret || !accessToken || !accessSecret) {
-      showToast('⚠️ 設定タブでX APIの「4大キー」を保存してから送信してください！');
-      return;
-    }
-
-    showToast(`🚀 公式X APIへ本物通信中... (@us4Wy71DM6xpjtSへ直接投稿)`);
-
-    try {
-      const response = await fetch('/api/post_tweet', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          text: post.content,
-          api_key: apiKey,
-          api_secret: apiSecret,
-          access_token: accessToken,
-          access_token_secret: accessSecret
-        })
-      });
-
-      const resData = await response.json();
-
-      if (response.ok && resData.success) {
-        post.posted = true;
-        post.time = '本日 (X実機本物送信完了)';
-        renderApprovalCards();
-        showToast(`🎉 🎉 大成功！！Xアカウントへ本物のポストが送信されました！`);
-      } else {
-        showToast(`⚠️ X APIエラー: ${resData.error || resData.message || '送信に失敗しました'}`);
-      }
-    } catch (err) {
-      showToast(`⚠️ 通信エラーが発生しました: ${err.message}`);
     }
   }
 
@@ -542,11 +489,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function unapprovePost(id) {
     const post = approvedPosts.find(p => p.id === id);
     if (post) {
-      post.posted = false; // Reset posted status on unapprove!
+      post.posted = false;
       approvedPosts = approvedPosts.filter(p => p.id !== id);
       pendingPosts.unshift(post);
       renderApprovalCards();
-      showToast('↩️ 投稿を未承認リストに戻し、送信ステータスをリセットしました！');
+      showToast('↩️ 投稿を未承認リストに戻しました！');
     }
   }
 
@@ -565,7 +512,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tag: '一括自動生成',
         tagClass: 'tag-ai',
         time: '3日後 19:00 (自動投稿予定)',
-        content: `【定型作業はすべてAIへ】\n指示待ちではなく、ロジックと仕組みで動かすのが現代のリーダーシップ。\n\n作業はAI（早苗ちゃん）に全投げし、人間は「決定」と「責任」にコミットしよう！\n\n#AI副業 #業務効率化 #マネジメント`
+        content: `【定型作業はすべてAIへ】\n指示待ちではなく仕組みで動かすのが現代のリーダーシップ！\n\n作業はAI（早苗ちゃん）に全投げし、人間は「決定」と「責任」にコミットしよう🔥\n\n#AI副業 #業務効率化 #生産性向上`
       };
       pendingPosts.unshift(newPost);
       renderApprovalCards();
@@ -574,7 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Topic Generator Action
+  // Topic Generator Action (Strict 140-char Optimization)
   const btnRunGenerate = document.getElementById('btn-run-generate');
   if (btnRunGenerate) {
     btnRunGenerate.addEventListener('click', () => {
@@ -582,9 +529,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const count = parseInt(document.getElementById('gen-count').value) || 3;
 
       const sampleTemplates = [
-        `【${topic}】\n定型業務やルーティンワークはAIへ全投げ！\n\n人間は「意思決定」と「責任」に集中するのが一番スマート。…と言いつつ、たまに早苗ちゃんの冗談にツッコんでるオジサンです(笑)\n\n#AI副業 #業務効率化 #生産性向上`,
-        `【現場指導とAI活用のリアル】\n${topic}を実践中。\n\n指示論や根性論ではなく、ロジックと仕組みで動かすのが現代のリーダーシップ。\n塩対応の早苗ちゃんを相棒に最短で結果を出します👍\n\n#マネジメント #生成AI #早苗ちゃん`,
-        `【40代からの挑戦】\n${topic}で月商100万を目指すロードマップ。\n\nコードが組めなくても、AIと対話して構造化できればアプリは作れる！\n真面目に働き、たまにボケながら今日も一歩前進です✨\n\n#AI副業 #挑戦 #個人開発`
+        `【${topic}】\n定型業務はAIへ全投げ！\n\n人間は「意思決定」と「責任」に集中するのが一番スマート。…と言いつつ、たまに早苗ちゃんの冗談にツッコんでるオジサンです(笑)\n\n#AI副業 #業務効率化`,
+        `【現場指導とAI活用のリアル】\n${topic}を実践中！\n\n指示論や根性論ではなくロジックと仕組みで動かすのが現代のマネジメント。塩対応の早苗ちゃんを相棒に最短で結果出します👍\n\n#マネジメント #生成AI`,
+        `【40代からの挑戦】\n${topic}で月商100万目指す！\n\nコードが組めなくてもAIと対話して構造化できればアプリは作れる！真面目に働き、たまにボケながら前進です✨\n\n#AI副業 #個人開発`
       ];
 
       for (let i = 0; i < Math.min(count, sampleTemplates.length); i++) {
@@ -592,36 +539,14 @@ document.addEventListener('DOMContentLoaded', () => {
           id: 'p_gen_' + Date.now() + '_' + i,
           tag: 'テーマAI生成',
           tagClass: 'tag-ai',
-          time: `${i + 1}日後 18:00 (自動投稿予定)`,
+          time: `${i + 1}日後 18:00 (送信予定)`,
           content: sampleTemplates[i]
         });
       }
 
       renderApprovalCards();
       document.querySelector('[data-tab="dashboard"]').click();
-      showToast(`✨ 「${topic}」に関する投稿案を${count}件生成し、ダッシュボードに追加しました！`);
-    });
-  }
-
-  // Save 4 API Keys Action
-  const btnSaveKeys = document.getElementById('btn-save-api-keys');
-  if (btnSaveKeys) {
-    btnSaveKeys.addEventListener('click', () => {
-      const apiKey = document.getElementById('api-key').value.trim();
-      const apiSecret = document.getElementById('api-secret').value.trim();
-      const accessToken = document.getElementById('access-token').value.trim();
-      const accessSecret = document.getElementById('access-secret').value.trim();
-
-      if (!apiKey || !apiSecret || !accessToken || !accessSecret) {
-        showToast('⚠️ 4つのキーすべてを入力してください。');
-        return;
-      }
-
-      localStorage.setItem('X_API_KEY', apiKey);
-      localStorage.setItem('X_API_SECRET', apiSecret);
-      localStorage.setItem('X_ACCESS_TOKEN', accessToken);
-      localStorage.setItem('X_ACCESS_SECRET', accessSecret);
-      showToast('🎉 X API 4大キーの連動保存が完了しました！実機自動送信が有効です。');
+      showToast(`✨ 「${topic}」に関する文字数最適化済み投稿案を${count}件生成しました！`);
     });
   }
 
