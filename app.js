@@ -1,5 +1,5 @@
 /* ==========================================================================
-   X-AutoPilot AI Logic & Real X API Dispatch Integration (Persistent Storage)
+   X-AutoPilot AI Logic & Real X API 4-Keys Dispatch Integration
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -100,16 +100,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const countPendingEl = document.getElementById('count-pending');
   const countApprovedEl = document.getElementById('count-approved');
 
-  // Load Saved API Keys into Inputs on Load
-  const savedClientId = localStorage.getItem('X_CLIENT_ID');
-  const savedClientSecret = localStorage.getItem('X_CLIENT_SECRET');
-  if (savedClientId) {
-    const elId = document.getElementById('api-client-id');
-    if (elId) elId.value = savedClientId;
+  // Load Saved 4 API Keys into Inputs on Load
+  const savedApiKey = localStorage.getItem('X_API_KEY');
+  const savedApiSecret = localStorage.getItem('X_API_SECRET');
+  const savedAccessToken = localStorage.getItem('X_ACCESS_TOKEN');
+  const savedAccessSecret = localStorage.getItem('X_ACCESS_SECRET');
+
+  if (savedApiKey) {
+    const el = document.getElementById('api-key');
+    if (el) el.value = savedApiKey;
   }
-  if (savedClientSecret) {
-    const elSecret = document.getElementById('api-client-secret');
-    if (elSecret) elSecret.value = savedClientSecret;
+  if (savedApiSecret) {
+    const el = document.getElementById('api-secret');
+    if (el) el.value = savedApiSecret;
+  }
+  if (savedAccessToken) {
+    const el = document.getElementById('access-token');
+    if (el) el.value = savedAccessToken;
+  }
+  if (savedAccessSecret) {
+    const el = document.getElementById('access-secret');
+    if (el) el.value = savedAccessSecret;
   }
 
   // Navigation Logic
@@ -139,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Render Function for Both Sections
   function renderApprovalCards() {
-    saveState(); // Auto save every time state changes
+    saveState();
 
     if (countPendingEl) countPendingEl.textContent = pendingPosts.length;
     if (countApprovedEl) countApprovedEl.textContent = approvedPosts.length;
@@ -223,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const postActionBtn = !post.posted ? `
             <button class="btn btn-primary btn-dispatch-x" data-id="${post.id}" style="margin-bottom: 8px; width: 100%; background: linear-gradient(135deg, #1d9bf0, #0284c7);">
-              🚀 今すぐX（@us4Wy71DM6xpjtS）へ投稿送信
+              🚀 今すぐX（@us4Wy71DM6xpjtS）へ本物投稿送信
             </button>
           ` : '';
 
@@ -340,16 +351,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Real X API Dispatch Integration via Vercel Backend
+  // Real X API Dispatch Integration via Vercel Backend (OAuth 1.0a 4 Keys)
   async function dispatchPostToX(id) {
     const post = approvedPosts.find(p => p.id === id);
     if (!post) return;
 
-    const clientId = localStorage.getItem('X_CLIENT_ID') || '';
-    const clientSecret = localStorage.getItem('X_CLIENT_SECRET') || '';
+    const apiKey = localStorage.getItem('X_API_KEY') || '';
+    const apiSecret = localStorage.getItem('X_API_SECRET') || '';
+    const accessToken = localStorage.getItem('X_ACCESS_TOKEN') || '';
+    const accessSecret = localStorage.getItem('X_ACCESS_SECRET') || '';
 
-    const mediaCount = (post.mediaDataUrls || []).length;
-    showToast(`🚀 Vercelバックエンド経由でX APIへ通信中... (@us4Wy71DM6xpjtSへ送信)`);
+    if (!apiKey || !apiSecret || !accessToken || !accessSecret) {
+      showToast('⚠️ 設定タブでX APIの「4大キー」を保存してから送信してください！');
+      return;
+    }
+
+    showToast(`🚀 公式X APIへ本物通信中... (@us4Wy71DM6xpjtSへ直接投稿)`);
 
     try {
       const response = await fetch('/api/post_tweet', {
@@ -359,8 +376,10 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         body: JSON.stringify({
           text: post.content,
-          client_id: clientId,
-          client_secret: clientSecret
+          api_key: apiKey,
+          api_secret: apiSecret,
+          access_token: accessToken,
+          access_token_secret: accessSecret
         })
       });
 
@@ -370,18 +389,12 @@ document.addEventListener('DOMContentLoaded', () => {
         post.posted = true;
         post.time = '本日 (X実機本物送信完了)';
         renderApprovalCards();
-        showToast(`🎉 成功！Xアカウントへ投稿が本物送信されました！`);
+        showToast(`🎉 🎉 大成功！！Xアカウントへ本物のポストが送信されました！`);
       } else {
-        post.posted = true;
-        post.time = '本日 (送信完了)';
-        renderApprovalCards();
-        showToast(`🚀 Xアカウントへ投稿を完了処理しました！`);
+        showToast(`⚠️ X APIエラー: ${resData.error || resData.message || '送信に失敗しました'}`);
       }
     } catch (err) {
-      post.posted = true;
-      post.time = '本日 (送信完了)';
-      renderApprovalCards();
-      showToast(`🚀 Xアカウントへ投稿完了処理を行いました！`);
+      showToast(`⚠️ 通信エラーが発生しました: ${err.message}`);
     }
   }
 
@@ -588,117 +601,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Automatic Trend Discovery Logic
-  const btnSearchTrend = document.getElementById('btn-search-trend');
-  const trendResultsGrid = document.getElementById('trend-results-grid');
-
-  const defaultTrends = [
-    {
-      badge: '🔥 本日人気No.1急上昇',
-      title: '#AI副業 の失敗談とリアル',
-      stats: '関連ポスト増加率: +184% (直近24時間)',
-      insight: '解説記事よりも「実際に40代サラリーマンがやってみて分かった壁や本音」にインプレッションと保存が集中中。',
-      topic: 'AI副業でやってみて分かったリアルの壁と解決法'
-    },
-    {
-      badge: '💡 注目急上昇キーワード',
-      title: '中間管理職の【板挟み解消AI】',
-      stats: 'リポスト数: 通常の3.2倍',
-      insight: '「上と下の板挟み」に悩むリーダー層が、AIでの業務効率化や客観的な指導シナリオ作成に強い関心。',
-      topic: '中間管理職の板挟みをAIで解消する新アプローチ'
-    },
-    {
-      badge: '🚀 今週のヒットパターン',
-      title: '手作業 vs AI全自動のBefore/After',
-      stats: '保存数: 過去最高水準',
-      insight: '手作業で数時間かかっていたルーティン業務をAIで数分に削減したビフォーアフターの体験談がバズりやすい。',
-      topic: 'ルーティン作業をAIで全自動化したBeforeAfter実証'
-    }
-  ];
-
-  function renderTrendCards(trends) {
-    if (!trendResultsGrid) return;
-    trendResultsGrid.innerHTML = trends.map(item => `
-      <div class="trend-card" style="border-color: rgba(59, 130, 246, 0.4);">
-        <div class="trend-badge">${item.badge}</div>
-        <h3>${item.title}</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">${item.stats}</p>
-        <p class="trend-insight">${item.insight}</p>
-        <button class="btn btn-sm btn-primary btn-use-trend" data-topic="${item.topic}">✨ このトレンドで投稿作成</button>
-      </div>
-    `).join('');
-
-    attachTrendButtonEvents();
-  }
-
-  if (btnSearchTrend) {
-    btnSearchTrend.addEventListener('click', () => {
-      const freshTrends = [
-        {
-          badge: '⚡️ リアルタイム発見！',
-          title: '#生成AI 時代の意思決定論',
-          stats: 'リアルタイムトレンド上位獲得',
-          insight: '「ルーティンはAIに任せ、人間は意思決定と責任に集中する」という思考法に経営者・リーダー層が共感。',
-          topic: 'AI時代に人間が集中すべき【決定と責任】の思考法'
-        },
-        {
-          badge: '🔥 急上昇トピック',
-          title: '40代からのAIアプリ個人開発',
-          stats: '関連ポスト急増中',
-          insight: '非エンジニア・コード不要でAIをパートナーに爆速でプロダクトを作る挑戦ストーリーが注目を集めています。',
-          topic: 'コード不要！AIを右腕に個人開発する勝ちパターン'
-        },
-        {
-          badge: '💡 現場の悩みバズ',
-          title: '若手社員との納得感ある対話法',
-          stats: 'コメント数: 拡大中',
-          insight: '根性論を廃し、合理的な理由と仕組みで部下を動かす最新マネジメント術が拡散されています。',
-          topic: '根性論を廃した論理的マネジメントの実践法'
-        }
-      ];
-
-      renderTrendCards(freshTrends);
-      showToast('⚡️ 今日のX最新トレンド＆バズテーマを全自動AI分析・更新しました！');
-    });
-  }
-
-  // Attach Trend Button Events Helper
-  function attachTrendButtonEvents() {
-    document.querySelectorAll('.btn-use-trend').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const topic = e.target.getAttribute('data-topic');
-        pendingPosts.unshift({
-          id: 'p_' + Date.now(),
-          tag: '全自動トレンドAI',
-          tagClass: 'tag-ai',
-          time: '本日 21:00 (自動投稿予定)',
-          content: `【最新トレンド考察：${topic}】\n\n今Xで急速に関心が高まっているテーマ。\n\n「誰がやっても同じ定型作業はAIに全投げし、人間は決定と責任に集中する」\nたまに早苗ちゃんに突っこまれつつ、本日も現場で実証中👍\n\n#トレンド分析 #${topic.replace(/[\s\/\【\】]/g, '')}`
-        });
-        renderApprovalCards();
-        document.querySelector('[data-tab="dashboard"]').click();
-        showToast(`🔥 「${topic}」の投稿案を作成し、ダッシュボードへ届かせました！`);
-      });
-    });
-  }
-
-  // Render Initial Trends on Load
-  renderTrendCards(defaultTrends);
-
-  // Save API Keys Action
+  // Save 4 API Keys Action
   const btnSaveKeys = document.getElementById('btn-save-api-keys');
   if (btnSaveKeys) {
     btnSaveKeys.addEventListener('click', () => {
-      const clientId = document.getElementById('api-client-id').value;
-      const clientSecret = document.getElementById('api-client-secret').value;
+      const apiKey = document.getElementById('api-key').value.trim();
+      const apiSecret = document.getElementById('api-secret').value.trim();
+      const accessToken = document.getElementById('access-token').value.trim();
+      const accessSecret = document.getElementById('access-secret').value.trim();
 
-      if (!clientId || !clientSecret) {
-        showToast('⚠️ Client ID と Client Secret を両方入力してください。');
+      if (!apiKey || !apiSecret || !accessToken || !accessSecret) {
+        showToast('⚠️ 4つのキーすべてを入力してください。');
         return;
       }
 
-      localStorage.setItem('X_CLIENT_ID', clientId);
-      localStorage.setItem('X_CLIENT_SECRET', clientSecret);
-      showToast('🎉 X APIキーの連動設定を保存しました！自動投稿連携が有効です。');
+      localStorage.setItem('X_API_KEY', apiKey);
+      localStorage.setItem('X_API_SECRET', apiSecret);
+      localStorage.setItem('X_ACCESS_TOKEN', accessToken);
+      localStorage.setItem('X_ACCESS_SECRET', accessSecret);
+      showToast('🎉 X API 4大キーの連動保存が完了しました！実機自動送信が有効です。');
     });
   }
 
