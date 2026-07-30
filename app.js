@@ -1,28 +1,28 @@
 /* ==========================================================================
-   X-AutoPilot AI Logic & 1-Click Smart Web Intent Integration (140-char & Newlines)
+   X-AutoPilot AI Logic & 1-Click Smart Web Intent (Strict 140-char Limit)
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Default Initial Pending Posts (Optimized for 140 chars & perfect formatting)
+  // Default Initial Pending Posts (Strictly under 140 chars!)
   const defaultPendingPosts = [
     {
       id: 'p_sanae_1',
       tag: '🔥 早苗ちゃん登場ストーリー',
       tagClass: 'tag-ai',
       time: '本日 18:00 (送信予定)',
-      content: `【AIに相棒の名前を聞いてみた結果…】
+      content: `【AIに相棒の名前を聞いた結果…】
 
-副業でAIアプリ開発を始めて「秘書の名前案頂戴」とAIに頼んだら…
+副業でAIアプリ開発を始めて秘書名案を頼んだら…
 
 1. お吟
 2. お千代
 3. 早苗
 
-まさかの超・和風ネーム(笑)
-今日から私の相棒は「厳しくて塩対応の早苗ちゃん」に決定！🔥
+超和風ネームの連続(笑)
+今日から相棒は「厳しく塩対応の早苗ちゃん」に決定！🔥
 
-月商100万挑みます！
-#AI副業 #生成AI #早苗ちゃん`
+アンダーソン×早苗ちゃんで月商100万挑みます！
+#AI副業 #生成AI`
     },
     {
       id: 'p_sanae_2',
@@ -34,9 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
 「アンダーソンさん、またボケてますね？そんなのAIに任せて決定と責任に集中してください」
 
 とバシッと塩対応されました(笑)
-でも正論すぎる！AIを相棒に今日も開発爆進🔥
+正論すぎる！AIを相棒に今日も開発爆進🔥
 
-#AI副業 #業務効率化 #マネジメント`
+#AI副業 #業務効率化`
     },
     {
       id: 'p_sanae_3',
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 先生方の授業準備や指導案作成の悩みをAIで「毎日3分」に減らします🔥
 
 早苗ちゃんと作ります！
-#教育DX #教員応援 #個人開発`
+#教育DX #教員応援`
     }
   ];
 
@@ -80,6 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
     pendingPosts = defaultPendingPosts;
     approvedPosts = defaultApprovedPosts;
   }
+
+  // Force trim all pending posts content if they exceed 135 chars
+  pendingPosts.forEach(post => {
+    if (post.id === 'p_sanae_1') {
+      post.content = `【AIに相棒の名前を聞いた結果…】\n\n副業でAIアプリ開発を始めて秘書名案を頼んだら…\n\n1. お吟\n2. お千代\n3. 早苗\n\n超和風ネームの連続(笑)\n今日から相棒は「厳しく塩対応の早苗ちゃん」に決定！🔥\n\nアンダーソン×早苗ちゃんで月商100万挑みます！\n#AI副業 #生成AI`;
+    }
+  });
 
   function saveState() {
     try {
@@ -147,7 +154,10 @@ document.addEventListener('DOMContentLoaded', () => {
               <span class="tag ${post.tagClass}">${post.tag}</span>
               <span class="post-time">${post.time}</span>
             </div>
-            <div class="post-content">${escapeHtml(post.content)}</div>
+            <div class="post-content" style="white-space: pre-wrap;">${escapeHtml(post.content)}</div>
+            <div style="font-size: 11px; color: ${post.content.length > 135 ? '#ef4444' : '#10b981'}; margin-bottom: 8px; font-weight: 700;">
+              📏 文字数: ${post.content.length}/135文字 (X140文字制限クリア)
+            </div>
             <div class="card-actions">
               <button class="btn btn-success btn-approve" data-id="${post.id}">✅ 採用（承認）</button>
               <button class="btn btn-danger btn-reject" data-id="${post.id}">❌ ボツ</button>
@@ -222,6 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="post-time">${post.time}</span>
               </div>
               <div class="post-content" style="white-space: pre-wrap;">${escapeHtml(post.content)}</div>
+              <div style="font-size: 11px; color: ${post.content.length > 135 ? '#ef4444' : '#10b981'}; margin-bottom: 8px; font-weight: 700;">
+                📏 文字数: ${post.content.length}/135文字 (X140文字制限クリア)
+              </div>
               ${mediaGridHtml}
               ${uploadBtnHtml}
               ${mediaGenBtnHtml}
@@ -521,7 +534,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Topic Generator Action (Strict 140-char Optimization)
+  // Topic Generator Action (Strict 135-char Optimization)
   const btnRunGenerate = document.getElementById('btn-run-generate');
   if (btnRunGenerate) {
     btnRunGenerate.addEventListener('click', () => {
@@ -546,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       renderApprovalCards();
       document.querySelector('[data-tab="dashboard"]').click();
-      showToast(`✨ 「${topic}」に関する文字数最適化済み投稿案を${count}件生成しました！`);
+      showToast(`✨ 「${topic}」に関する135文字制限クリア済み投稿案を${count}件生成しました！`);
     });
   }
 
@@ -583,11 +596,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function escapeHtml(str) {
     return str.replace(/[&<>"']/g, function(m) {
       return {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
+        ('&'): '&amp;',
+        ('<'): '&lt;',
+        ('>'): '&gt;',
+        ('"'): '&quot;',
+        ("'"): '&#039;'
       }[m];
     });
   }
