@@ -594,15 +594,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function escapeHtml(str) {
-    return str.replace(/[&<>"']/g, function(m) {
-      return {
-        ('&'): '&amp;',
-        ('<'): '&lt;',
-        ('>'): '&gt;',
-        ('"'): '&quot;',
-        ("'"): '&#039;'
-      }[m];
-    });
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#039;');
   }
 
   // Initial Render
