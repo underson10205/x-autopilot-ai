@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X-AutoPilot AI | X運用全自動化＆トレンド調査ダッシュボード</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="logo-container">
+      <div class="logo-icon">🚀</div>
+      <div class="logo-text">
+        <span class="brand-name">X-AutoPilot</span>
+        <span class="badge-pro">PRO</span>
+      </div>
+    </div>
+
+    <nav class="nav-menu">
+      <a href="#dashboard" class="nav-item active" data-tab="dashboard">
+        <span class="icon">📊</span> ダッシュボード
+      </a>
+      <a href="#generator" class="nav-item" data-tab="generator">
+        <span class="icon">✨</span> AI投稿生成
+      </a>
+      <a href="#trend" class="nav-item" data-tab="trend">
+        <span class="icon">🔥</span> トレンド＆バズリサーチ
+      </a>
+      <a href="#url-import" class="nav-item" data-tab="url-import">
+        <span class="icon">🎥</span> YouTube / Web要約
+      </a>
+      <a href="#rewriter" class="nav-item" data-tab="rewriter">
+        <span class="icon">🔄</span> 過去投稿リライト
+      </a>
+      <a href="#settings" class="nav-item" data-tab="settings">
+        <span class="icon">⚙️</span> アカウント・AI設定
+      </a>
+    </nav>
+
+    <div class="user-profile-widget">
+      <div class="avatar">👨‍💼</div>
+      <div class="user-info">
+        <span class="user-name">アッキー</span>
+        <span class="user-role">月商100万AIプロジェクト</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-header">
+      <div class="header-title">
+        <h1 id="page-title">承認待ち投稿ダッシュボード</h1>
+        <p class="subtitle">AIが自動生成した投稿案を「承認」して一括配信設定</p>
+      </div>
+      <div class="header-actions">
+        <button id="btn-quick-generate" class="btn btn-primary">
+          <span>✨ 今週の投稿を一括自動生成</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Tab 1: Dashboard / Approval Flow -->
+    <section id="tab-dashboard" class="tab-content active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon purple">📝</div>
+          <div class="stat-data">
+            <span class="stat-value" id="count-pending">7</span>
+            <span class="stat-label">承認待ち投稿</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✅</div>
+          <div class="stat-data">
+            <span class="stat-value" id="count-approved">12</span>
+            <span class="stat-label">今週の承認済み投稿</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">🚀</div>
+          <div class="stat-data">
+            <span class="stat-value">94.2%</span>
+            <span class="stat-label">AI生成エンゲージメント予測</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <h2>未承認の投稿候補（AI生成）</h2>
+        <span class="hint">「採用」または「ボツ」を選択してください</span>
+      </div>
+
+      <div id="approval-cards-container" class="cards-container" style="margin-bottom: 40px;">
+        <!-- Dynamic Cards rendered via JS -->
+      </div>
+
+      <!-- Approved Posts Section -->
+      <div class="section-header" style="border-top: 1px solid var(--border-color); padding-top: 24px;">
+        <h2>✅ 承認済み・配信予約済みの投稿一覧</h2>
+        <span class="hint">予約日時の確認・送信取り消し（削除）が可能です</span>
+      </div>
+
+      <div id="approved-cards-container" class="cards-container">
+        <!-- Dynamic Approved Cards rendered via JS -->
+      </div>
+    </section>
+
+    <!-- Tab 2: AI Post Generator -->
+    <section id="tab-generator" class="tab-content">
+      <div class="panel">
+        <h2>✨ テーマ指定AI自動ポスト生成</h2>
+        <p class="panel-desc">テーマやキーワードを入力するだけで、Xで伸びやすい140字テキスト＋ハッシュタグをAIが生成します。</p>
+        
+        <div class="form-group">
+          <label>今週呟きたいテーマ・キーワード</label>
+          <input type="text" id="gen-topic" placeholder="例：40代からのAI副業、マネジメントの悩み、C言語出身者のAI活用" value="40代からのAI副業×マネジメントのリアル">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>投稿トーン＆マナー</label>
+            <select id="gen-tone">
+              <option value="logical">論理的＆共感型（アッキー語り口）</option>
+              <option value="energetic">熱量＆挑戦ストーリー型</option>
+              <option value="tips">ノウハウ＆まとめ解説型</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>生成件数</label>
+            <select id="gen-count">
+              <option value="3">3件（1日分）</option>
+              <option value="7" selected>7件（1週間分）</option>
+              <option value="14">14件（2週間分）</option>
+            </select>
+          </div>
+        </div>
+
+        <button id="btn-run-generate" class="btn btn-accent btn-large">
+          AIで投稿案を生成する⚡️
+        </button>
+      </div>
+    </section>
+
+    <!-- Tab 3: Trend & Buzz Intelligence -->
+    <section id="tab-trend" class="tab-content">
+      <div class="panel">
+        <h2>🔥 今日の最新トレンド＆バズテーマ全自動リサーチAI</h2>
+        <p class="panel-desc">入力は一切不要！「最新トレンドをリサーチ」ボタンを押すだけで、AIが今X上で急上昇している最新キーワードとバズの切り口を自動収集・提案します。</p>
+
+        <div class="form-group" style="text-align: center; padding: 20px; background: rgba(59, 130, 246, 0.05); border-radius: 12px; border: 1px dashed rgba(59, 130, 246, 0.3);">
+          <button id="btn-search-trend" class="btn btn-primary btn-large" style="max-width: 400px; margin: 0 auto;">
+            ⚡️ 今日のX最新トレンドを全自動リサーチする
+          </button>
+        </div>
+
+        <div class="section-header" style="margin-top: 32px;">
+          <h2>📊 今、Xで急上昇中のトレンド＆おすすめ投稿案</h2>
+          <span class="hint">「このトレンドで投稿作成」を押すと投稿案がダッシュボードへ届きます</span>
+        </div>
+
+        <div id="trend-results-grid" class="trend-results-grid">
+          <!-- Dynamic Trend Cards rendered via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 4: YouTube & Web Summary -->
+    <section id="tab-url-import" class="tab-content">
+      <div class="panel">
+        <h2>🎥 YouTube / Web記事 要約ポスト作成</h2>
+        <p class="panel-desc">参考になったYouTube動画のURLやニュース記事のURLを貼るだけで、AIが要素を抽出してX用の投稿案に自動変換します。</p>
+
+        <div class="form-group">
+          <label>YouTube動画 または Web記事のURL</label>
+          <input type="text" id="input-url" placeholder="https://www.youtube.com/watch?v=..." value="https://www.youtube.com/watch?v=hR5v04zfwqU">
+        </div>
+
+        <div class="form-group">
+          <label>アッキーさんの補足メモ・感想（任意）</label>
+          <textarea id="input-url-memo" rows="2" placeholder="例：若手が根性論で動かない原因は会社側の守る構造がなくなったから。激しく同意。">若い世代の離脱原因は根性ではなく合理性。リーダーの教え方を変える必要がある。</textarea>
+        </div>
+
+        <button id="btn-convert-url" class="btn btn-primary">
+          URLからX投稿文を生成する🚀
+        </button>
+
+        <div id="url-output-container" class="output-preview hidden">
+          <h3>生成された投稿案</h3>
+          <div class="post-preview-box" id="url-output-text"></div>
+          <button id="btn-add-url-to-approval" class="btn btn-success">承認リストへ追加</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 5: Post Rewriter -->
+    <section id="tab-rewriter" class="tab-content">
+      <div class="panel">
+        <h2>🔄 過去投稿のリライト＆パワーアップ</h2>
+        <p class="panel-desc">過去に反応が良かった投稿や、前に投稿した文面を入力すると、AIが現在のトレンドや新しい視点を加えてリライトします。</p>
+
+        <div class="form-group">
+          <label>過去の投稿文</label>
+          <textarea id="rewrite-input" rows="4" placeholder="過去に伸びた投稿文を貼り付けてください...">定型作業や誰がやっても同じルーティンワークは、全部AIに任せるべき。人間は人間がやるべき「決定すること」と「責任を取ること」に集中できる環境を作るのがベスト。</textarea>
+        </div>
+
+        <div class="form-group">
+          <label>リライトの方針</label>
+          <select id="rewrite-style">
+            <option value="hook">冒頭のインパクト（フック）を強力にする</option>
+            <option value="story">ストーリー性・体験談風にアレンジする</option>
+            <option value="summary">箇条書き・リスト形式で分かりやすく整理する</option>
+          </select>
+        </div>
+
+        <button id="btn-run-rewrite" class="btn btn-accent">
+          投稿をパワーアップ・リライト⚡️
+        </button>
+
+        <div id="rewrite-output-container" class="output-preview hidden">
+          <h3>リライト完了案</h3>
+          <div class="post-preview-box" id="rewrite-output-text"></div>
+          <button id="btn-add-rewrite-to-approval" class="btn btn-success">承認リストへ追加</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 6: Settings -->
+    <section id="tab-settings" class="tab-content">
+      <div class="panel">
+        <h2>⚙️ アカウント＆AIプロンプト設定</h2>
+        <div class="form-group">
+          <label>発信者のペルソナ（口調・バックグラウンド）</label>
+          <textarea rows="4" id="setting-persona">アンダーソン（40歳）。サービス系企業で業務効率化＆現場リーダー2年(現場対応11年)｜元SE5年。「定型業務はAIに任せ、人間は意思決定と責任に集中する」を軸に、月商100万のAIプロダクトを構築中。冗談を言ったりボケたりするのが好きな愛されオジサン。論理的だけど親しみやすくお茶目。</textarea>
+        </div>
+
+        <div class="panel" style="background-color: var(--bg-dark); border: 1px solid var(--primary); margin-top: 20px;">
+          <h3 style="font-size: 16px; margin-bottom: 12px; color: #60a5fa;">🔑 X API連携設定（自動投稿キー）</h3>
+          <p class="panel-desc" style="margin-bottom: 16px;">X Developer Portalで取得したキーを入力して「設定を保存」してください。</p>
+
+          <div class="form-group">
+            <label>Client ID（クライアントID）</label>
+            <input type="text" id="api-client-id" placeholder="X Developer Portalで発行された Client ID を入力...">
+          </div>
+
+          <div class="form-group">
+            <label>Client Secret（クライアントシークレット）</label>
+            <input type="text" id="api-client-secret" placeholder="X Developer Portalで発行された Client Secret を入力...">
+          </div>
+
+          <button id="btn-save-api-keys" class="btn btn-primary">
+            🔑 X API設定を保存する
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
