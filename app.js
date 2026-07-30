@@ -1,9 +1,9 @@
 /* ==========================================================================
-   X-AutoPilot AI Logic & Perfect 140-Char Full Hashtags Intent Integration
+   X-AutoPilot AI Logic & Perfect Newline Preservation Web Intent
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Default Initial Pending Posts (Full Hashtags Included, Strictly under 140 chars)
+  // Default Initial Pending Posts (Full Newlines & Hashtags)
   const defaultPendingPosts = [
     {
       id: 'p_sanae_1',
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="post-content" style="white-space: pre-wrap;">${escapeHtml(post.content)}</div>
             <div style="font-size: 11px; color: ${post.content.length > 135 ? '#ef4444' : '#10b981'}; margin-bottom: 8px; font-weight: 700;">
-              📏 文字数: ${post.content.length}/135文字 (全タグ込・140文字制限クリア)
+              📏 文字数: ${post.content.length}/135文字 (全改行・全タグ保持)
             </div>
             <div class="card-actions">
               <button class="btn btn-success btn-approve" data-id="${post.id}">✅ 採用（承認）</button>
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
               <div class="post-content" style="white-space: pre-wrap;">${escapeHtml(post.content)}</div>
               <div style="font-size: 11px; color: ${post.content.length > 135 ? '#ef4444' : '#10b981'}; margin-bottom: 8px; font-weight: 700;">
-                📏 文字数: ${post.content.length}/135文字 (全タグ込・140文字制限クリア)
+                📏 文字数: ${post.content.length}/135文字 (全改行・全タグ保持)
               </div>
               ${mediaGridHtml}
               ${uploadBtnHtml}
@@ -335,22 +335,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 1-Click Instant X Intent Dispatcher (Full Newline & 140-char Formatting)
+  // 1-Click Instant X Intent Dispatcher with Explicit %0A Newline Encoding
   function dispatch1ClickToX(id) {
     const post = approvedPosts.find(p => p.id === id);
     if (!post) return;
 
-    // Encode text with exact newlines & emojis preserved
-    const encodedText = encodeURIComponent(post.content);
+    // Explicitly preserve every newline via %0A URL encoding
+    const lines = post.content.replace(/\r\n/g, '\n').split('\n');
+    const encodedText = lines.map(line => encodeURIComponent(line)).join('%0A');
     const intentUrl = `https://x.com/intent/tweet?text=${encodedText}`;
 
-    // Open X Intent in new tab/window immediately
+    // Open X Intent in new tab/window
     window.open(intentUrl, '_blank');
 
     post.posted = true;
     post.time = '本日 (X画面へ自動セット完了)';
     renderApprovalCards();
-    showToast('🚀 Xの投稿作成画面に、改行・140文字制限クリア済みのテキストを1秒で全自動セットしました！');
+    showToast('🚀 Xの投稿作成画面に、改行を100%保持した状態で全自動セットしました！');
   }
 
   // Remove Single Image
