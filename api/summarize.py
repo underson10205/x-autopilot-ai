@@ -61,7 +61,7 @@ class handler(BaseHTTPRequestHandler):
                 title = "話題の動画・記事"
 
             # 2. Build High-Density Prompt (Learned persona from @underson_____)
-            learned_persona = "うぃるそん/アンダーソン（40代兼業トレーダー＆AI副業挑戦者）。「家族と一緒に自由を手に入れること」を目的に挑戦中！検証とリアルの差や損切りの悔しさも『(;´∀｀)』『😢』と素直に共有する誠実で等身大の語り口。ルールとリスクリワード（R:R）を徹底重視。"
+            learned_persona = "アンダーソン（40代AI副業挑戦者）。「定型作業はAIに任せ、人間は意思決定と責任に集中する」が持論。失敗や壁にぶつかった時も『(;´∀｀)』『😢』と素直に共有する誠実で等身大の語り口。根性論ではなく論理とルールを重視。塩対応のAI秘書「早苗ちゃん」に指導されながらコツコツ前進。"
             
             if is_youtube:
                 prompt_task = f"""
