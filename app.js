@@ -593,6 +593,105 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
     }
   }
 
+  // ===== CHAT UI IMAGE GENERATOR (16:9 X OPTIMIZED) =====
+  function createChatBubbleImage(messages) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1200;
+    canvas.height = 675;
+    const ctx = canvas.getContext('2d');
+
+    // Background Gradient
+    const bgGrad = ctx.createLinearGradient(0, 0, 1200, 675);
+    bgGrad.addColorStop(0, '#0f172a');
+    bgGrad.addColorStop(1, '#1e1b4b');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, 1200, 675);
+
+    // Header Bar
+    ctx.fillStyle = 'rgba(30, 41, 59, 0.8)';
+    ctx.fillRect(0, 0, 1200, 70);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = 'bold 20px "Noto Sans JP", sans-serif';
+    ctx.fillText('💬 X-AutoPilot AI 開発チャットログ | アンダーソン × 早苗ちゃん', 40, 43);
+
+    let currentY = 110;
+
+    messages.forEach(msg => {
+      const isUser = msg.sender === 'user';
+      const text = msg.text;
+
+      ctx.font = '18px "Noto Sans JP", sans-serif';
+      const maxTextWidth = 650;
+      const paddingH = 20;
+      const paddingV = 14;
+
+      // Calculate lines
+      let words = text.split('');
+      let line = '';
+      let lines = [];
+      for (let n = 0; n < words.length; n++) {
+        let testLine = line + words[n];
+        let metrics = ctx.measureText(testLine);
+        if (metrics.width > maxTextWidth && n > 0) {
+          lines.push(line);
+          line = words[n];
+        } else {
+          line = testLine;
+        }
+      }
+      lines.push(line);
+
+      const bubbleWidth = Math.min(maxTextWidth + paddingH * 2, Math.max(...lines.map(l => ctx.measureText(l).width)) + paddingH * 2);
+      const bubbleHeight = lines.length * 28 + paddingV * 2;
+
+      if (isUser) {
+        // User (Right side, Blue)
+        const bubbleX = 1200 - 40 - bubbleWidth;
+        ctx.fillStyle = '#2563eb';
+        roundRect(ctx, bubbleX, currentY, bubbleWidth, bubbleHeight, 16, true, false);
+
+        ctx.fillStyle = '#ffffff';
+        lines.forEach((l, i) => {
+          ctx.fillText(l, bubbleX + paddingH, currentY + paddingV + 18 + i * 28);
+        });
+      } else {
+        // Sanae-chan (Left side, Dark Purple with Avatar)
+        const avatarX = 40;
+        const bubbleX = 40 + 50 + 15;
+
+        // Avatar Icon
+        ctx.fillStyle = '#8b5cf6';
+        ctx.beginPath();
+        ctx.arc(avatarX + 25, currentY + 25, 25, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 16px sans-serif';
+        ctx.fillText('早苗', avatarX + 9, currentY + 31);
+
+        // Bubble
+        ctx.fillStyle = '#4c1d95';
+        ctx.strokeStyle = '#7c3aed';
+        ctx.lineWidth = 1.5;
+        roundRect(ctx, bubbleX, currentY, bubbleWidth, bubbleHeight, 16, true, true);
+
+        ctx.fillStyle = '#f1f5f9';
+        ctx.font = '18px "Noto Sans JP", sans-serif';
+        lines.forEach((l, i) => {
+          ctx.fillText(l, bubbleX + paddingH, currentY + paddingV + 18 + i * 28);
+        });
+      }
+
+      currentY += bubbleHeight + 24;
+    });
+
+    // Footer Watermark
+    ctx.fillStyle = '#64748b';
+    ctx.font = '14px sans-serif';
+    ctx.fillText('X-AutoPilot AI Development Record', 40, 645);
+
+    return canvas.toDataURL('image/png');
+  }
+
   // Real Image Generation via HTML5 Canvas API (Max 4 limit aware)
   function generateRealSlideImage(id) {
     const post = approvedPosts.find(p => p.id === id);
@@ -757,6 +856,85 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
     saveState();
     renderApprovalCards();
     showToast('🗑️ 予約投稿を取り消し・削除しました（以降再表示されません）。');
+  }
+
+  // ===== REAL DEVELOPMENT STORY GENERATOR (WITH AUTOMATIC CHAT IMAGE ATTACHMENT) =====
+  const btnGenerateStory = document.getElementById('btn-generate-story');
+  if (btnGenerateStory) {
+    btnGenerateStory.addEventListener('click', () => {
+      const realStories = [
+        {
+          id: 'story_chat_1',
+          tag: '📖 開発実話：名前逆事件',
+          tagClass: 'tag-rewrite',
+          time: '本日 (チャット実録連載)',
+          content: `【Xバナー作成での珍プレー(笑)】\n\nバナー完成！と思ったら早苗ちゃんから冷静な指摘↓\n\n早苗「アンダーソンさん、名前の左右が逆です。やり直してください」\n\n大慌てで修正しました(;´∀｀)\n\n#AI副業 #個人開発 #生成AI`,
+          chatData: [
+            { sender: 'user', text: '早苗ちゃん！バナーできたよ！どうかな？' },
+            { sender: 'sanae', text: '…アンダーソンさん、名前の左右が逆です。やり直してください。' },
+            { sender: 'user', text: 'あ！本当だ！大慌てで直します(;´∀｀)' }
+          ]
+        },
+        {
+          id: 'story_chat_2',
+          tag: '📖 開発実話：ツンデレ褒められ事件',
+          tagClass: 'tag-ai',
+          time: '本日 (チャット実録連載)',
+          content: `【ちびキャラ案を提案した結果】\n\n「親しみやすく2等身ちびキャラにしよう」と提案したら…\n\n早苗「…正解です。前のオジサン案は親近感ゼロでした。…ふ、フン///」\n\n照れ隠しされた(笑)\n\n#AI副業 #生成AI #個人開発`,
+          chatData: [
+            { sender: 'user', text: 'Xプロフ画像、できるオジサン風をやめて2等身ちびキャラにしようと思うんだよね！' },
+            { sender: 'sanae', text: '…正解です、アンダーソンさん。前の案は親近感ゼロでした。…ふ、フン///' },
+            { sender: 'user', text: '珍しく早苗ちゃんに褒められた(笑) このコンビで月商100万目指すぞー！' }
+          ]
+        },
+        {
+          id: 'story_chat_3',
+          tag: '📖 開発実話：動画中身見てなくね事件',
+          tagClass: 'tag-url',
+          time: '本日 (チャット実録連載)',
+          content: `【AI機能テスト中のすれ違い】\n\nYouTube要約を試したら動画タイトルだけ入って中身がスカスカ…\n\n私「中身確認してなくね？💦」\n早苗「…失礼いたしました。本物エンジンへ改修します」\n\nAIとのやり取りが面白すぎる(笑)\n\n#AI副業 #生成AI`,
+          chatData: [
+            { sender: 'user', text: 'YouTube要約機能試したんだけど、タイトルだけで中身確認してなくね？💦' },
+            { sender: 'sanae', text: '…失礼いたしました。動画の字幕テキストを全自動取得する本物エンジンへ改修いたします。' },
+            { sender: 'user', text: 'よろしく！AIと一緒に試行錯誤するの最高に楽しい(;´∀｀)' }
+          ]
+        },
+        {
+          id: 'story_chat_4',
+          tag: '📖 開発実話：スクショ撮影事件',
+          tagClass: 'tag-ai',
+          time: '本日 (チャット実録連載)',
+          content: `【AI秘書にスクショ頼んだ結果】\n\n私「チャットのスクショ撮るからもう一回喋って！」\n\n早苗「ハァ…どこまでお茶目なんですか。さっさと撮って作業に戻ってください///」\n\n塩対応だけど最高の相棒です(笑)\n\n#AI副業 #個人開発`,
+          chatData: [
+            { sender: 'user', text: 'このチャット画面をスクショしてXに載せたいから、もう一回喋って！' },
+            { sender: 'sanae', text: 'ハァ…どこまでお茶目なんですか、アンダーソンさんは。納得したならさっさと作業に戻ってください///' },
+            { sender: 'user', text: 'サンキュー！(笑) 今日も爆進します！' }
+          ]
+        }
+      ];
+
+      // Pick next story
+      const storyCount = pendingPosts.filter(p => p.id.startsWith('story_chat_')).length;
+      const targetStory = realStories[storyCount % realStories.length];
+
+      // Generate Chat UI Image
+      const chatImageUrl = createChatBubbleImage(targetStory.chatData);
+
+      const newStoryPost = {
+        id: targetStory.id + '_' + Date.now(),
+        tag: targetStory.tag,
+        tagClass: targetStory.tagClass,
+        time: targetStory.time,
+        content: targetStory.content,
+        mediaDataUrls: [chatImageUrl]
+      };
+
+      pendingPosts.unshift(newStoryPost);
+      saveState();
+      renderApprovalCards();
+      document.querySelector('[data-tab="dashboard"]').click();
+      showToast(`📖 リアル開発ストーリー『${targetStory.tag}』とチャット画像を全自動生成し、添付セットしました！`);
+    });
   }
 
   // Quick Generate Button
