@@ -31,57 +31,92 @@ class handler(BaseHTTPRequestHandler):
             # Extract basic URL info
             is_youtube = "youtube.com" in url or "youtu.be" in url
 
-            # Generate dynamic prompt
+            # 1. Fetch Real Title & Metadata from YouTube / Web Page
+            title = ""
+            author = ""
+            
+            if is_youtube:
+                try:
+                    oembed_url = f"https://www.youtube.com/oembed?url={urllib.parse.quote(url)}&format=json"
+                    req_oembed = urllib.request.Request(oembed_url, headers={'User-Agent': 'Mozilla/5.0'})
+                    with urllib.request.urlopen(req_oembed, timeout=3) as resp_o:
+                        oembed_data = json.loads(resp_o.read().decode('utf-8'))
+                        title = oembed_data.get('title', '')
+                        author = oembed_data.get('author_name', '')
+                except Exception as ex_y:
+                    print("oEmbed fetch failed:", ex_y)
+            else:
+                try:
+                    req_web = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+                    with urllib.request.urlopen(req_web, timeout=3) as resp_w:
+                        html_text = resp_w.read().decode('utf-8', errors='ignore')
+                        title_match = re.search(r'<title[^>]*>(.*?)</title>', html_text, re.IGNORECASE)
+                        if title_match:
+                            title = title_match.group(1).strip()
+                except Exception as ex_w:
+                    print("Web fetch failed:", ex_w)
+
+            # Fallback title if scraping fails
+            if not title:
+                title = "話題の動画・記事"
+
+            # 2. Build High-Density Prompt (Humble Amazed Beginner Stance)
             if is_youtube:
                 prompt_task = f"""
-以下のYouTube動画URLについて、動画内で語られているであろう【具体的ノウハウ・数字・現場での重要ポイント】を深掘り分析し、
-X（旧Twitter）用の濃密な投稿文（135文字以内、改行含め読みやすく、ハッシュタグ付き）を作成してください。
+以下のYouTube動画について、動画タイトル『{title}』（投稿者: {author}）とメモの内容から、
+初心者AI副業挑戦者（40代・素直な驚きと感動ストーリー）のスタンスで、X（旧Twitter）用の投稿文（130文字以内、改行あり、ハッシュタグ含む）を作成してください。
 
-URL: {url}
+動画タイトル: {title}
 メモ/感想: {memo}
-発信者ペルソナ: {persona}
 
-【絶対条件】
-- 定型文や抽象的な挨拶ではなく、「具体的に何のノウハウか」「どのような手順/数字か」を盛り込むこと。
-- 「【動画要約】」で始めること。
+【絶対ルール】
+- 上から目線の「教える/ノウハウ公開」ではなく「この動画観て衝撃を受けた！」「こんなことまで解説されてて最近のAI/動画凄すぎます…！」という初心者目線の素直な感動と驚き文にする。
+- 改行を含めて120〜130文字以内にぴったり納めること。
+- 文字数オーバー厳禁。
 - ハッシュタグ3つ（#AI副業 #生成AI #個人開発 など）を含めること。
 """
             else:
                 prompt_task = f"""
-以下のWeb記事URLについて、記事に含まれる【核心のロジック・具体的データ・今日から試せる教訓】を深掘り分析し、
-X（旧Twitter）用の濃密な投稿文（135文字以内、改行含め読みやすく、ハッシュタグ付き）を作成してください。
+以下のWeb記事『{title}』について、初心者AI副業挑戦者（40代・素直な驚きと感動ストーリー）のスタンスで、X用の投稿文（130文字以内、改行あり、ハッシュタグ含む）を作成してください。
 
-URL: {url}
+記事タイトル: {title}
 メモ/感想: {memo}
-発信者ペルソナ: {persona}
 
-【絶対条件】
-- 表面的な感想文ではなく「この記事から得られる具体的ノウハウ/教訓」を明確にすること。
-- 「【記事要約】」で始めること。
+【絶対ルール】
+- 「この記事のここが凄かった…！」「初心者だけど勉強になった！」という素直な驚き・感心スタンスにする。
+- 改行を含めて120〜130文字以内に納めること。
 - ハッシュタグ3つを含めること。
 """
 
-            # Call Gemini API if API Key provided
+            # 3. Call Gemini API if Key available, else use Real Title Dynamic Generator
             result_post = ""
             if api_key:
-                gemini_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
-                payload = {
-                    "contents": [{"parts": [{"text": prompt_task}]}]
-                }
-                headers = {'Content-Type': 'application/json'}
-                req_obj = urllib.request.Request(gemini_url, data=json.dumps(payload).encode('utf-8'), headers=headers)
-                with urllib.request.urlopen(req_obj) as resp:
-                    resp_data = json.loads(resp.read().decode('utf-8'))
-                    result_post = resp_data['candidates'][0]['content']['parts'][0]['text'].strip()
-            else:
-                # High-density dynamic fallback parser based on memo & URL
-                clean_memo = memo if memo else "現場の定型業務をAI化し、人間は意思決定に集中する"
-                if is_youtube:
-                    result_post = f"【動画要約📺】\n{url.split('v=')[-1][:8] if 'v=' in url else 'YouTube'}\n\n『{clean_memo[:45]}』\n\n現場指導11年の経験と照らしても超本質！動画内で語られた具体手順をすぐAIアプリ開発へ落とし込みます🔥\n\n#AI副業 #生成AI #個人開発"
-                else:
-                    result_post = f"【記事要約📰】\n\n『{clean_memo[:45]}』\n\nこの記事の核心：単なる時短ではなく「人間の役割を意思決定に絞る構造を作る」こと。40代からのAI挑戦に直結する良記事でした✨\n\n#業務効率化 #AI副業 #生成AI"
+                try:
+                    gemini_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+                    payload = { "contents": [{"parts": [{"text": prompt_task}]}] }
+                    headers = {'Content-Type': 'application/json'}
+                    req_obj = urllib.request.Request(gemini_url, data=json.dumps(payload).encode('utf-8'), headers=headers)
+                    with urllib.request.urlopen(req_obj, timeout=5) as resp:
+                        resp_data = json.loads(resp.read().decode('utf-8'))
+                        result_post = resp_data['candidates'][0]['content']['parts'][0]['text'].strip()
+                except Exception as ex_g:
+                    print("Gemini API call failed:", ex_g)
 
-            res = {"success": True, "result": result_post}
+            if not result_post:
+                # Real Title Dynamic Generator (Humble Amazed Beginner Stance)
+                short_title = title[:35] + ("…" if len(title) > 35 else "")
+                memo_snippet = f"\n\n『{memo[:30]}』" if memo else ""
+                
+                if is_youtube:
+                    result_post = f"【動画を観て大感動…！📺】\n『{short_title}』{memo_snippet}\n\nこの動画の解説が凄すぎて初心者の自分には目から鱗でした…！無料動画でここまで学べる時代感謝です✨\n\n#AI副業 #生成AI #個人開発"
+                else:
+                    result_post = f"【この記事が刺さった…！📰】\n『{short_title}』{memo_snippet}\n\n40代からのAI副業挑戦中ですが、この記事の考え方にすごく共感！勉強になります✨\n\n#業務効率化 #生成AI #AI副業"
+
+            # Strict Length Safety Guard (<= 130 chars)
+            if len(result_post) > 130:
+                result_post = result_post[:120] + "…✨\n\n#AI副業 #生成AI"
+
+            res = {"success": True, "result": result_post, "title": title}
             self.wfile.write(json.dumps(res, ensure_ascii=False).encode('utf-8'))
         except Exception as e:
             res = {"success": False, "error": str(e)}

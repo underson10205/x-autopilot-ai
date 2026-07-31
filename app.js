@@ -965,11 +965,11 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
 
         if (!generatedPost || !res.success) {
           const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
-          const cleanMemo = memo ? memo : "定型作業をAI化して、人間は決定と責任に集中する";
+          const memoSnippet = memo ? `\n\n『${memo.substring(0, 30)}』` : '';
           if (isYouTube) {
-            generatedPost = `【動画要約📺】\n${url}\n\n『${cleanMemo}』\n\n具体的ノウハウ：動画内で解説されていた「ルーティン業務をAIに下書きさせ、人間が最終判断する3ステップ」を即実践！1日2時間の時短を達成します🔥\n\n#AI副業 #生成AI #個人開発`;
+            generatedPost = `【動画を観て大感動…！📺】\n『話題のYouTube動画』${memoSnippet}\n\nこの動画の解説が凄すぎて初心者の自分には目から鱗でした…！無料動画でここまで学べる時代感謝です✨\n\n#AI副業 #生成AI #個人開発`;
           } else {
-            generatedPost = `【記事要約📰】\n${url}\n\n『${cleanMemo}』\n\n本質論：この記事のポイントは「単なる作業時短ではなく、思考のノイズを減らすこと」。現場指導11年の経験とも直結する学びでした✨\n\n#業務効率化 #生成AI #AI副業`;
+            generatedPost = `【この記事が刺さった…！📰】\n『話題のWeb記事』${memoSnippet}\n\n40代からのAI副業挑戦中ですが、この記事の考え方にすごく共感！勉強になります✨\n\n#業務効率化 #生成AI #AI副業`;
           }
         }
 
