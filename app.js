@@ -126,18 +126,22 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
   // Load from LocalStorage (Persistent Memory)
   let pendingPosts = [];
   let approvedPosts = [];
+  let rejectedPostIds = [];
 
   try {
     const savedPending = localStorage.getItem('X_PENDING_POSTS');
     const savedApproved = localStorage.getItem('X_APPROVED_POSTS');
+    const savedRejected = localStorage.getItem('X_REJECTED_POST_IDS');
     pendingPosts = savedPending ? JSON.parse(savedPending) : defaultPendingPosts;
     approvedPosts = savedApproved ? JSON.parse(savedApproved) : defaultApprovedPosts;
+    rejectedPostIds = savedRejected ? JSON.parse(savedRejected) : [];
   } catch (e) {
     pendingPosts = defaultPendingPosts;
     approvedPosts = defaultApprovedPosts;
+    rejectedPostIds = [];
   }
 
-  // Guarantee Icon/Banner story posts ALWAYS exist at index 0 (top of pending list)
+  // Initial Story Posts definition
   const iconStoryPosts = [
     {
       id: 'p_icon_story_1',
@@ -196,34 +200,29 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
     }
   ];
 
-  // Remove previous versions if present in pending or approved
-  iconStoryPosts.forEach(storyPost => {
-    pendingPosts = pendingPosts.filter(p => p.id !== storyPost.id);
-    approvedPosts = approvedPosts.filter(p => p.id !== storyPost.id);
-  });
+  // ONLY add story posts on very first load if NEVER approved or rejected before
+  iconStoryPosts.reverse().forEach(storyPost => {
+    const isApproved = approvedPosts.some(p => p.id === storyPost.id);
+    const isRejected = rejectedPostIds.includes(storyPost.id);
+    const isPending = pendingPosts.some(p => p.id === storyPost.id);
 
-  // Force unshift all 3 to the very front of pendingPosts
-  iconStoryPosts.slice().reverse().forEach(storyPost => {
-    pendingPosts.unshift(storyPost);
-  });
-
-  // Force clean formatting for Sanae-chan story
-  pendingPosts.forEach(post => {
-    if (post.id === 'p_sanae_1' || post.content.includes('早苗ちゃん登場') || post.content.includes('お吟')) {
-      post.content = `【AIに相棒の名前を聞いた結果…】\n\n副業でAIアプリ開発を始めて秘書名案を頼んだら…\n\n1. お吟\n2. お千代\n3. 早苗\n\n超和風ネームの連続(笑)\n今日から相棒は厳しく塩対応の「早苗ちゃん」に決定！🔥\n\nアンダーソン×早苗ちゃんで月商100万挑みます！\n\n#AI副業 #生成AI #個人開発`;
+    // If it was rejected or approved, remove it completely from pending
+    if (isApproved || isRejected) {
+      pendingPosts = pendingPosts.filter(p => p.id !== storyPost.id);
+    } else if (!isPending) {
+      // Add only if missing from everywhere
+      pendingPosts.unshift(storyPost);
     }
   });
 
-  approvedPosts.forEach(post => {
-    if (post.id === 'p_sanae_1' || post.content.includes('早苗ちゃん登場') || post.content.includes('お吟')) {
-      post.content = `【AIに相棒の名前を聞いた結果…】\n\n副業でAIアプリ開発を始めて秘書名案を頼んだら…\n\n1. お吟\n2. お千代\n3. 早苗\n\n超和風ネームの連続(笑)\n今日から相棒は厳しく塩対応の「早苗ちゃん」に決定！🔥\n\nアンダーソン×早苗ちゃんで月商100万挑みます！\n\n#AI副業 #生成AI #個人開発`;
-    }
-  });
+  // Filter out any rejected posts from pendingPosts just in case
+  pendingPosts = pendingPosts.filter(p => !rejectedPostIds.includes(p.id));
 
   function saveState() {
     try {
       localStorage.setItem('X_PENDING_POSTS', JSON.stringify(pendingPosts));
       localStorage.setItem('X_APPROVED_POSTS', JSON.stringify(approvedPosts));
+      localStorage.setItem('X_REJECTED_POST_IDS', JSON.stringify(rejectedPostIds));
     } catch (e) {
       console.error('Failed to save to localStorage:', e);
     }
@@ -241,6 +240,7 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
     const payload = {
       pendingPosts,
       approvedPosts,
+      rejectedPostIds,
       persona: document.getElementById('setting-persona') ? document.getElementById('setting-persona').value : '',
       apiKey: document.getElementById('api-key') ? document.getElementById('api-key').value : '',
       apiSecret: document.getElementById('api-secret') ? document.getElementById('api-secret').value : '',
@@ -268,8 +268,11 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
       const resp = await fetch(`/api/sync?id=${encodeURIComponent(syncId)}`);
       const res = await resp.json();
       if (res.success && res.data) {
+        if (res.data.rejectedPostIds && Array.isArray(res.data.rejectedPostIds)) {
+          rejectedPostIds = res.data.rejectedPostIds;
+        }
         if (res.data.pendingPosts && res.data.pendingPosts.length > 0) {
-          pendingPosts = res.data.pendingPosts;
+          pendingPosts = res.data.pendingPosts.filter(p => !rejectedPostIds.includes(p.id));
         }
         if (res.data.approvedPosts && res.data.approvedPosts.length > 0) {
           approvedPosts = res.data.approvedPosts;
@@ -725,9 +728,13 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
   }
 
   function rejectPost(id) {
+    if (!rejectedPostIds.includes(id)) {
+      rejectedPostIds.push(id);
+    }
     pendingPosts = pendingPosts.filter(p => p.id !== id);
+    saveState();
     renderApprovalCards();
-    showToast('🗑️ 投稿案をボツ削除しました。');
+    showToast('🗑️ 投稿案をボツ削除しました（以降再表示されません）。');
   }
 
   function unapprovePost(id) {
@@ -736,15 +743,20 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
       post.posted = false;
       approvedPosts = approvedPosts.filter(p => p.id !== id);
       pendingPosts.unshift(post);
+      saveState();
       renderApprovalCards();
       showToast('↩️ 投稿を未承認リストに戻しました！');
     }
   }
 
   function deleteApprovedPost(id) {
+    if (!rejectedPostIds.includes(id)) {
+      rejectedPostIds.push(id);
+    }
     approvedPosts = approvedPosts.filter(p => p.id !== id);
+    saveState();
     renderApprovalCards();
-    showToast('🗑️ 予約投稿を取り消し（削除）しました。');
+    showToast('🗑️ 予約投稿を取り消し・削除しました（以降再表示されません）。');
   }
 
   // Quick Generate Button
