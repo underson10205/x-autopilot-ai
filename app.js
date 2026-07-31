@@ -942,44 +942,73 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
 
   let pendingStoryQueue = JSON.parse(localStorage.getItem('X_STORY_QUEUE')) || [...defaultStoryQueue];
 
-  // ===== REAL DEVELOPMENT STORY GENERATOR (DYNAMIC BACKLOG BULK GENERATION) =====
+  let generatedStoryIds = JSON.parse(localStorage.getItem('X_GENERATED_STORY_IDS')) || [];
+
+  // ===== REAL DEVELOPMENT STORY GENERATOR (FILE-BASED STORY_LOGS.json BACKLOG) =====
   const btnGenerateStory = document.getElementById('btn-generate-story');
   if (btnGenerateStory) {
-    btnGenerateStory.addEventListener('click', () => {
-      // 1. Check if queue is empty
-      if (!pendingStoryQueue || pendingStoryQueue.length === 0) {
-        showToast('🎉 現在、新しい未作成の開発ストーリーはありません！Antigravityで早苗ちゃんと開発チャットを進めると新しいログが自動で溜まります！', 5000);
-        return;
+    btnGenerateStory.addEventListener('click', async () => {
+      btnGenerateStory.disabled = true;
+      btnGenerateStory.textContent = '⏳ 開発ログ読み込み中...';
+
+      try {
+        let stories = [];
+        // Try fetching from server API first
+        try {
+          const res = await fetch('/api/story_logs');
+          const data = await res.json();
+          if (data.success && data.stories) {
+            stories = data.stories;
+          }
+        } catch (err) {
+          console.warn('API fetch failed, fallback to local default queue:', err);
+        }
+
+        // Fallback default stories if API empty
+        if (!stories || stories.length === 0) {
+          stories = defaultStoryQueue;
+        }
+
+        // Filter out stories that have already been generated/processed
+        const ungeneratedStories = stories.filter(s => !generatedStoryIds.includes(s.id));
+
+        if (ungeneratedStories.length === 0) {
+          showToast('🎉 現在、新しい未作成の開発ストーリーはありません！`STORY_LOGS.json` に最新のチャット実話が追記されると生成できるようになります！', 5000);
+          btnGenerateStory.disabled = false;
+          btnGenerateStory.textContent = '📖 開発ストーリー＆チャット画像生成';
+          return;
+        }
+
+        // Process all ungenerated stories in bulk
+        ungeneratedStories.forEach(targetStory => {
+          // Generate Chat UI Image with Extra Large Text
+          const chatImageUrl = createChatBubbleImage(targetStory.chatData);
+
+          const newStoryPost = {
+            id: targetStory.id + '_' + Date.now(),
+            tag: targetStory.tag,
+            tagClass: targetStory.tagClass,
+            time: targetStory.time,
+            content: targetStory.content,
+            mediaDataUrls: [chatImageUrl]
+          };
+
+          pendingPosts.unshift(newStoryPost);
+          generatedStoryIds.push(targetStory.id);
+        });
+
+        localStorage.setItem('X_GENERATED_STORY_IDS', JSON.stringify(generatedStoryIds));
+        saveState();
+        renderApprovalCards();
+        document.querySelector('[data-tab="dashboard"]').click();
+
+        showToast(`✨ STORY_LOGS.json から未作成の実話ストーリー ${ungeneratedStories.length} 件を一括生成し、特大チャット画像をアタッチしました！`, 5000);
+      } catch (e) {
+        showToast('❌ ストーリーログの生成中にエラーが発生しました: ' + e.message);
+      } finally {
+        btnGenerateStory.disabled = false;
+        btnGenerateStory.textContent = '📖 開発ストーリー＆チャット画像生成';
       }
-
-      // 2. Process all pending stories in bulk
-      const itemCount = pendingStoryQueue.length;
-      const itemsToProcess = [...pendingStoryQueue];
-
-      itemsToProcess.forEach(targetStory => {
-        // Generate Chat UI Image with Extra Large Text
-        const chatImageUrl = createChatBubbleImage(targetStory.chatData);
-
-        const newStoryPost = {
-          id: targetStory.id + '_' + Date.now(),
-          tag: targetStory.tag,
-          tagClass: targetStory.tagClass,
-          time: targetStory.time,
-          content: targetStory.content,
-          mediaDataUrls: [chatImageUrl]
-        };
-
-        pendingPosts.unshift(newStoryPost);
-      });
-
-      // 3. Clear Queue & Save State
-      pendingStoryQueue = [];
-      localStorage.setItem('X_STORY_QUEUE', JSON.stringify(pendingStoryQueue));
-      saveState();
-      renderApprovalCards();
-      document.querySelector('[data-tab="dashboard"]').click();
-
-      showToast(`✨ 溜まっていた実話ストーリー ${itemCount} 件を一括生成し、特大チャット画像を添付しました！`, 5000);
     });
   }
 
