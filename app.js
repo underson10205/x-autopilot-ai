@@ -560,27 +560,41 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
     });
   }
 
-  // 1-Click Instant X Intent Dispatcher with Clipboard Auto-Copy Guarantee
+  // 1-Click Instant X Intent Dispatcher with Clipboard Auto-Copy Guarantee & Image Auto-Download
   function dispatch1ClickToX(id) {
     const post = approvedPosts.find(p => p.id === id);
     if (!post) return;
 
-    // Auto-copy perfect text to clipboard to guarantee 100% newline preservation if user pastes
+    // Auto-copy perfect text to clipboard
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(post.content).catch(err => console.log(err));
     }
 
-    // Open X Intent URL with %0A newline format
+    // Auto download attached images so user can easily attach on X
+    if (post.mediaDataUrls && post.mediaDataUrls.length > 0) {
+      post.mediaDataUrls.forEach((imgUrl, i) => {
+        const a = document.createElement('a');
+        a.href = imgUrl;
+        a.download = `x_post_image_${i + 1}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+      showToast('📸 添付画像を自動ダウンロードしました！X画面の『画像追加ボタン』から選択してください！');
+    }
+
+    // Open X Intent URL
     const lines = post.content.split('\n');
     const encodedText = lines.map(l => encodeURIComponent(l)).join('%0A');
     const intentUrl = `https://x.com/intent/post?text=${encodedText}`;
 
-    window.open(intentUrl, '_blank');
+    setTimeout(() => {
+      window.open(intentUrl, '_blank');
+    }, 500);
 
     post.posted = true;
     post.time = '本日 (X画面へ自動セット完了)';
     renderApprovalCards();
-    showToast('✨ クリップボードに改行100%保持テキストを自動コピー＆X投稿画面を開きました！Ctrl+Vで上書き貼り付けも可能です！');
   }
 
   // Remove Single Image
@@ -593,7 +607,7 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
     }
   }
 
-  // ===== CHAT UI IMAGE GENERATOR (16:9 X OPTIMIZED) =====
+  // ===== CHAT UI IMAGE GENERATOR (HIGH VISIBILITY EXTRA LARGE TEXT) =====
   function createChatBubbleImage(messages) {
     const canvas = document.createElement('canvas');
     canvas.width = 1200;
@@ -608,22 +622,23 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
     ctx.fillRect(0, 0, 1200, 675);
 
     // Header Bar
-    ctx.fillStyle = 'rgba(30, 41, 59, 0.8)';
-    ctx.fillRect(0, 0, 1200, 70);
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = 'bold 20px "Noto Sans JP", sans-serif';
-    ctx.fillText('💬 X-AutoPilot AI 開発チャットログ | アンダーソン × 早苗ちゃん', 40, 43);
+    ctx.fillStyle = 'rgba(30, 41, 59, 0.9)';
+    ctx.fillRect(0, 0, 1200, 80);
+    ctx.fillStyle = '#60a5fa';
+    ctx.font = 'bold 26px "Noto Sans JP", sans-serif';
+    ctx.fillText('💬 X-AutoPilot AI 開発実録ログ | アンダーソン × 早苗ちゃん', 40, 50);
 
-    let currentY = 110;
+    let currentY = 120;
 
     messages.forEach(msg => {
       const isUser = msg.sender === 'user';
       const text = msg.text;
 
-      ctx.font = '18px "Noto Sans JP", sans-serif';
-      const maxTextWidth = 650;
-      const paddingH = 20;
-      const paddingV = 14;
+      ctx.font = 'bold 28px "Noto Sans JP", sans-serif';
+      const maxTextWidth = 720;
+      const paddingH = 26;
+      const paddingV = 20;
+      const fontLineHeight = 40;
 
       // Calculate lines
       let words = text.split('');
@@ -642,52 +657,53 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
       lines.push(line);
 
       const bubbleWidth = Math.min(maxTextWidth + paddingH * 2, Math.max(...lines.map(l => ctx.measureText(l).width)) + paddingH * 2);
-      const bubbleHeight = lines.length * 28 + paddingV * 2;
+      const bubbleHeight = lines.length * fontLineHeight + paddingV * 2;
 
       if (isUser) {
-        // User (Right side, Blue)
+        // User (Right side, Bright Blue)
         const bubbleX = 1200 - 40 - bubbleWidth;
         ctx.fillStyle = '#2563eb';
-        roundRect(ctx, bubbleX, currentY, bubbleWidth, bubbleHeight, 16, true, false);
+        roundRect(ctx, bubbleX, currentY, bubbleWidth, bubbleHeight, 20, true, false);
 
         ctx.fillStyle = '#ffffff';
         lines.forEach((l, i) => {
-          ctx.fillText(l, bubbleX + paddingH, currentY + paddingV + 18 + i * 28);
+          ctx.fillText(l, bubbleX + paddingH, currentY + paddingV + 26 + i * fontLineHeight);
         });
       } else {
-        // Sanae-chan (Left side, Dark Purple with Avatar)
+        // Sanae-chan (Left side, Vivid Purple with Avatar)
         const avatarX = 40;
-        const bubbleX = 40 + 50 + 15;
+        const avatarSize = 64;
+        const bubbleX = 40 + avatarSize + 18;
 
         // Avatar Icon
         ctx.fillStyle = '#8b5cf6';
         ctx.beginPath();
-        ctx.arc(avatarX + 25, currentY + 25, 25, 0, Math.PI * 2);
+        ctx.arc(avatarX + avatarSize / 2, currentY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 16px sans-serif';
-        ctx.fillText('早苗', avatarX + 9, currentY + 31);
+        ctx.font = 'bold 20px sans-serif';
+        ctx.fillText('早苗', avatarX + 12, currentY + 39);
 
         // Bubble
-        ctx.fillStyle = '#4c1d95';
-        ctx.strokeStyle = '#7c3aed';
-        ctx.lineWidth = 1.5;
-        roundRect(ctx, bubbleX, currentY, bubbleWidth, bubbleHeight, 16, true, true);
+        ctx.fillStyle = '#581c87';
+        ctx.strokeStyle = '#a855f7';
+        ctx.lineWidth = 2.5;
+        roundRect(ctx, bubbleX, currentY, bubbleWidth, bubbleHeight, 20, true, true);
 
-        ctx.fillStyle = '#f1f5f9';
-        ctx.font = '18px "Noto Sans JP", sans-serif';
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 28px "Noto Sans JP", sans-serif';
         lines.forEach((l, i) => {
-          ctx.fillText(l, bubbleX + paddingH, currentY + paddingV + 18 + i * 28);
+          ctx.fillText(l, bubbleX + paddingH, currentY + paddingV + 26 + i * fontLineHeight);
         });
       }
 
-      currentY += bubbleHeight + 24;
+      currentY += bubbleHeight + 28;
     });
 
     // Footer Watermark
-    ctx.fillStyle = '#64748b';
-    ctx.font = '14px sans-serif';
-    ctx.fillText('X-AutoPilot AI Development Record', 40, 645);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = 'bold 16px sans-serif';
+    ctx.fillText('X-AutoPilot AI Development Record', 40, 650);
 
     return canvas.toDataURL('image/png');
   }
