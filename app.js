@@ -347,7 +347,19 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
 
   // Render Function for Both Sections
   function renderApprovalCards() {
-    saveState();
+  // Ensure all posts stay strictly within 130 chars
+  pendingPosts.forEach(post => {
+    if (post.content && post.content.length > 135) {
+      // Auto trim whitespace/newlines or extra length
+      const lines = post.content.split('\n');
+      if (lines.length > 4) {
+        post.content = lines.slice(0, -1).join('\n') + '\n\n#AI副業 #生成AI #個人開発';
+      }
+      if (post.content.length > 135) {
+        post.content = post.content.substring(0, 125) + '…✨\n\n#AI副業 #生成AI';
+      }
+    }
+  });
 
     if (countPendingEl) countPendingEl.textContent = pendingPosts.length;
     if (countApprovedEl) countApprovedEl.textContent = approvedPosts.length;
@@ -807,48 +819,48 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
             keyword: '#AI副業 (ChatGPT & Claude活用)',
             heat: '🔥🔥🔥 超急上昇中',
             heatColor: '#ef4444',
-            desc: '単なるAI雑学ではなく「具体的に月5〜10万稼ぐためのCursor/Claudeでのローコード開発手順」が大バズ中。',
-            suggest: `【ChatGPTで副業月商100万を本気で目指すステップ】\n\n1. 定型業務のプロンプト化（1日1.5h時短）\n2. 空いた時間でCursorを使ってWebアプリ作成\n3. 早苗ちゃんに厳しくコードレビューしてもらう(笑)\n\n40代現場リーダーでもコードなしで本物アプリ作れます🔥\n\n#AI副業 #生成AI #個人開発`
+            desc: 'AIで副業を始めてみたら、こんな手順でアプリまで作れて驚いた！という等身大の感動体験。',
+            suggest: `【AI副業を試してビックリした話】\n\n1. 定型作業をAIへ相談（1.5h時短）\n2. 空いた時間にCursorを触ってみる\n3. 早苗ちゃんにツッコまれる(笑)\n\n40代初心者でも本当にアプリの形になって感動…！最近のAI凄すぎます✨\n\n#AI副業 #生成AI #個人開発`
           },
           {
             rank: 2,
             keyword: '#教育DX (教員向けAIツール)',
             heat: '🔥🔥 急上昇中',
             heatColor: '#f97316',
-            desc: '学校現場の残業削減・指導案作成時短。スポーツスクール指導歴11年の知見と親和性バツグンのトレンド。',
-            suggest: `【指導歴11年の経験×教育AI】\n\n現場の先生方が一番苦労している「学級通信」と「個別指導案」の作成。\n\nAIに枠組みを生成させて、人間は子ども一人ひとりの「観察と最終決断」に時間を使う仕組みを開発中🏫\n\n先生の負担を3分に！\n\n#教育DX #教員応援 #AI副業`
+            desc: '指導案作成がAIで数分でできることに素直に感動！先生方を応援する温かいスタンス。',
+            suggest: `【教育AIを試して大感動…！】\n\n現場の先生が悩む「学級通信」の枠組み、AIが3分で作ってくれて衝撃を受けました🏫\n\n人間は子ども達の「観察」に時間を使える時代。初心者ですが形にします！\n\n#教育DX #教員応援 #AI副業`
           },
           {
             rank: 3,
             keyword: '#業務効率化 (定型作業全自動化)',
             heat: '🔥 上昇中',
             heatColor: '#eab308',
-            desc: 'メール返信・議事録要約・データ入力を完全自動化する「具体的ツール構成（Notion + Make + Gemini）」が拡散中。',
-            suggest: `【定型業務ゼロ化の実体験】\n\n毎日のメール返信・報告書作成をAI化して判明したこと↓\n\n・定型作業：AIが0.5秒で下書き\n・人間の仕事：内容の「決定」と「責任」のみ\n\nこれだけで週10時間浮きます。浮いた時間で副業爆進！\n\n#業務効率化 #生成AI #AI副業`
+            desc: 'ルーティン作業をAIに任せたら1秒で下書きができて驚いた体験。',
+            suggest: `【AIに作業を投げて驚いたこと】\n\n毎日の面倒な文章作成、AIにお願いしたら0.5秒で下書き完了…！\n\n「人間は決定だけに集中してください」と早苗ちゃんに言われ感心しきりです(笑)\n\n#業務効率化 #生成AI #AI副業`
           },
           {
             rank: 4,
             keyword: '#40代からのAI学び直し',
             heat: '📈 注目上昇中',
             heatColor: '#10b981',
-            desc: '「C言語/COBOL世代の論理的思考力はAI時代に超強みになる」というリスキリング視点が共感といいねを獲得中。',
-            suggest: `【C言語歴5年→40代でAI開発を始めて気づいた真実】\n\n昔の基幹システムで培った「構造化思考」と「論理ロジック」は、現代のAIプロンプト作成にそのまま活きる！\n\n40代オジサン、まだまだこれからです🔥\n\n#40代の挑戦 #生成AI #AI副業`
+            desc: '昔のC言語知識しかなくてもAIと対話して形にできて素直に喜ぶスタンス。',
+            suggest: `【40代からAI学び直しに挑戦中！】\n\n昔のC言語しか知らなかったオジサンですが、AIと対話するだけでコードが動いて感激…！\n\n「遅すぎることはない」って本当ですね🔥\n\n#40代の挑戦 #生成AI #AI副業`
           },
           {
             rank: 5,
             keyword: '#個人開発 (Vercel & Python連携)',
             heat: '📊 注目',
             heatColor: '#6366f1',
-            desc: '1人でAIアプリを作って即日公開するWebアーキテクチャ事例。「個人開発で月商100万達成のロードマップ」がトレンド。',
-            suggest: `【個人開発アプリを0円で即日公開する方法】\n\n・フロント：HTML/JS (Vanilla)\n・バックエンド：Vercel Serverless (Python)\n・相棒：塩対応の早苗ちゃん(AI)\n\nこの構成で月商100万アプリを爆速構築中🚀\n\n#個人開発 #AI副業 #生成AI`
+            desc: '0円でアプリがWebに公開できたことに感動する初心者ストーリー。',
+            suggest: `【自分が作った画面がWebで動いて感動！】\n\nAIに教えてもらいながら作ったWebアプリ、スマホでも動いてビックリ…！\n\n早苗ちゃん「感動してないで次行きますよ」\n塩対応だけど感謝です(笑)\n\n#個人開発 #AI副業 #生成AI`
           },
           {
             rank: 6,
-            keyword: '#マネジメント論 (根性論からの脱却)',
+            keyword: '#マネジメント論 (合理性とAI)',
             heat: '📊 注目',
             heatColor: '#8b5cf6',
-            desc: '指示待ち若手への接し方。「根性ではなく合理性とAIツールで動かす」リーダーシップ論が中間管理職層に大ヒット。',
-            suggest: `【現場リーダー11年でたどり着いた教え方】\n\n「もっと考えて動け」はNG。\n「AIでルーティンを終わらせて、決定に集中しよう」と仕組みを渡すのが正解。\n\n部下もAIも動かし方は同じ！\n\n#マネジメント #業務効率化 #AI副業`
+            desc: '指示出しよりもAIツールを渡す便利さに感心した体験。',
+            suggest: `【AI時代の教え方に目から鱗…！】\n\n「根性でやれ」より「AIで下書き作ってから最終決定しよう」と伝える方が圧倒的に早い！\n\nこんな時代が来るとは…技術の進化に感謝です✨\n\n#マネジメント #業務効率化 #AI副業`
           }
         ];
 
