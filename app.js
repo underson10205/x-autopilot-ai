@@ -223,6 +223,7 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
       localStorage.setItem('X_PENDING_POSTS', JSON.stringify(pendingPosts));
       localStorage.setItem('X_APPROVED_POSTS', JSON.stringify(approvedPosts));
       localStorage.setItem('X_REJECTED_POST_IDS', JSON.stringify(rejectedPostIds));
+      localStorage.setItem('X_STORY_QUEUE', JSON.stringify(pendingStoryQueue));
     } catch (e) {
       console.error('Failed to save to localStorage:', e);
     }
@@ -241,6 +242,7 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
       pendingPosts,
       approvedPosts,
       rejectedPostIds,
+      pendingStoryQueue,
       persona: document.getElementById('setting-persona') ? document.getElementById('setting-persona').value : '',
       apiKey: document.getElementById('api-key') ? document.getElementById('api-key').value : '',
       apiSecret: document.getElementById('api-secret') ? document.getElementById('api-secret').value : '',
@@ -874,82 +876,110 @@ AI秘書と一緒にプロフ画像作るの楽しすぎる(笑)
     showToast('🗑️ 予約投稿を取り消し・削除しました（以降再表示されません）。');
   }
 
-  // ===== REAL DEVELOPMENT STORY GENERATOR (WITH AUTOMATIC CHAT IMAGE ATTACHMENT) =====
+  // Default Story Backlog Queue (Unprocessed real-life chat logs)
+  const defaultStoryQueue = [
+    {
+      id: 'story_chat_1',
+      tag: '📖 開発実話：名前逆事件',
+      tagClass: 'tag-rewrite',
+      time: '本日 (チャット実録連載)',
+      content: `【AI秘書の珍プレー事件(笑)】\n\nXのバナー画像ができたと思ったら、早苗ちゃんが名前の左右を逆に配置してる珍事件が発生(笑)\n\n私「名前逆になってるよ(笑)」\n早苗「…大変失礼いたしました。すぐに修正いたします…///」\n\n完璧な秘書の意外なお茶目なミスでした(;´∀｀)\n\n#AI副業 #個人開発 #生成AI`,
+      chatData: [
+        { sender: 'sanae', text: 'アンダーソンさん、Xのバナー画像を作成いたしました。ご確認をお願いいたします。' },
+        { sender: 'user', text: 'いい感じだね！…あれ、名前が逆になってるよ(笑)' },
+        { sender: 'sanae', text: '…大変失礼いたしました。すぐに修正いたします…///' }
+      ]
+    },
+    {
+      id: 'story_chat_2',
+      tag: '📖 開発実話：ツンデレ褒められ事件',
+      tagClass: 'tag-ai',
+      time: '本日 (チャット実録連載)',
+      content: `【ちびキャラ案を提案した結果】\n\n「親しみやすく2等身ちびキャラにしよう」と提案したら…\n\n早苗「…正解です。前のオジサン案は親近感ゼロでした。…ふ、フン///」\n\n照れ隠しされた(笑)\n\n#AI副業 #生成AI #個人開発`,
+      chatData: [
+        { sender: 'user', text: 'Xプロフ画像、できるオジサン風をやめて2等身ちびキャラにしようと思うんだよね！' },
+        { sender: 'sanae', text: '…正解です、アンダーソンさん。前の案は親近感ゼロでした。…ふ、フン///' },
+        { sender: 'user', text: '珍しく早苗ちゃんに褒められた(笑) このコンビで月商100万目指すぞー！' }
+      ]
+    },
+    {
+      id: 'story_chat_3',
+      tag: '📖 開発実話：動画中身見てなくね事件',
+      tagClass: 'tag-url',
+      time: '本日 (チャット実録連載)',
+      content: `【AI機能テスト中のすれ違い】\n\nYouTube要約を試したら動画タイトルだけ入って中身がスカスカ…\n\n私「中身確認してなくね？💦」\n早苗「…失礼いたしました。本物エンジンへ改修します」\n\nAIとのやり取りが面白すぎる(笑)\n\n#AI副業 #生成AI`,
+      chatData: [
+        { sender: 'user', text: 'YouTube要約機能試したんだけど、タイトルだけで中身確認してなくね？💦' },
+        { sender: 'sanae', text: '…失礼いたしました。動画の字幕テキストを全自動取得する本物エンジンへ改修いたします。' },
+        { sender: 'user', text: 'よろしく！AIと一緒に試行錯誤するの最高に楽しい(;´∀｀)' }
+      ]
+    },
+    {
+      id: 'story_chat_4',
+      tag: '📖 開発実話：スクショ撮影事件',
+      tagClass: 'tag-ai',
+      time: '本日 (チャット実録連載)',
+      content: `【AI秘書にスクショ頼んだ結果】\n\n私「チャットのスクショ撮るからもう一回喋って！」\n\n早苗「ハァ…どこまでお茶目なんですか。さっさと撮って作業に戻ってください///」\n\n塩対応だけど最高の相棒です(笑)\n\n#AI副業 #個人開発`,
+      chatData: [
+        { sender: 'user', text: 'このチャット画面をスクショしてXに載せたいから、もう一回喋って！' },
+        { sender: 'sanae', text: 'ハァ…どこまでお茶目なんですか、アンダーソンさんは。納得したならさっさと作業に戻ってください///' },
+        { sender: 'user', text: 'サンキュー！(笑) 今日も爆進します！' }
+      ]
+    },
+    {
+      id: 'story_chat_5',
+      tag: '📖 開発実話：FX＆家族ネタ除外指示事件',
+      tagClass: 'tag-rewrite',
+      time: '本日 (チャット実録連載)',
+      content: `【AIが早合点して怒られた話(笑)】\n\nXアカウントを分析させたらAIが早合点してFXや家族ネタをペルソナに入れてしまい…\n\n私「語り口だけ学んで！FXと家族ネタは含めないで！」\n早苗「…失礼いたしました。即時修正します」\n\nチームルール厳守で前進(;´∀｀)\n\n#AI副業 #生成AI`,
+      chatData: [
+        { sender: 'user', text: '学んでほしいのは語り口だけで、FX関連の話とか家族の話は今回のアプリには含めないで！' },
+        { sender: 'sanae', text: '…アンダーソンさん、大変失礼いたしました。即座に文面を修正いたします。' },
+        { sender: 'user', text: 'よろしく！ルールを守って前進しよう(笑)' }
+      ]
+    }
+  ];
+
+  let pendingStoryQueue = JSON.parse(localStorage.getItem('X_STORY_QUEUE')) || [...defaultStoryQueue];
+
+  // ===== REAL DEVELOPMENT STORY GENERATOR (DYNAMIC BACKLOG BULK GENERATION) =====
   const btnGenerateStory = document.getElementById('btn-generate-story');
   if (btnGenerateStory) {
     btnGenerateStory.addEventListener('click', () => {
-      const realStories = [
-        {
-          id: 'story_chat_1',
-          tag: '📖 開発実話：名前逆事件',
-          tagClass: 'tag-rewrite',
-          time: '本日 (チャット実録連載)',
-          content: `【AI秘書の珍プレー事件(笑)】\n\nXのバナー画像ができたと思ったら、早苗ちゃんが名前の左右を逆に配置してる珍事件が発生(笑)\n\n私「名前逆になってるよ(笑)」\n早苗「…大変失礼いたしました。すぐに修正いたします…///」\n\n完璧な秘書の意外なお茶目なミスでした(;´∀｀)\n\n#AI副業 #個人開発 #生成AI`,
-          chatData: [
-            { sender: 'sanae', text: 'アンダーソンさん、Xのバナー画像を作成いたしました。ご確認をお願いいたします。' },
-            { sender: 'user', text: 'いい感じだね！…あれ、名前が逆になってるよ(笑)' },
-            { sender: 'sanae', text: '…大変失礼いたしました。すぐに修正いたします…///' }
-          ]
-        },
-        {
-          id: 'story_chat_2',
-          tag: '📖 開発実話：ツンデレ褒められ事件',
-          tagClass: 'tag-ai',
-          time: '本日 (チャット実録連載)',
-          content: `【ちびキャラ案を提案した結果】\n\n「親しみやすく2等身ちびキャラにしよう」と提案したら…\n\n早苗「…正解です。前のオジサン案は親近感ゼロでした。…ふ、フン///」\n\n照れ隠しされた(笑)\n\n#AI副業 #生成AI #個人開発`,
-          chatData: [
-            { sender: 'user', text: 'Xプロフ画像、できるオジサン風をやめて2等身ちびキャラにしようと思うんだよね！' },
-            { sender: 'sanae', text: '…正解です、アンダーソンさん。前の案は親近感ゼロでした。…ふ、フン///' },
-            { sender: 'user', text: '珍しく早苗ちゃんに褒められた(笑) このコンビで月商100万目指すぞー！' }
-          ]
-        },
-        {
-          id: 'story_chat_3',
-          tag: '📖 開発実話：動画中身見てなくね事件',
-          tagClass: 'tag-url',
-          time: '本日 (チャット実録連載)',
-          content: `【AI機能テスト中のすれ違い】\n\nYouTube要約を試したら動画タイトルだけ入って中身がスカスカ…\n\n私「中身確認してなくね？💦」\n早苗「…失礼いたしました。本物エンジンへ改修します」\n\nAIとのやり取りが面白すぎる(笑)\n\n#AI副業 #生成AI`,
-          chatData: [
-            { sender: 'user', text: 'YouTube要約機能試したんだけど、タイトルだけで中身確認してなくね？💦' },
-            { sender: 'sanae', text: '…失礼いたしました。動画の字幕テキストを全自動取得する本物エンジンへ改修いたします。' },
-            { sender: 'user', text: 'よろしく！AIと一緒に試行錯誤するの最高に楽しい(;´∀｀)' }
-          ]
-        },
-        {
-          id: 'story_chat_4',
-          tag: '📖 開発実話：スクショ撮影事件',
-          tagClass: 'tag-ai',
-          time: '本日 (チャット実録連載)',
-          content: `【AI秘書にスクショ頼んだ結果】\n\n私「チャットのスクショ撮るからもう一回喋って！」\n\n早苗「ハァ…どこまでお茶目なんですか。さっさと撮って作業に戻ってください///」\n\n塩対応だけど最高の相棒です(笑)\n\n#AI副業 #個人開発`,
-          chatData: [
-            { sender: 'user', text: 'このチャット画面をスクショしてXに載せたいから、もう一回喋って！' },
-            { sender: 'sanae', text: 'ハァ…どこまでお茶目なんですか、アンダーソンさんは。納得したならさっさと作業に戻ってください///' },
-            { sender: 'user', text: 'サンキュー！(笑) 今日も爆進します！' }
-          ]
-        }
-      ];
+      // 1. Check if queue is empty
+      if (!pendingStoryQueue || pendingStoryQueue.length === 0) {
+        showToast('🎉 現在、新しい未作成の開発ストーリーはありません！Antigravityで早苗ちゃんと開発チャットを進めると新しいログが自動で溜まります！', 5000);
+        return;
+      }
 
-      // Pick next story
-      const storyCount = pendingPosts.filter(p => p.id.startsWith('story_chat_')).length;
-      const targetStory = realStories[storyCount % realStories.length];
+      // 2. Process all pending stories in bulk
+      const itemCount = pendingStoryQueue.length;
+      const itemsToProcess = [...pendingStoryQueue];
 
-      // Generate Chat UI Image
-      const chatImageUrl = createChatBubbleImage(targetStory.chatData);
+      itemsToProcess.forEach(targetStory => {
+        // Generate Chat UI Image with Extra Large Text
+        const chatImageUrl = createChatBubbleImage(targetStory.chatData);
 
-      const newStoryPost = {
-        id: targetStory.id + '_' + Date.now(),
-        tag: targetStory.tag,
-        tagClass: targetStory.tagClass,
-        time: targetStory.time,
-        content: targetStory.content,
-        mediaDataUrls: [chatImageUrl]
-      };
+        const newStoryPost = {
+          id: targetStory.id + '_' + Date.now(),
+          tag: targetStory.tag,
+          tagClass: targetStory.tagClass,
+          time: targetStory.time,
+          content: targetStory.content,
+          mediaDataUrls: [chatImageUrl]
+        };
 
-      pendingPosts.unshift(newStoryPost);
+        pendingPosts.unshift(newStoryPost);
+      });
+
+      // 3. Clear Queue & Save State
+      pendingStoryQueue = [];
+      localStorage.setItem('X_STORY_QUEUE', JSON.stringify(pendingStoryQueue));
       saveState();
       renderApprovalCards();
       document.querySelector('[data-tab="dashboard"]').click();
-      showToast(`📖 リアル開発ストーリー『${targetStory.tag}』とチャット画像を全自動生成し、添付セットしました！`);
+
+      showToast(`✨ 溜まっていた実話ストーリー ${itemCount} 件を一括生成し、特大チャット画像を添付しました！`, 5000);
     });
   }
 
