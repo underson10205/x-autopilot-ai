@@ -1,0 +1,137 @@
+/* ==========================================================================
+   Management Support AI Custom CSS (Earth tone & Healing UI Theme)
+   ========================================================================== */
+
+:root {
+  --mg-primary: #10b981;
+  --mg-primary-hover: #059669;
+  --mg-bg-dark: #0f172a;
+  --mg-bg-card: rgba(30, 41, 59, 0.6);
+  --mg-border: rgba(255, 255, 255, 0.08);
+}
+
+.quick-question-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quick-question-card:hover {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: #10b981;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.quick-question-card .card-icon {
+  font-size: 24px;
+}
+
+.quick-question-card .card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.quick-question-card .card-desc {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.chat-bubble-row {
+  display: flex;
+  gap: 14px;
+  max-width: 88%;
+}
+
+.chat-bubble-row.partner {
+  align-self: flex-start;
+}
+
+.chat-bubble-row.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.chat-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.chat-bubble-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-sender-name {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.chat-bubble-text {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 16px 20px;
+  color: #f1f5f9;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.chat-bubble-row.user .chat-bubble-text {
+  background: #2563eb;
+  border-color: #3b82f6;
+  color: #fff;
+}
+
+.option-proposal-box {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-top: 10px;
+}
+
+.option-proposal-box .option-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: #34d399;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.option-proposal-box .option-reason {
+  font-size: 12px;
+  color: #cbd5e1;
+  margin-top: 4px;
+}
+
+.partner-select-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.partner-select-card.active {
+  border-color: #a855f7 !important;
+  background: rgba(88, 28, 135, 0.35) !important;
+}
