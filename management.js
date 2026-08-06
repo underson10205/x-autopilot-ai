@@ -124,19 +124,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Tab Navigation
+  // Tab Navigation Handler
   const navButtons = document.querySelectorAll('.nav-item');
   const tabContents = document.querySelectorAll('.tab-content');
 
-  navButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tabId = btn.getAttribute('data-tab');
-      navButtons.forEach(b => b.classList.remove('active'));
-      tabContents.forEach(c => c.style.display = 'none');
+  function switchTab(tabId) {
+    navButtons.forEach(b => {
+      if (b.getAttribute('data-tab') === tabId) {
+        b.classList.add('active');
+      } else {
+        b.classList.remove('active');
+      }
+    });
 
-      btn.classList.add('active');
-      const targetTab = document.getElementById(`tab-${tabId}`);
-      if (targetTab) targetTab.style.display = 'block';
+    tabContents.forEach(c => {
+      if (c.id === `tab-${tabId}`) {
+        c.style.display = 'block';
+        c.classList.add('active');
+      } else {
+        c.style.display = 'none';
+        c.classList.remove('active');
+      }
+    });
+  }
+
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const tabId = btn.getAttribute('data-tab');
+      if (tabId) {
+        switchTab(tabId);
+      }
     });
   });
 
