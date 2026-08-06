@@ -341,17 +341,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const listGrid = document.getElementById('knowledge-list-grid');
     if (!listGrid) return;
 
-    listGrid.innerHTML = knowledgeList.map(k => `
-      <div class="knowledge-item-card" style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: flex-start;">
-        <div>
-          <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; margin-bottom: 6px;">${escapeHtml(k.category || 'ナレッジ')}</span>
-          <h4 style="font-size: 15px; font-weight: 700; color: #f8fafc;">${escapeHtml(k.title)}</h4>
-          <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px; white-space: pre-wrap;">${escapeHtml(k.summary)}</p>
+    if (knowledgeList.length === 0) {
+      listGrid.innerHTML = `
+        <div style="background: #ffffff; border: 1px solid var(--mg-border); border-radius: 12px; padding: 24px; text-align: center; color: #64748b;">
+          登録されたナレッジはまだありません。上のフォームからYouTube動画URLを入力して登録してください。
         </div>
+      `;
+      document.getElementById('knowledge-count').textContent = 0;
+      return;
+    }
+
+    listGrid.innerHTML = knowledgeList.map((k, index) => `
+      <div class="knowledge-item-card" style="background: #ffffff; border: 1px solid #e2ded4; border-radius: 16px; padding: 20px 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+          <div>
+            <span class="badge" style="background: #f0fdf4; color: #047857; border: 1px solid #a7f3d0; margin-bottom: 8px;">${escapeHtml(k.category || 'ナレッジ')}</span>
+            <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 4px 0 0 0;">${escapeHtml(k.title)}</h4>
+          </div>
+          <button class="btn btn-secondary btn-sm btn-delete-k" data-index="${index}" style="background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5; font-size: 12px; padding: 6px 14px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+            🗑️ 削除
+          </button>
+        </div>
+        <div style="font-size: 14px; color: #334155; line-height: 1.75; white-space: pre-wrap; background: #f8f6f0; border: 1px solid #eae6dd; border-radius: 12px; padding: 16px;">${escapeHtml(k.summary)}</div>
       </div>
     `).join('');
 
     document.getElementById('knowledge-count').textContent = knowledgeList.length;
+
+    // Attach Delete Event Listeners
+    const deleteBtns = document.querySelectorAll('.btn-delete-k');
+    deleteBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.getAttribute('data-index'), 10);
+        const deletedTitle = knowledgeList[idx].title;
+        knowledgeList.splice(idx, 1);
+        localStorage.setItem('MG_KNOWLEDGE_LIST', JSON.stringify(knowledgeList));
+        renderKnowledgeList();
+        showToast(`🗑️ ナレッジ『${deletedTitle.slice(0, 15)}...』を削除しました`);
+      });
+    });
   }
 
   function saveUserState() {
