@@ -1,50 +1,165 @@
 /* ==========================================================================
-   Management Support AI Custom CSS (Earth tone & Healing UI Theme)
+   Management Support AI - Earth Tone & Warm Healing UI Theme
+   (Dark mode replaced with gentle warm beige & sage green)
    ========================================================================== */
 
 :root {
-  --mg-primary: #10b981;
-  --mg-primary-hover: #059669;
-  --mg-bg-dark: #0f172a;
-  --mg-bg-card: rgba(30, 41, 59, 0.6);
-  --mg-border: rgba(255, 255, 255, 0.08);
+  --mg-primary: #059669;
+  --mg-primary-hover: #047857;
+  --mg-primary-light: rgba(5, 150, 105, 0.08);
+  --mg-bg: #f6f4ee;
+  --mg-bg-card: #ffffff;
+  --mg-bg-sub: #eeebe3;
+  --mg-text-main: #1e293b;
+  --mg-text-muted: #64748b;
+  --mg-border: #e2ded4;
+  --mg-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
-.quick-question-card {
+body {
+  background-color: var(--mg-bg);
+  color: var(--mg-text-main);
+  font-family: 'Noto Sans JP', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  display: flex;
+  min-h-screen: 100vh;
+}
+
+/* Sidebar Warm Styling */
+.sidebar {
+  width: 260px;
+  background: #eae6dd;
+  border-right: 1px solid var(--mg-border);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.02);
+}
+
+.brand-title {
+  color: #065f46;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.brand-subtitle {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.nav-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
   border-radius: 12px;
-  padding: 14px 16px;
-  color: #fff;
-  text-align: left;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
+.nav-item:hover {
+  background: rgba(5, 150, 105, 0.08);
+  color: var(--mg-primary);
+}
+
+.nav-item.active {
+  background: #ffffff;
+  color: var(--mg-primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  font-weight: 700;
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--mg-bg);
+}
+
+.top-header {
+  background: #f1ede4;
+  border-bottom: 1px solid var(--mg-border);
+  padding: 20px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title h1 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #065f46;
+  margin: 0;
+}
+
+.header-title .subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.content-body {
+  padding: 32px;
+  flex: 1;
+  max-width: 1100px;
+}
+
+/* Quick Question Cards */
+.quick-question-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid var(--mg-border);
+  border-radius: 14px;
+  padding: 16px;
+  color: var(--mg-text-main);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--mg-shadow);
+}
+
 .quick-question-card:hover {
-  background: rgba(16, 185, 129, 0.12);
-  border-color: #10b981;
+  background: #f0fdf4;
+  border-color: #059669;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 6px 16px rgba(5, 150, 105, 0.12);
 }
 
 .quick-question-card .card-icon {
-  font-size: 24px;
+  font-size: 26px;
 }
 
 .quick-question-card .card-title {
   font-size: 14px;
   font-weight: 700;
-  color: #f8fafc;
+  color: #0f172a;
 }
 
 .quick-question-card .card-desc {
   font-size: 12px;
-  color: #94a3b8;
+  color: #64748b;
   margin-top: 2px;
+}
+
+/* Chat Window & Bubbles */
+.chat-window-container {
+  background: #ffffff;
+  border: 1px solid var(--mg-border);
+  border-radius: 20px;
+  box-shadow: var(--mg-shadow);
 }
 
 .chat-bubble-row {
@@ -63,8 +178,8 @@
 }
 
 .chat-avatar {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -73,65 +188,78 @@
   font-weight: 700;
   color: #fff;
   flex-shrink: 0;
-}
-
-.chat-bubble-content {
-  display: flex;
-  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .chat-sender-name {
   font-size: 12px;
-  color: #94a3b8;
+  color: #64748b;
   margin-bottom: 4px;
+  font-weight: 600;
 }
 
 .chat-bubble-text {
-  background: rgba(30, 41, 59, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 16px 20px;
-  color: #f1f5f9;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 18px 22px;
+  color: #1e293b;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.75;
   white-space: pre-wrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
 }
 
 .chat-bubble-row.user .chat-bubble-text {
-  background: #2563eb;
-  border-color: #3b82f6;
-  color: #fff;
+  background: #059669;
+  border-color: #047857;
+  color: #ffffff;
 }
 
 .option-proposal-box {
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: #f0fdf4;
+  border: 1px solid #a7f3d0;
   border-radius: 12px;
-  padding: 14px 16px;
+  padding: 14px 18px;
   margin-top: 10px;
 }
 
 .option-proposal-box .option-title {
   font-weight: 700;
   font-size: 14px;
-  color: #34d399;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  color: #047857;
 }
 
 .option-proposal-box .option-reason {
-  font-size: 12px;
-  color: #cbd5e1;
+  font-size: 13px;
+  color: #334155;
   margin-top: 4px;
+}
+
+.partner-select-card {
+  background: #ffffff;
+  border: 2px solid var(--mg-border);
+  border-radius: 16px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--mg-shadow);
 }
 
 .partner-select-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  border-color: #059669;
 }
 
 .partner-select-card.active {
-  border-color: #a855f7 !important;
-  background: rgba(88, 28, 135, 0.35) !important;
+  border-color: #059669 !important;
+  background: #f0fdf4 !important;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
 }

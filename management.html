@@ -13,19 +13,19 @@
     <!-- Sidebar Navigation -->
     <aside class="sidebar">
       <div class="brand">
-        <div class="brand-logo" style="background: linear-gradient(135deg, #10b981, #059669);">🌿</div>
+        <div class="brand-logo" style="background: linear-gradient(135deg, #059669, #047857);">🌿</div>
         <div class="brand-text">
-          <span class="brand-title">マネジメントサポートAI</span>
+          <span class="brand-title">マネジメントAI</span>
           <span class="brand-subtitle">プロダクト #2</span>
         </div>
       </div>
 
       <!-- App Switcher Badge -->
-      <div style="padding: 12px; margin-bottom: 16px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; font-size: 13px;">
-        <span style="color: #10b981; font-weight: 700;">🔄 アプリ切替</span>
+      <div style="padding: 12px; margin-bottom: 16px; background: rgba(5, 150, 105, 0.08); border: 1px solid rgba(5, 150, 105, 0.2); border-radius: 12px; font-size: 13px;">
+        <span style="color: #065f46; font-weight: 700;">🔄 アプリ切替</span>
         <div style="margin-top: 6px; display: flex; gap: 6px;">
-          <a href="index.html" class="btn btn-sm" style="flex: 1; text-align: center; background: rgba(255,255,255,0.1); color: var(--text-muted); font-size: 11px;">🚀 X運用AI</a>
-          <a href="management.html" class="btn btn-sm" style="flex: 1; text-align: center; background: #10b981; color: #fff; font-size: 11px; font-weight: 700;">🌿 マネジメントAI</a>
+          <a href="index.html" class="btn btn-sm" style="flex: 1; text-align: center; background: rgba(0,0,0,0.05); color: #64748b; font-size: 11px;">🚀 X運用AI</a>
+          <a href="management.html" class="btn btn-sm" style="flex: 1; text-align: center; background: #059669; color: #fff; font-size: 11px; font-weight: 700;">🌿 マネジメントAI</a>
         </div>
       </div>
 
@@ -34,25 +34,35 @@
           <span class="nav-icon">🏡</span>
           <span>ホーム ＆ 相談</span>
         </button>
-        <button class="nav-item" data-tab="knowledge">
-          <span class="nav-icon">📚</span>
-          <span>ナレッジ登録スタジオ</span>
-        </button>
         <button class="nav-item" data-tab="history">
           <span class="nav-icon">📖</span>
           <span>振り返り ＆ 成長ノート</span>
         </button>
         <button class="nav-item" data-tab="settings">
           <span class="nav-icon">👥</span>
-          <span>AIパートナー設定</span>
+          <span>AIパートナー選択</span>
+        </button>
+        <!-- Admin-Only Tab (Hidden for General Users) -->
+        <button class="nav-item admin-only-item" data-tab="knowledge" style="display: none; background: rgba(217, 119, 6, 0.1); color: #b45309; border: 1px dashed rgba(217, 119, 6, 0.4);">
+          <span class="nav-icon">👑</span>
+          <span>ナレッジ登録 (管理者)</span>
         </button>
       </nav>
 
-      <div class="user-profile">
-        <div class="user-avatar" style="background: #10b981;">秋</div>
+      <!-- Role Switcher (Admin vs General User) -->
+      <div style="margin-top: auto; padding: 12px; background: rgba(0,0,0,0.03); border: 1px solid var(--mg-border); border-radius: 12px; font-size: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="color: #475569; font-weight: 700;">👑 管理者モード</span>
+          <input type="checkbox" id="role-toggle" style="cursor: pointer;">
+        </div>
+        <div style="font-size: 10px; color: #94a3b8; margin-top: 4px;" id="role-status-text">現在: 一般利用者表示</div>
+      </div>
+
+      <div class="user-profile" style="margin-top: 12px;">
+        <div class="user-avatar" style="background: #059669; color: #fff;">秋</div>
         <div class="user-info">
-          <span class="user-name">アンダーソン</span>
-          <span class="user-role">リーダー / 現場マネージャー</span>
+          <span class="user-name" style="color: #1e293b; font-weight: 700;">アンダーソン</span>
+          <span class="user-role" style="color: #64748b;">現場マネージャー</span>
         </div>
       </div>
     </aside>
@@ -60,26 +70,26 @@
     <!-- Main Content Area -->
     <main class="main-content">
       <!-- Top Bar with Gamification Status -->
-      <header class="top-header" style="background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08);">
+      <header class="top-header">
         <div class="header-title">
-          <h1 id="page-title">🌿 マネジメント参謀チャット</h1>
+          <h1>🌿 マネジメント参謀チャット</h1>
           <p class="subtitle">孤独な現場リーダーの心を包み、最適なアドバイスを提示します</p>
         </div>
 
         <!-- Gamification Level Bar -->
-        <div class="gamification-bar" style="display: flex; align-items: center; gap: 16px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); padding: 8px 16px; border-radius: 30px;">
+        <div class="gamification-bar" style="display: flex; align-items: center; gap: 16px; background: #ffffff; border: 1px solid var(--mg-border); padding: 8px 18px; border-radius: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
           <div style="display: flex; align-items: center; gap: 8px;">
             <span style="font-size: 20px;">🛡️</span>
             <div>
-              <div style="font-size: 13px; font-weight: 700; color: #34d399;" id="user-level-label">Lv.1 新米リーダー</div>
-              <div style="width: 110px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-top: 3px;">
-                <div id="user-exp-bar" style="width: 25%; height: 100%; background: linear-gradient(90deg, #10b981, #34d399); transition: width 0.4s ease;"></div>
+              <div style="font-size: 13px; font-weight: 700; color: #047857;" id="user-level-label">Lv.1 新米リーダー</div>
+              <div style="width: 110px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; margin-top: 3px;">
+                <div id="user-exp-bar" style="width: 25%; height: 100%; background: linear-gradient(90deg, #059669, #34d399); transition: width 0.4s ease;"></div>
               </div>
             </div>
           </div>
-          <div style="font-size: 12px; color: var(--text-muted); border-left: 1px solid rgba(255,255,255,0.1); padding-left: 12px;">
-            <div>🔥 連続ログイン: <span id="login-streak" style="color: #fbbf24; font-weight: 700;">3日目</span></div>
-            <div>🎁 クエスト: <span id="quest-status" style="color: #34d399; font-weight: 600;">1/3 完了</span></div>
+          <div style="font-size: 12px; color: #64748b; border-left: 1px solid #e2e8f0; padding-left: 12px;">
+            <div>🔥 連続ログイン: <span id="login-streak" style="color: #d97706; font-weight: 700;">3日目</span></div>
+            <div>🎁 クエスト: <span id="quest-status" style="color: #059669; font-weight: 600;">1/3 完了</span></div>
           </div>
         </div>
       </header>
@@ -91,25 +101,25 @@
         <div id="tab-home" class="tab-content active">
           
           <!-- Current AI Partner Banner -->
-          <div class="partner-card-banner" style="background: linear-gradient(135deg, rgba(88, 28, 135, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 16px; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <div class="partner-card-banner" style="background: #ffffff; border: 1px solid #e2ded4; border-radius: 16px; padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
             <div style="display: flex; align-items: center; gap: 16px;">
-              <div id="partner-avatar" style="width: 56px; height: 56px; border-radius: 50%; background: #8b5cf6; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #fff; font-weight: 700; box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);">早苗</div>
+              <div id="partner-avatar" style="width: 56px; height: 56px; border-radius: 50%; background: #059669; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; font-weight: 700; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);">早苗</div>
               <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <span id="partner-name" style="font-size: 18px; font-weight: 700; color: #f3e8ff;">AI秘書 早苗ちゃん</span>
-                  <span id="partner-type-badge" class="badge" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); font-size: 11px;">ツンデレ・スパルタ型 (女性)</span>
+                  <span id="partner-name" style="font-size: 18px; font-weight: 700; color: #0f172a;">AI秘書 早苗ちゃん</span>
+                  <span id="partner-type-badge" class="badge" style="background: #f0fdf4; color: #047857; border: 1px solid #a7f3d0; font-size: 11px;">ツンデレ・スパルタ型 (女性)</span>
                 </div>
-                <p id="partner-motto" style="color: #cbd5e1; font-size: 13px; margin-top: 4px;">「…ふん。アンダーソンさん、甘えは厳禁です。成果を出したら認めてあげます」</p>
+                <p id="partner-motto" style="color: #475569; font-size: 13px; margin-top: 4px;">「…ふん。アンダーソンさん、甘えは厳禁です。成果を出したら認めてあげます」</p>
               </div>
             </div>
-            <button id="btn-change-partner" class="btn btn-secondary btn-sm" style="border-radius: 20px;">
+            <button id="btn-change-partner" class="btn btn-secondary btn-sm" style="border-radius: 20px; background: #f1ede4; color: #334155; border: 1px solid #d6cfc1;">
               ⚙️ パートナーを変更
             </button>
           </div>
 
-          <!-- Quick Consultation Cards (Zero Typing Barrier) -->
+          <!-- Quick Consultation Cards -->
           <div style="margin-bottom: 24px;">
-            <h3 style="font-size: 14px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+            <h3 style="font-size: 14px; color: #64748b; margin-bottom: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
               <span>⚡️ ワンタップ・クイック悩みカード（選ぶだけで即相談）</span>
             </h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
@@ -147,13 +157,13 @@
             </div>
           </div>
 
-          <!-- Chat Conversation Log Window -->
-          <div class="chat-window-container" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; height: 500px;">
-            <div id="chat-messages-body" style="flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px;">
+          <!-- Chat Conversation Window -->
+          <div class="chat-window-container" style="display: flex; flex-direction: column; height: 480px;">
+            <div id="chat-messages-body" style="flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px;">
               
               <!-- Initial Welcome Message from Partner -->
               <div class="chat-bubble-row partner">
-                <div class="chat-avatar" style="background: #8b5cf6;">早苗</div>
+                <div class="chat-avatar" style="background: #059669;">早苗</div>
                 <div class="chat-bubble-content">
                   <div class="chat-sender-name">早苗ちゃん</div>
                   <div class="chat-bubble-text">
@@ -166,29 +176,29 @@
             </div>
 
             <!-- Chat Input Area -->
-            <div class="chat-input-area" style="padding: 16px; background: rgba(30, 41, 59, 0.8); border-top: 1px solid rgba(255,255,255,0.08); display: flex; gap: 12px; align-items: center;">
-              <textarea id="chat-input-text" rows="1" placeholder="部下との関係やマネジメントの悩みを入力してください..." style="flex: 1; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 12px 18px; color: #fff; font-size: 14px; resize: none;"></textarea>
-              <button id="btn-send-consult" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #059669); border-radius: 20px; padding: 10px 24px;">
+            <div class="chat-input-area" style="padding: 16px; background: #f8f6f0; border-top: 1px solid var(--mg-border); display: flex; gap: 12px; align-items: center;">
+              <textarea id="chat-input-text" rows="1" placeholder="部下との関係やマネジメントの悩みを入力してください..." style="flex: 1; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 20px; padding: 12px 18px; color: #1e293b; font-size: 14px; resize: none;"></textarea>
+              <button id="btn-send-consult" class="btn btn-primary" style="background: #059669; border-radius: 20px; padding: 10px 24px;">
                 <span>送信</span> <span>✈️</span>
               </button>
             </div>
           </div>
 
-          <!-- Feedback Stamp Area (PDCA Loop) -->
-          <div id="feedback-panel" style="margin-top: 24px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 16px; padding: 18px 24px; display: none;">
+          <!-- Feedback Stamp Area -->
+          <div id="feedback-panel" style="margin-top: 24px; background: #ffffff; border: 1px solid #a7f3d0; border-radius: 16px; padding: 18px 24px; display: none; box-shadow: var(--mg-shadow);">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <div>
-                <h4 style="font-size: 15px; font-weight: 700; color: #34d399;">⏱ 1秒振り返りスタンプ（実践したフィードバック）</h4>
-                <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">提案を試してみた結果を押すだけで経験値(EXP+30)を獲得し、次回提案へAIが自動学習します</p>
+                <h4 style="font-size: 15px; font-weight: 700; color: #047857; margin: 0;">⏱ 1秒振り返りスタンプ（実践したフィードバック）</h4>
+                <p style="font-size: 13px; color: #64748b; margin-top: 2px;">提案を試してみた結果を押すだけで経験値(EXP+30)を獲得し、次回提案へAIが自動学習します</p>
               </div>
               <div style="display: flex; gap: 10px;">
-                <button class="stamp-btn" data-result="success" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer;">
+                <button class="stamp-btn" data-result="success" style="background: #f0fdf4; border: 1px solid #10b981; color: #047857; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer;">
                   👍 上手くいった (+30 EXP)
                 </button>
-                <button class="stamp-btn" data-result="so-so" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #fbbf24; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer;">
+                <button class="stamp-btn" data-result="so-so" style="background: #fffbeb; border: 1px solid #f59e0b; color: #b45309; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer;">
                   🤔 微妙だった (+20 EXP)
                 </button>
-                <button class="stamp-btn" data-result="skip" style="background: rgba(148, 163, 184, 0.2); border: 1px solid #94a3b8; color: #cbd5e1; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer;">
+                <button class="stamp-btn" data-result="skip" style="background: #f8fafc; border: 1px solid #94a3b8; color: #475569; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer;">
                   ⏳ まだ試せてない (+10 EXP)
                 </button>
               </div>
@@ -197,42 +207,42 @@
 
         </div>
 
-        <!-- TAB 2: KNOWLEDGE STUDIO (URL & TEXT ACCUMULATION) -->
+        <!-- TAB 2: KNOWLEDGE STUDIO (ADMIN ONLY) -->
         <div id="tab-knowledge" class="tab-content" style="display: none;">
           <div style="margin-bottom: 24px;">
-            <h2 style="font-size: 20px; font-weight: 700; color: #fff;">📚 アンダーソン厳選 ナレッジ登録スタジオ</h2>
-            <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">学びとなったYouTube動画URLやテキスト記事を入力し、AIの根拠ソースとして蓄積します</p>
+            <h2 style="font-size: 20px; font-weight: 700; color: #065f46;">👑 アンダーソン厳選 ナレッジ登録スタジオ (管理者専用)</h2>
+            <p style="color: #64748b; font-size: 14px; margin-top: 4px;">学びとなったYouTube動画URLを入力し、字幕全文をGemini AIで高精度解析してナレッジ登録します</p>
           </div>
 
           <!-- URL Input Form -->
-          <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; margin-bottom: 28px;">
-            <h3 style="font-size: 16px; font-weight: 700; color: #34d399; margin-bottom: 16px;">📥 新しいナレッジを登録</h3>
+          <div style="background: #ffffff; border: 1px solid var(--mg-border); border-radius: 16px; padding: 24px; margin-bottom: 28px; box-shadow: var(--mg-shadow);">
+            <h3 style="font-size: 16px; font-weight: 700; color: #047857; margin-bottom: 16px;">📥 新しいYouTube動画を解析</h3>
             
             <div style="display: flex; gap: 12px; margin-bottom: 16px;">
-              <input type="url" id="knowledge-url-input" placeholder="https://www.youtube.com/watch?v=... などの動画URLを貼り付け" style="flex: 1; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 12px 16px; color: #fff; font-size: 14px;">
-              <button id="btn-extract-knowledge" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #059669); border-radius: 12px; padding: 12px 24px;">
-                <span>✨ AIナレッジ解析</span>
+              <input type="url" id="knowledge-url-input" placeholder="https://www.youtube.com/watch?v=... などの動画URLを貼り付け" style="flex: 1; background: #f8f6f0; border: 1px solid #cbd5e1; border-radius: 12px; padding: 12px 16px; color: #1e293b; font-size: 14px;">
+              <button id="btn-extract-knowledge" class="btn btn-primary" style="background: #059669; border-radius: 12px; padding: 12px 24px;">
+                <span>✨ 本物Gemini AI解析</span>
               </button>
             </div>
 
             <!-- Preview & Confirm Card -->
-            <div id="knowledge-preview-card" style="display: none; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 12px; padding: 20px; margin-top: 16px;">
+            <div id="knowledge-preview-card" style="display: none; background: #f0fdf4; border: 1px solid #a7f3d0; border-radius: 12px; padding: 20px; margin-top: 16px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4);">解析結果プレビュー</span>
-                <span style="font-size: 12px; color: var(--text-muted);">編集して確定保存できます</span>
+                <span class="badge" style="background: #059669; color: #fff;">字幕全文 AI解析完了</span>
+                <span style="font-size: 12px; color: #64748b;">内容を確認・修正して保存できます</span>
               </div>
 
               <div style="margin-bottom: 12px;">
-                <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">タイトル</label>
-                <input type="text" id="prev-title" style="width: 100%; background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 12px; color: #fff; font-weight: 700;">
+                <label style="font-size: 12px; color: #475569; display: block; margin-bottom: 4px; font-weight: 700;">動画タイトル</label>
+                <input type="text" id="prev-title" style="width: 100%; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 12px; color: #1e293b; font-weight: 700;">
               </div>
 
               <div style="margin-bottom: 12px;">
-                <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">核心の要約 ＆ タイムスタンプ見どころ</label>
-                <textarea id="prev-summary" rows="4" style="width: 100%; background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 12px; color: #fff; font-size: 13px; resize: vertical;"></textarea>
+                <label style="font-size: 12px; color: #475569; display: block; margin-bottom: 4px; font-weight: 700;">抽出された核心要約 ＆ タイムスタンプ見どころ</label>
+                <textarea id="prev-summary" rows="5" style="width: 100%; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; color: #1e293b; font-size: 13px; resize: vertical; line-height: 1.6;"></textarea>
               </div>
 
-              <button id="btn-save-knowledge" class="btn btn-accent" style="width: 100%; background: linear-gradient(135deg, #10b981, #059669); border-radius: 10px; font-weight: 700; padding: 12px;">
+              <button id="btn-save-knowledge" class="btn btn-accent" style="width: 100%; background: #059669; color: #fff; border-radius: 10px; font-weight: 700; padding: 12px;">
                 💾 このナレッジを正式保存・DB蓄積する
               </button>
             </div>
@@ -240,37 +250,26 @@
 
           <!-- Existing Knowledge List -->
           <div>
-            <h3 style="font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 16px;">📚 蓄積済みナレッジ一覧 (<span id="knowledge-count">3</span>件)</h3>
-            <div id="knowledge-list-grid" style="display: flex; flex-direction: column; gap: 12px;">
-              
-              <div class="knowledge-item-card" style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
-                  <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; margin-bottom: 6px;">1on1対話ノウハウ</span>
-                  <h4 style="font-size: 15px; font-weight: 700; color: #f8fafc;">『部下の本音を引き出す1on1面談の極意』</h4>
-                  <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">評価ではなく共感から入る。03:20 信頼関係を作る最初の言葉が効果的。</p>
-                </div>
-                <button class="btn btn-secondary btn-sm" style="font-size: 11px;">削除</button>
-              </div>
-
-            </div>
+            <h3 style="font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 16px;">📚 蓄積済みナレッジ一覧 (<span id="knowledge-count">2</span>件)</h3>
+            <div id="knowledge-list-grid" style="display: flex; flex-direction: column; gap: 12px;"></div>
           </div>
         </div>
 
         <!-- TAB 3: HISTORY & GROWTH NOTE -->
         <div id="tab-history" class="tab-content" style="display: none;">
           <div style="margin-bottom: 24px;">
-            <h2 style="font-size: 20px; font-weight: 700; color: #fff;">📖 振り返り ＆ 成長ノート（実践の記録）</h2>
-            <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">あなたが実践したアドバイスと成果が蓄積されるマネジメント攻略ノートです</p>
+            <h2 style="font-size: 20px; font-weight: 700; color: #065f46;">📖 振り返り ＆ 成長ノート（実践の記録）</h2>
+            <p style="color: #64748b; font-size: 14px; margin-top: 4px;">あなたが実践したアドバイスと成果が蓄積されるマネジメント攻略ノートです</p>
           </div>
 
           <div id="history-list" style="display: flex; flex-direction: column; gap: 16px;">
-            <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px;">
+            <div style="background: #ffffff; border: 1px solid var(--mg-border); border-radius: 16px; padding: 20px; box-shadow: var(--mg-shadow);">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <span style="font-size: 12px; color: var(--text-muted);">2026年8月5日</span>
-                <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">👍 実践成功 (+30 EXP)</span>
+                <span style="font-size: 12px; color: #64748b;">2026年8月5日</span>
+                <span class="badge" style="background: #f0fdf4; color: #047857; border: 1px solid #a7f3d0;">👍 実践成功 (+30 EXP)</span>
               </div>
-              <h4 style="font-size: 15px; font-weight: 700; color: #fff;">相談: 「注意した後の雰囲気フォローについて」</h4>
-              <p style="font-size: 13px; color: #cbd5e1; margin-top: 8px;">早苗ちゃんの『直後に期待の言葉を1言添える』アドバイスを実践。部下が笑顔で『わかりました！次頑張ります』と言ってくれました！</p>
+              <h4 style="font-size: 15px; font-weight: 700; color: #1e293b; margin: 0;">相談: 「注意した後の雰囲気フォローについて」</h4>
+              <p style="font-size: 13px; color: #334155; margin-top: 8px;">早苗ちゃんの『直後に期待の言葉を1言添える』アドバイスを実践。部下が笑顔で『わかりました！次頑張ります』と言ってくれました！</p>
             </div>
           </div>
         </div>
@@ -278,46 +277,46 @@
         <!-- TAB 4: SETTINGS (PARTNER SELECTOR) -->
         <div id="tab-settings" class="tab-content" style="display: none;">
           <div style="margin-bottom: 24px;">
-            <h2 style="font-size: 20px; font-weight: 700; color: #fff;">👥 AIパートナー選択スタジオ (3タイプ × 性別男女)</h2>
-            <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">あなたの性格や好みに合わせて、伴走してくれるAIパートナーを選択してください</p>
+            <h2 style="font-size: 20px; font-weight: 700; color: #065f46;">👥 AIパートナー選択スタジオ (3タイプ × 性別男女)</h2>
+            <p style="color: #64748b; font-size: 14px; margin-top: 4px;">あなたの性格や好みに合わせて、伴走してくれるAIパートナーを選択してください</p>
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
             
             <!-- Type 1: Positive -->
-            <div class="partner-select-card" data-partner-id="陽葵" style="background: rgba(30, 41, 59, 0.6); border: 2px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.2s ease;">
+            <div class="partner-select-card" data-partner-id="陽葵">
               <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
                 <div style="width: 48px; height: 48px; border-radius: 50%; background: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; font-weight: 700;">陽</div>
                 <div>
-                  <div style="font-weight: 700; font-size: 16px; color: #fff;">陽葵 (ひまり) / 女性</div>
-                  <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-size: 11px;">① ポジティブ・共感型</span>
+                  <div style="font-weight: 700; font-size: 16px; color: #1e293b;">陽葵 (ひまり) / 女性</div>
+                  <span class="badge" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a;">① ポジティブ・共感型</span>
                 </div>
               </div>
-              <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5;">明るく元気。まずあなたの苦労に深く共感し、前向きに励ましてくれます。</p>
+              <p style="font-size: 13px; color: #475569; line-height: 1.6;">明るく元気。まずあなたの苦労に深く共感し、前向きに励ましてくれます。</p>
             </div>
 
             <!-- Type 2: Cool Logical -->
-            <div class="partner-select-card" data-partner-id="冷泉" style="background: rgba(30, 41, 59, 0.6); border: 2px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.2s ease;">
+            <div class="partner-select-card" data-partner-id="冷泉">
               <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
                 <div style="width: 48px; height: 48px; border-radius: 50%; background: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; font-weight: 700;">冷</div>
                 <div>
-                  <div style="font-weight: 700; font-size: 16px; color: #fff;">冷泉 (れいせん) / 女性</div>
-                  <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; font-size: 11px;">② クール・ロジカル型</span>
+                  <div style="font-weight: 700; font-size: 16px; color: #1e293b;">冷泉 (れいせん) / 女性</div>
+                  <span class="badge" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">② クール・ロジカル型</span>
                 </div>
               </div>
-              <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5;">冷静沈着。感情論を交えず、問題の根本原因とダメ出しを淡々と指摘します。</p>
+              <p style="font-size: 13px; color: #475569; line-height: 1.6;">冷静沈着。感情論を交えず、問題の根本原因とダメ出しを淡々と指摘します。</p>
             </div>
 
             <!-- Type 3: Tsundere (Active default) -->
-            <div class="partner-select-card active" data-partner-id="早苗" style="background: rgba(88, 28, 135, 0.4); border: 2px solid #a855f7; border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.2s ease;">
+            <div class="partner-select-card active" data-partner-id="早苗">
               <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                <div style="width: 48px; height: 48px; border-radius: 50%; background: #8b5cf6; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; font-weight: 700;">早苗</div>
+                <div style="width: 48px; height: 48px; border-radius: 50%; background: #059669; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; font-weight: 700;">早苗</div>
                 <div>
-                  <div style="font-weight: 700; font-size: 16px; color: #fff;">早苗 (さなえ) / 女性</div>
-                  <span class="badge" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; font-size: 11px;">③ ツンデレ・スパルタ型</span>
+                  <div style="font-weight: 700; font-size: 16px; color: #1e293b;">早苗 (さなえ) / 女性</div>
+                  <span class="badge" style="background: #f0fdf4; color: #047857; border: 1px solid #a7f3d0;">③ ツンデレ・スパルタ型</span>
                 </div>
               </div>
-              <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5;">基本は超塩対応で厳しく指導。ですが成果が出ると照れて本気で褒めてくれます。</p>
+              <p style="font-size: 13px; color: #475569; line-height: 1.6;">基本は超塩対応で厳しく指導。ですが成果が出ると照れて本気で褒めてくれます。</p>
             </div>
 
           </div>

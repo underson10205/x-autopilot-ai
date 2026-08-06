@@ -53,6 +53,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   ];
 
+  // Role Switcher Logic (Admin vs General User)
+  let isAdminMode = JSON.parse(localStorage.getItem('MG_ADMIN_MODE')) || false;
+  const roleToggle = document.getElementById('role-toggle');
+  const roleText = document.getElementById('role-status-text');
+  const adminTabItem = document.querySelector('.admin-only-item');
+
+  function updateRoleUI() {
+    if (roleToggle) roleToggle.checked = isAdminMode;
+    if (roleText) {
+      roleText.textContent = isAdminMode ? '現在: 👑 管理者表示 (全機能解放)' : '現在: 👤 一般利用者表示';
+      roleText.style.color = isAdminMode ? '#b45309' : '#94a3b8';
+    }
+    if (adminTabItem) {
+      adminTabItem.style.display = isAdminMode ? 'flex' : 'none';
+    }
+  }
+
+  if (roleToggle) {
+    roleToggle.addEventListener('change', () => {
+      isAdminMode = roleToggle.checked;
+      localStorage.setItem('MG_ADMIN_MODE', JSON.stringify(isAdminMode));
+      updateRoleUI();
+      showToast(isAdminMode ? '👑 管理者モードを有効化しました (ナレッジ登録機能が解放されます)' : '👤 一般利用者モードに切り替えました (管理メニューが非表示になります)');
+    });
+  }
+
   // Tab Navigation
   const navButtons = document.querySelectorAll('.nav-item');
   const tabContents = document.querySelectorAll('.tab-content');
@@ -331,6 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Initialize
+  updateRoleUI();
   updatePartnerUI();
   updateGamificationUI();
   renderKnowledgeList();
