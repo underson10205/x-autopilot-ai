@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
 以下の【蓄積ナレッジデータベース】を参照し、あなたのキャラクター（${partner.name}）になりきって回答してください。
 
 【蓄積ナレッジデータベース】
-${knContext if knContext else "基本マネジメント原則を適用"}
+${knContext ? knContext : "基本マネジメント原則を適用"}
 
 【回答要件】
 1. 冒頭で、キャラクターに応じた温かい労いまたはキャラクターらしい受け答え（1〜2行）を述べてください。
