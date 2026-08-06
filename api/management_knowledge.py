@@ -87,8 +87,8 @@ class handler(BaseHTTPRequestHandler):
 ...
 """
 
-            # Try Multi-Model Gemini Fallback (gemini-2.5-flash -> gemini-1.5-flash -> gemini-pro)
-            models_to_try = ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-pro"]
+            # Try Gemini 3.5 Flash API (gemini-3.5-flash -> gemini-2.5-flash -> gemini-1.5-flash)
+            models_to_try = ["gemini-3.5-flash", "gemini-2.5-flash", "gemini-1.5-flash"]
             
             if gemini_api_key:
                 for model_name in models_to_try:
