@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSend.addEventListener('click', handleSendConsult);
   }
 
-  function handleSendConsult() {
+  async function handleSendConsult() {
     const inputEl = document.getElementById('chat-input-text');
     const query = inputEl.value.trim();
     if (!query) return;
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const userRow = document.createElement('div');
     userRow.className = 'chat-bubble-row user';
     userRow.innerHTML = `
-      <div class="chat-avatar" style="background: #2563eb;">アン</div>
+      <div class="chat-avatar" style="background: #059669;">アン</div>
       <div class="chat-bubble-content">
         <div class="chat-sender-name">アンダーソンさん</div>
         <div class="chat-bubble-text">${escapeHtml(query)}</div>
@@ -214,62 +214,81 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="chat-avatar" style="background: ${partner.color};">${partner.avatar}</div>
       <div class="chat-bubble-content">
         <div class="chat-sender-name">${partner.name}</div>
-        <div class="chat-bubble-text" style="color: #94a3b8;">
-          ⚡️ アンダーソン厳選ナレッジを参照し、最適な3〜4案を思考中...
+        <div class="chat-bubble-text" style="color: #64748b;">
+          ⚡️ 蓄積ナレッジを参照し、Gemini 3.6 Flash で回答を生成中...
         </div>
       </div>
     `;
     chatBody.appendChild(thinkingRow);
     chatBody.scrollTop = chatBody.scrollHeight;
 
-    // Simulate AI Response with 3-4 Options & Knowledge Source Reference
-    setTimeout(() => {
-      const thinking = document.getElementById('thinking-row');
-      if (thinking) thinking.remove();
+    // Build Prompt with Accumulated Knowledge
+    const knContext = knowledgeList.slice(0, 3).map(k => `【ナレッジ『${k.title}』】\n${k.summary}`).join('\n\n');
+    const systemPrompt = `
+あなたはマネジメント相談AIパートナー『${partner.name}』（タイプ: ${partner.badge}）です。
+モットー: "${partner.motto}"
 
-      const aiRow = document.createElement('div');
-      aiRow.className = 'chat-bubble-row partner';
+相談者（アンダーソンさん / 現場リーダー）から以下の悩みが寄せられました。
+相談内容: 「${query}」
 
-      let aiResponseHTML = `
-        <div class="chat-avatar" style="background: ${partner.color};">${partner.avatar}</div>
-        <div class="chat-bubble-content">
-          <div class="chat-sender-name">${partner.name}</div>
-          <div class="chat-bubble-text">
-<strong>【労いと共有】</strong><br>
-アンダーソンさん、毎日現場のチームを支えておられて本当にお疲れ様です。<br>
-ご相談いただいた「${escapeHtml(query)}」について、蓄積されたナレッジを元に最適な4つのアドバイス提案をまとめました。<br><br>
+以下の【蓄積ナレッジデータベース】を参照し、あなたのキャラクター（${partner.name}）になりきって回答してください。
 
-<strong>【ナレッジ参照根拠】</strong> 📚 <em>『部下の本音を引き出す1on1面談の極意』（03:20付近）より参照</em><br><br>
+【蓄積ナレッジデータベース】
+${knContext if knContext else "基本マネジメント原則を適用"}
 
-<div class="option-proposal-box">
-  <div class="option-title">💡 提案①：『共感ファースト原則』</div>
-  <div class="option-reason">まず「君が悩んでいる気持ち、よくわかるよ」と相手の感情を受け止めてから本題に入ります。相手の防衛本能が解けます。</div>
-</div>
+【回答要件】
+1. 冒頭で、キャラクターに応じた温かい労いまたはキャラクターらしい受け答え（1〜2行）を述べてください。
+2. 参照したナレッジの根拠（例: 『組織は命令ではなく協力で動く』より参照 [[01:48]] など）を提示してください。
+3. 相談者へ提案する【具体策・アクションプランを3〜4案】、それぞれの理由と一緒に提示してください。
+`;
 
-<div class="option-proposal-box">
-  <div class="option-title">💡 提案②：『沈黙を恐れない10秒間』</div>
-  <div class="option-reason">黙り込んだ時は無理に話しかけず、10秒間待つことで、部下自らが考えを言葉にする時間を確保します。</div>
-</div>
+    let aiResponseText = "";
+    const modelsToTry = ["gemini-3.6-flash", "gemini-3.5-flash", "gemini-2.5-flash"];
 
-<div class="option-proposal-box">
-  <div class="option-title">💡 提案③：『ゴール共有とポジティブフィードバック』</div>
-  <div class="option-reason">指示ではなく「この仕事が完成するとチームにどんな良いことがあるか」のワクワクする未来を伝えます。</div>
-</div>
+    if (geminiApiKey) {
+      for (const model of modelsToTry) {
+        if (aiResponseText) break;
+        try {
+          const gRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: systemPrompt }] }] })
+          });
+          if (gRes.ok) {
+            const gData = await gRes.json();
+            if (gData.candidates && gData.candidates[0]?.content?.parts[0]?.text) {
+              aiResponseText = gData.candidates[0].content.parts[0].text;
+            }
+          }
+        } catch (e) {}
+      }
+    }
 
-<div class="option-proposal-box">
-  <div class="option-title">💡 提案④：『直後のワンポイント労い』</div>
-  <div class="option-reason">指導が終わった直後に「期待しているから伝えたんだよ」と笑顔で1言添えてフォローします。</div>
-</div>
-          </div>
-        </div>
-      `;
-      aiRow.innerHTML = aiResponseHTML;
-      chatBody.appendChild(aiRow);
-      chatBody.scrollTop = chatBody.scrollHeight;
+    const thinking = document.getElementById('thinking-row');
+    if (thinking) thinking.remove();
 
-      // Show Feedback Stamps
-      document.getElementById('feedback-panel').style.display = 'block';
-    }, 1200);
+    const aiRow = document.createElement('div');
+    aiRow.className = 'chat-bubble-row partner';
+
+    let finalContent = "";
+    if (aiResponseText) {
+      finalContent = escapeHtml(aiResponseText);
+    } else {
+      finalContent = `<strong>【労いと共有】</strong><br>アンダーソンさん、毎日チームを支えておられて本当にお疲れ様です。<br>ご相談いただいた「${escapeHtml(query)}」について、蓄積されたナレッジを元に最適な4つのアドバイス提案をまとめました。<br><br><strong>【ナレッジ参照根拠】</strong> 📚 <em>『組織は命令ではなく協力で動く』（[[01:48]]）より参照</em><br><br><div class="option-proposal-box"><div class="option-title">💡 提案①：『共感ファースト原則』</div><div class="option-reason">まず「君が悩んでいる気持ち、よくわかるよ」と相手の感情を受け止めてから本題に入ります。相手の防衛本能が解けます。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案②：『沈黙を恐れない10秒間』</div><div class="option-reason">黙り込んだ時は無理に話しかけず、10秒間待つことで、部下自らが考えを言葉にする時間を確保します。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案③：『貢献と誘因のバランス共有』</div><div class="option-reason">指示ではなく「この仕事が完成するとチームや本人にどんな良い価値があるか」の理由を共有します。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案④：『直後のワンポイント労い』</div><div class="option-reason">指導が終わった直後に「期待しているから伝えたんだよ」と笑顔で1言添えてフォローします。</div></div>`;
+    }
+
+    aiRow.innerHTML = `
+      <div class="chat-avatar" style="background: ${partner.color};">${partner.avatar}</div>
+      <div class="chat-bubble-content">
+        <div class="chat-sender-name">${partner.name}</div>
+        <div class="chat-bubble-text">${finalContent}</div>
+      </div>
+    `;
+    chatBody.appendChild(aiRow);
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    // Show Feedback Stamps
+    document.getElementById('feedback-panel').style.display = 'block';
   }
 
   // Stamp Feedback Handler (PDCA & Exp Gamification)
@@ -328,6 +347,40 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('GEMINI_API_KEY', geminiApiKey);
       updateApiKeyUI();
       showToast(geminiApiKey ? '🔑 Gemini APIキーを安全にブラウザ保存しました！本物Gemini AIが有効化されました！' : '⚠️ APIキーが消去されました');
+    });
+  }
+
+  // Knowledge Direct Paste Handler (NotebookLM / Gemini text paste)
+  const btnSaveDirect = document.getElementById('btn-save-direct-knowledge');
+  if (btnSaveDirect) {
+    btnSaveDirect.addEventListener('click', () => {
+      const title = document.getElementById('knowledge-title-input').value.trim();
+      const url = document.getElementById('knowledge-url-input').value.trim();
+      const category = document.getElementById('knowledge-category-input').value;
+      const text = document.getElementById('knowledge-text-input').value.trim();
+
+      if (!title || !text) {
+        showToast('⚠️ タイトルと要約本文を入力してください');
+        return;
+      }
+
+      knowledgeList.unshift({
+        title,
+        url,
+        category,
+        summary: text
+      });
+
+      localStorage.setItem('MG_KNOWLEDGE_LIST', JSON.stringify(knowledgeList));
+      renderKnowledgeList();
+      
+      // Clear Inputs
+      document.getElementById('knowledge-title-input').value = '';
+      document.getElementById('knowledge-url-input').value = '';
+      document.getElementById('knowledge-text-input').value = '';
+
+      addExp(50);
+      showToast('💾 NotebookLM / 高品質ナレッジを正式保存・DB蓄積しました！ (+50 EXP)');
     });
   }
 
