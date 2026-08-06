@@ -470,8 +470,7 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
       // Clear Input
       document.getElementById('knowledge-bulk-input').value = '';
 
-      addExp(50);
-      showToast(`💾 ナレッジ『${title.slice(0, 15)}...』を一括解析・保存しました！ (+50 EXP)`);
+      showToast(`💾 ナレッジ『${title.slice(0, 15)}...』を一括解析・蓄積保存しました！`);
     });
   }
 
