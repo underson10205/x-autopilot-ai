@@ -213,7 +213,7 @@
             <p style="color: #64748b; font-size: 14px; margin-top: 4px;">学びとなったYouTube動画URLを入力し、字幕全文をGemini AIで高精度解析してナレッジ登録します</p>
           </div>
 
-          <!-- Knowledge Direct Paste & Registration Form -->
+          <!-- Knowledge Bulk Single Area Registration Form -->
           <div style="background: #ffffff; border: 1px solid var(--mg-border); border-radius: 16px; padding: 24px; margin-bottom: 28px; box-shadow: var(--mg-shadow);">
             
             <!-- Gemini API Key Settings Box -->
@@ -228,40 +228,24 @@
                   保存
                 </button>
               </div>
-              <p style="font-size: 11px; color: #64748b; margin-top: 6px; margin-bottom: 0;">※チャット相談時に、パートナーAIが最新 Gemini 3.6 Flash / 3.5 Flash でナレッジを参照しながら超高度レスポンスを行います。</p>
             </div>
 
-            <h3 style="font-size: 16px; font-weight: 700; color: #047857; margin-bottom: 16px;">📝 高品質ナレッジを自由登録 (NotebookLM / Gemini要約ペースト)</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <h3 style="font-size: 16px; font-weight: 700; color: #047857; margin: 0;">📝 ナレッジ一括コピペ登録エリア (1テキストエリア完了)</h3>
+              <button id="btn-fill-sample-knowledge" class="btn btn-secondary btn-sm" style="background: #f0fdf4; color: #047857; border: 1px solid #a7f3d0; font-size: 11px; padding: 6px 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+                📋 見本フォーマットを自動入力
+              </button>
+            </div>
             
-            <div style="margin-bottom: 14px;">
-              <label style="font-size: 12px; color: #475569; display: block; margin-bottom: 4px; font-weight: 700;">タイトル / テーマ</label>
-              <input type="text" id="knowledge-title-input" placeholder="例: 組織は命令ではなく協力で動く｜バーナードが見た協力意欲の構造" style="width: 100%; background: #f8f6f0; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; color: #1e293b; font-size: 14px; font-weight: 600;">
-            </div>
-
-            <div style="display: flex; gap: 12px; margin-bottom: 14px;">
-              <div style="flex: 1;">
-                <label style="font-size: 12px; color: #475569; display: block; margin-bottom: 4px; font-weight: 700;">参照動画URL / 出典 (任意)</label>
-                <input type="url" id="knowledge-url-input" placeholder="https://www.youtube.com/watch?v=..." style="width: 100%; background: #f8f6f0; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; color: #1e293b; font-size: 13px;">
-              </div>
-              <div style="width: 200px;">
-                <label style="font-size: 12px; color: #475569; display: block; margin-bottom: 4px; font-weight: 700;">カテゴリタグ</label>
-                <select id="knowledge-category-input" style="width: 100%; background: #f8f6f0; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; color: #1e293b; font-size: 13px; font-weight: 600;">
-                  <option value="組織構造・協力意欲の法則">組織構造・協力意欲</option>
-                  <option value="1on1対話ノウハウ">1on1対話ノウハウ</option>
-                  <option value="指導・フィードバック">指導・フィードバック</option>
-                  <option value="チームビルディング">チームビルディング</option>
-                  <option value="マネジメント思想">マネジメント思想</option>
-                </select>
-              </div>
-            </div>
-
             <div style="margin-bottom: 18px;">
-              <label style="font-size: 12px; color: #475569; display: block; margin-bottom: 4px; font-weight: 700;">📄 要約・ノウハウ本文 (NotebookLMやGeminiで作成した高品質テキストをそのままペースト)</label>
-              <textarea id="knowledge-text-input" rows="10" placeholder="NotebookLMやGemini、読書メモなどで作成した要約・根拠・タイムスタンプテキストをそのままペーストしてください..." style="width: 100%; background: #f8f6f0; border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px 16px; color: #1e293b; font-size: 13px; line-height: 1.7; resize: vertical;"></textarea>
+              <p style="font-size: 12px; color: #64748b; margin-top: 0; margin-bottom: 8px;">
+                NotebookLMやGemini等で作成した【タイトル】【URL】【カテゴリ】【本文】が混ざったテキストを、そのまま丸ごとペーストしてください。AIが全自動で解析・構造化して蓄積します。
+              </p>
+              <textarea id="knowledge-bulk-input" rows="14" placeholder="【タイトル / テーマ】&#10;組織は命令ではなく協力で動く｜バーナードが見た協力意欲の構造&#10;&#10;【参照動画URL / 出典】&#10;https://www.youtube.com/watch?v=t-H3VsCcijM&#10;&#10;【カテゴリタグ】&#10;組織構造・協力意欲&#10;&#10;【要約・ノウハウ本文】&#10;# 組織論・マネジメント構造（バーナード理論）ナレッジ..." style="width: 100%; background: #f8f6f0; border: 1px solid #cbd5e1; border-radius: 12px; padding: 16px; color: #1e293b; font-size: 13px; line-height: 1.7; resize: vertical; font-family: inherit;"></textarea>
             </div>
 
-            <button id="btn-save-direct-knowledge" class="btn btn-accent" style="width: 100%; background: #059669; color: #fff; border-radius: 12px; font-weight: 700; padding: 14px; font-size: 15px; cursor: pointer;">
-              💾 この高品質ナレッジを正式保存・DB蓄積する (+50 EXP)
+            <button id="btn-save-bulk-knowledge" class="btn btn-accent" style="width: 100%; background: #059669; color: #fff; border-radius: 12px; font-weight: 700; padding: 14px; font-size: 15px; cursor: pointer;">
+              💾 この一括ナレッジを正式保存・DB蓄積する (+50 EXP)
             </button>
 
           </div>

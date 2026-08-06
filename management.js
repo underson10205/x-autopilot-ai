@@ -64,37 +64,70 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  let sampleBernardText = `【タイトル / テーマ】
+組織は命令ではなく協力で動く｜バーナードが見た協力意欲の構造
+
+【参照動画URL / 出典】
+https://www.youtube.com/watch?v=t-H3VsCcijM
+
+【カテゴリタグ】
+組織構造・協力意欲
+
+【要約・ノウハウ本文】
+# 組織論・マネジメント構造（バーナード理論）ナレッジ
+
+## 1. 動画全体要約・コアメッセージ
+組織が機能しない根本原因は「管理や命令の不足」ではなく「現場の協力意欲の低下」にある。組織は単なる配置や命令で動く機械ではなく「人々の協力が継続している状態」そのものである。マネジメントの本質とは、強い命令を出すことではなく、メンバーが自発的に協力したくなる構造・信頼関係・目的・情報を整えることである。
+
+---
+
+## 2. 中間管理職向け 悩み別AI相談・提案ロジック
+
+### 相談ケースA：「部下に指示を出しても最低限のことしかやらない / 主体性がない」
+- **動画参照URL**: https://www.youtube.com/watch?v=t-H3VsCcijM
+- **AI診断**: 部下の性格の問題ではなく、命令が受容不可能な形になっているか、「協力した人が損をする構造」に陥っている可能性が高い。
+- **具体提案・アクションプラン**:
+  1. **命令の受容化**: 背景・目的・優先順位をセットで伝えて「納得・実行できる指示」にする（[00:06:22](https://www.youtube.com/watch?v=t-H3VsCcijM&t=382s)）。
+  2. **貢献への誘因提供**: 隙間タスクの消化や非公式な貢献を可視化し、適切な承認や評価を与える（[00:10:16](https://www.youtube.com/watch?v=t-H3VsCcijM&t=616s)）。
+  3. **不公平感の排除**: 意見を出した人や気遣いをした人だけに負担が偏らないタスク分散を図る（[00:11:41](https://www.youtube.com/watch?v=t-H3VsCcijM&t=701s)）。
+
+### 相談ケースB：「ルールや報告を徹底させたのに、なぜかチームの動きが重い」
+- **動画参照URL**: https://www.youtube.com/watch?v=t-H3VsCcijM
+- **AI診断**: 協力意欲が落ちている中で管理（報告・承認・監視）を増やすと、「やらされ感」が増してさらに動作が鈍化する悪循環が発生している。
+- **具体提案・アクションプラン**:
+  1. **管理の引き算**: 不要な報告ラインや重複作業を削り、メンバーの負担を減らす（[00:18:10](https://www.youtube.com/watch?v=t-H3VsCcijM&t=1090s)）。
+  2. **非公式空気のケア**: チャットや日々の会話で「相談しやすい空気（非公式組織の活性化）」を作る（[00:13:30](https://www.youtube.com/watch?v=t-H3VsCcijM&t=810s)）。
+
+### 相談ケースC：「上層部の無茶振りと現場の不満の板挟みで辛い」
+- **動画参照URL**: https://www.youtube.com/watch?v=t-H3VsCcijM
+- **AI診断**: 上層部の指示が現場にとって「目的不明・実現不可能」な状態で降りてきている。
+- **具体提案・アクションプラン**:
+  1. **目的の翻訳**: 上からの命令をそのまま流さず、現場が共感できる「共通目的」に再定義して伝える（[00:15:30](https://www.youtube.com/watch?v=t-H3VsCcijM&t=930s)）。
+  2. **現場キャパの可視化**: 現場のボトルネックをデータ化し、上層部にフィードバックして指示を調整する。
+
+---
+
+## 3. 根拠ライブラリ（直リンク付きタイムスタンプ・引用データ）
+
+| ナレッジ・概念 | 内容・根拠 | 根拠リンク（直リンク） |
+| :--- | :--- | :--- |
+| **スピッドヘッドの反乱** | 厳格な軍隊組織（1797年英海軍）でも、現場が「協力不可能」と判断した瞬間に組織は機能停止した。 | [00:00:12 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=12s) |
+| **組織の定義** | 組織とは命令が流れる機械ではなく「人々の協力が継続している状態」。 | [00:01:29 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=89s) |
+| **組織成立の3要素** | コミュニケーション・共通目的・協力意欲の3点。欠けると静かな停滞が発生。 | [00:04:41 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=281s) |
+| **権威受容論** | 命令の効力は受け手（部下）が決める。理解・目的合致・実行可能で初めて命令となる。 | [00:06:22 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=382s) |
+| **受容の幅（信頼関係）** | 日頃の信頼や説明がある上司からの依頼なら、部下は余分に協力してくれる。 | [00:08:32 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=512s) |
+| **貢献と誘因のバランス** | メンバーの貢献（時間・注意・感情）に対し、適切な誘因（承認・給料・納得）を返す必要がある。 | [00:10:16 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=616s) |
+| **協力の損（弱体化）** | 協力者や意見を出した人が損をする構造になると、人は学習して不協力になる。 | [00:11:41 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=701s) |
+| **非公式組織の力** | ホーソン実験の通り、現場の行動を左右するのは公式ルールより仲間内の空気や暗黙の基準。 | [00:13:30 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=810s) |
+| **マネジメントの3役割** | ①情報体系維持 ②必要な貢献の確保 ③目的の明確化。命令を張り上げることではない。 | [00:15:30 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=930s) |
+| **管理強化の悪循環** | 協力意欲がない状態での管理・監視強化は、やらされ感を増やしてさらに組織を重くする。 | [00:18:10 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=1090s) |`;
+
   let knowledgeList = JSON.parse(localStorage.getItem('MG_KNOWLEDGE_LIST')) || [
     {
-      title: '『組織は命令ではなく協力で動く｜バーナードが見た協力意欲の構造』',
+      title: '組織は命令ではなく協力で動く｜バーナードが見た協力意欲の構造',
+      url: 'https://www.youtube.com/watch?v=t-H3VsCcijM',
       category: '組織構造・協力意欲の法則',
-      summary: `🎥 動画の全体概要と核心メッセージ
-組織が動かなくなる最大の要因は「指示の強さが足りないから」ではなく「現場の協力意欲が失われているから」である。上司の命令も部下が受け入れて初めて効力を持つ。管理を強めるよりも、メンバーが自然と「協力してもいい」と思える環境を整えることこそがマネジメントの本質である。
-
-🔑 使用者の相談時にAIが根拠として提案できる知識ポイント（6選）
-1. 【組織は命令ではなく「協力の継続」で成立する】
-・使用者に提案できる解決策: 強い命令系統や管理を強めるのではなく、チームの「協力意欲」を高める環境調整を最優先する。
-・根拠・事例・理由: 1797年イギリス海軍「スピッドヘッドの反乱」では、厳格な階級組織であったにもかかわらず出航拒否で機能停止した[[00:12]]。バーナードの定義でも組織とは「協力が意識的に調整されている状態」そのものである[[01:48]]。
-
-2. 【組織成立の3つの不可欠な要素】
-・使用者に提案できる解決策: コミュニケーション、共通目的、協力意欲の3つを同時に揃える。「静かな停滞」を防ぐ。
-・根拠・事例・理由: 目的があっても伝達されなければスローガン化し[[04:52]]、協力意欲が失われると最低限の仕事しかしない表面的な従属が起きる[[04:21]][[05:30]]。
-
-3. 【権威の受容論（命令の効力は受け手が決める）】
-・使用者に提案できる解決策: 命令や注意をする際は、文章そのものより日頃の「信頼関係」を土台にする。
-・根拠・事例・理由: 信頼関係がある上司の急な依頼は受け入れるが、そうでない上司の無茶振りは拒絶や形だけの対応を生む[[08:32]][[09:06]]。
-
-4. 【貢献と誘因のバランス】
-・使用者に提案できる解決策: 「協力した人が損をしない構造」を作る。時間や労力（貢献）に対して承認や成長（誘因）を返す。
-・根拠・事例・理由: 会議で意見を出した人だけに負担が集中すると、人は賢くなって協力するのをやめる[[11:41]]。主体性を責める前に誘因を返しているかを問うべき[[11:19]]。
-
-5. 【公式組織を支える非公式組織（暗黙の空気）】
-・使用者に提案できる解決策: ルールだけでなく、チームの暗黙の空気や人間関係の気遣いを大切にする。
-・根拠・事例・理由: ホーソン実験「銀行配線室」の研究では、歩合給制度よりも「仲間同士の非公式な基準」が生産量を左右していた[[13:48]]。
-
-6. 【真のマネジメントとは「協力の条件」を整えること】
-・使用者に提案できる解決策: 管理や監視を増やすと「やらされ感」で逆効果になる。自発的に隙間を拾い合える環境を作る。
-・根拠・事例・理由: ルール増やすと悪循環に陥る[[18:08]]。本当に強い組織とは、指示されていない隙間課題を自発的に拾い合える組織である[[19:49]]。`
+      summary: sampleBernardText
     }
   ];
 
@@ -368,37 +401,77 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
     });
   }
 
-  // Knowledge Direct Paste Handler (NotebookLM / Gemini text paste)
-  const btnSaveDirect = document.getElementById('btn-save-direct-knowledge');
-  if (btnSaveDirect) {
-    btnSaveDirect.addEventListener('click', () => {
-      const title = document.getElementById('knowledge-title-input').value.trim();
-      const url = document.getElementById('knowledge-url-input').value.trim();
-      const category = document.getElementById('knowledge-category-input').value;
-      const text = document.getElementById('knowledge-text-input').value.trim();
+  // Fill Sample Template Assistant Handler
+  const btnFillSample = document.getElementById('btn-fill-sample-knowledge');
+  if (btnFillSample) {
+    btnFillSample.addEventListener('click', () => {
+      const bulkInput = document.getElementById('knowledge-bulk-input');
+      if (bulkInput) {
+        bulkInput.value = sampleBernardText;
+        showToast('📋 バーナード理論の見本フォーマットを入力欄にセットしました！');
+      }
+    });
+  }
 
-      if (!title || !text) {
-        showToast('⚠️ タイトルと要約本文を入力してください');
+  // Bulk Single Text Area Parser & Knowledge Direct Save Handler
+  const btnSaveBulk = document.getElementById('btn-save-bulk-knowledge');
+  if (btnSaveBulk) {
+    btnSaveBulk.addEventListener('click', () => {
+      const rawText = document.getElementById('knowledge-bulk-input').value.trim();
+      if (!rawText) {
+        showToast('⚠️ 一括入力エリアにテキストをペーストしてください');
         return;
+      }
+
+      // Smart Parser
+      let title = "一括入力ナレッジ";
+      let url = "";
+      let category = "マネジメントナレッジ";
+      let bodyText = rawText;
+
+      // Extract Title
+      const titleMatch = rawText.match(/【タイトル\s*[\/／]?\s*テーマ】\s*\n?([^\n]+)/);
+      if (titleMatch && titleMatch[1].trim()) {
+        title = titleMatch[1].trim();
+      } else {
+        // Fallback to first line
+        const firstLine = rawText.split('\n')[0].replace(/^#*\s*/, '').trim();
+        if (firstLine) title = firstLine;
+      }
+
+      // Extract URL
+      const urlMatch = rawText.match(/(https?:\/\/[^\s]+)/);
+      if (urlMatch) {
+        url = urlMatch[1].trim();
+      }
+
+      // Extract Category
+      const catMatch = rawText.match(/【カテゴリタグ】\s*\n?([^\n]+)/);
+      if (catMatch && catMatch[1].trim()) {
+        category = catMatch[1].trim();
+      }
+
+      // Extract Body Text if structured header exists
+      const bodyMatch = rawText.match(/【要約・ノウハウ本文】\s*\n?([\s\S]+)/);
+      if (bodyMatch && bodyMatch[1].trim()) {
+        bodyText = bodyMatch[1].trim();
       }
 
       knowledgeList.unshift({
         title,
         url,
         category,
-        summary: text
+        summary: bodyText
       });
 
       localStorage.setItem('MG_KNOWLEDGE_LIST', JSON.stringify(knowledgeList));
       renderKnowledgeList();
       
-      // Clear Inputs
-      document.getElementById('knowledge-title-input').value = '';
-      document.getElementById('knowledge-url-input').value = '';
-      document.getElementById('knowledge-text-input').value = '';
+      // Clear Input
+      document.getElementById('knowledge-bulk-input').value = '';
 
       addExp(50);
-      showToast('💾 NotebookLM / 高品質ナレッジを正式保存・DB蓄積しました！ (+50 EXP)');
+      showToast(`💾 ナレッジ『${title.slice(0, 15)}...』を一括解析・保存しました！ (+50 EXP)`);
     });
   }
 
@@ -533,11 +606,21 @@ YouTube動画URL: ${urlInput}
     if (knowledgeList.length === 0) {
       listGrid.innerHTML = `
         <div style="background: #ffffff; border: 1px solid var(--mg-border); border-radius: 12px; padding: 24px; text-align: center; color: #64748b;">
-          登録されたナレッジはまだありません。上のフォームからYouTube動画URLを入力して登録してください。
+          登録されたナレッジはまだありません。上のフォームにテキストをコピペして登録してください。
         </div>
       `;
       document.getElementById('knowledge-count').textContent = 0;
       return;
+    }
+
+    function formatMarkdownText(str) {
+      if (!str) return '';
+      let formatted = escapeHtml(str);
+      // Format Markdown Links [text](url)
+      formatted = formatted.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" style="color: #059669; font-weight: 700; text-decoration: underline;">$1</a>');
+      // Format Raw URLs
+      formatted = formatted.replace(/(^|[^"])((https?:\/\/[^\s<]+))/g, '$1<a href="$2" target="_blank" style="color: #059669; font-weight: 700; text-decoration: underline;">$2</a>');
+      return formatted;
     }
 
     listGrid.innerHTML = knowledgeList.map((k, index) => `
@@ -546,12 +629,13 @@ YouTube動画URL: ${urlInput}
           <div>
             <span class="badge" style="background: #f0fdf4; color: #047857; border: 1px solid #a7f3d0; margin-bottom: 8px;">${escapeHtml(k.category || 'ナレッジ')}</span>
             <h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 4px 0 0 0;">${escapeHtml(k.title)}</h4>
+            ${k.url ? `<a href="${escapeHtml(k.url)}" target="_blank" style="font-size: 12px; color: #059669; font-weight: 600; text-decoration: underline; margin-top: 4px; display: inline-block;">🔗 参照動画/出典リンクへ</a>` : ''}
           </div>
           <button class="btn btn-secondary btn-sm btn-delete-k" data-index="${index}" style="background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5; font-size: 12px; padding: 6px 14px; border-radius: 8px; font-weight: 700; cursor: pointer;">
             🗑️ 削除
           </button>
         </div>
-        <div style="font-size: 14px; color: #334155; line-height: 1.75; white-space: pre-wrap; background: #f8f6f0; border: 1px solid #eae6dd; border-radius: 12px; padding: 16px;">${escapeHtml(k.summary)}</div>
+        <div style="font-size: 14px; color: #334155; line-height: 1.75; white-space: pre-wrap; background: #f8f6f0; border: 1px solid #eae6dd; border-radius: 12px; padding: 18px; max-height: 500px; overflow-y: auto;">${formatMarkdownText(k.summary)}</div>
       </div>
     `).join('');
 
