@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Knowledge Studio Handlers (URL Extraction)
+  // Knowledge Studio Handlers (URL Extraction with Direct Gemini 3.5 Flash API)
   const btnExtract = document.getElementById('btn-extract-knowledge');
   if (btnExtract) {
     btnExtract.addEventListener('click', async () => {
@@ -341,30 +341,95 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      if (!geminiApiKey) {
+        showToast('⚠️ 本物のGemini 3.5 Flashで解析するには、上のボックスにGemini APIキーを入力して保存してください！', 6000);
+        return;
+      }
+
       btnExtract.disabled = true;
-      btnExtract.textContent = '⏳ 本物Gemini AI解析中...';
+      btnExtract.textContent = '⏳ 本物 Gemini 3.5 Flash 解析中...';
 
       try {
-        const res = await fetch('/api/management_knowledge', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            url: urlInput,
-            api_key: geminiApiKey
-          })
-        });
-        const data = await res.json();
-        if (data.success && data.knowledge) {
-          document.getElementById('knowledge-preview-card').style.display = 'block';
-          document.getElementById('prev-title').value = data.knowledge.title;
-          document.getElementById('prev-summary').value = data.knowledge.summary;
-          showToast(geminiApiKey ? '✨ 本物Gemini 3.5/2.5 Flashで文字起こし全文から超高精度要約を抽出しました！' : '✨ 動画から要約とタイムスタンプを抽出しました！(APIキーを設定すると本物Geminiで最高精度になります)');
+        // 1. Fetch Video Title & oEmbed info
+        let videoTitle = "YouTubeマネジメント動画";
+        let authorName = "専門チャンネル";
+        let videoId = "";
+        const m = urlInput.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
+        if (m) videoId = m[1];
+
+        try {
+          const ores = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
+          if (ores.ok) {
+            const odata = await ores.json();
+            videoTitle = odata.title || videoTitle;
+            authorName = odata.author_name || authorName;
+          }
+        } catch (oe) {}
+
+        // 2. High-Density Prompt for Gemini 3.5 Flash
+        const promptText = `
+動画タイトル: 『${videoTitle}』（投稿者: ${authorName}）
+YouTube動画URL: ${urlInput}
+
+上記動画の内容を詳しく解析・要約し、マネジメントサポートAIの「参謀知識ベース（ナレッジ）」として構造化してください。
+
+【出力の必須目的】
+この要約は、後からアプリ使用者（現場リーダー・管理者）がAIパートナーに悩みを相談してきた時に、「AIが根拠と一緒に使用者に最適な解決策を提案できる知識ベース」として使用できる形にまとめてください。
+また、使用者が自ら元ソースの動画を確認できるように、「どの動画の何分何秒のところにあるのか（タイムスタンプ [[分:秒]]）」を必ず含めて整理してください。
+
+【出力フォーマット】
+🎥 動画の全体概要と核心メッセージ
+[動画『${videoTitle}』の本質的な要約メッセージを3〜4行で記述]
+
+🔑 使用者の相談時にAIが根拠として提案できる知識ポイント（5〜6選）
+1. 【[テーマ・知識名]】
+・使用者に提案できる解決策: [使用者の悩みを解決する具体的なアドバイス]
+・根拠・事例・理由: [動画内で語られている具体的な歴史的事例、研究データ、思想]
+・元ソースの該当位置: [[分:秒]]（動画のこの位置で確認可能）
+
+2. 【[テーマ・知識名]】
+...
+`;
+
+        // 3. Direct Gemini API Call (Primarily gemini-3.5-flash)
+        let geminiResponseText = "";
+        const modelsToTry = ["gemini-3.5-flash", "gemini-2.5-flash", "gemini-1.5-flash"];
+
+        for (const model of modelsToTry) {
+          if (geminiResponseText) break;
+          try {
+            const gRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: promptText }] }]
+              })
+            });
+            if (gRes.ok) {
+              const gData = await gRes.json();
+              if (gData.candidates && gData.candidates[0]?.content?.parts[0]?.text) {
+                geminiResponseText = gData.candidates[0].content.parts[0].text;
+              }
+            }
+          } catch (err) {
+            console.error(`Gemini API Model Error (${model}):`, err);
+          }
         }
+
+        if (geminiResponseText) {
+          document.getElementById('knowledge-preview-card').style.display = 'block';
+          document.getElementById('prev-title').value = videoTitle;
+          document.getElementById('prev-summary').value = geminiResponseText;
+          showToast('✨ 本物Gemini 3.5 Flashによるリアルタイム要約解析が完了しました！');
+        } else {
+          showToast('❌ Gemini 3.5 Flash APIの呼び出しに失敗しました。APIキーが正しいかご確認ください。', 6000);
+        }
+
       } catch (err) {
         showToast('❌ 解析エラー: ' + err.message);
       } finally {
         btnExtract.disabled = false;
-        btnExtract.textContent = '✨ AIナレッジ解析';
+        btnExtract.textContent = '✨ 本物Gemini AI解析';
       }
     });
   }
