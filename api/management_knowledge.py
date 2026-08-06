@@ -57,8 +57,9 @@ class handler(BaseHTTPRequestHandler):
                 except Exception:
                     pass
 
-            # 3. Dynamic Knowledge Generator per Video (Guaranteed Dynamic Output)
-            gemini_api_key = os.environ.get("GEMINI_API_KEY", "")
+            # 3. Dynamic Knowledge Generator per Video
+            user_api_key = req_data.get('api_key', '')
+            gemini_api_key = user_api_key if user_api_key else os.environ.get("GEMINI_API_KEY", "")
             ai_summary = ""
 
             prompt = f"""

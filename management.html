@@ -216,6 +216,22 @@
 
           <!-- URL Input Form -->
           <div style="background: #ffffff; border: 1px solid var(--mg-border); border-radius: 16px; padding: 24px; margin-bottom: 28px; box-shadow: var(--mg-shadow);">
+            
+            <!-- Gemini API Key Settings Box -->
+            <div style="background: #f0fdf4; border: 1px solid #a7f3d0; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 13px; font-weight: 700; color: #047857;">🔑 Google Gemini APIキー設定 (本物AI連携)</span>
+                <span style="font-size: 11px; color: #059669;" id="api-key-status">未設定 (ブラウザ保存)</span>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <input type="password" id="gemini-api-key-input" placeholder="AIzaSy... から始まるGemini APIキーを入力" style="flex: 1; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 12px; font-size: 13px;">
+                <button id="btn-save-api-key" class="btn btn-secondary btn-sm" style="background: #059669; color: #fff; border-radius: 8px; font-size: 12px; padding: 8px 16px; font-weight: 700;">
+                  保存
+                </button>
+              </div>
+              <p style="font-size: 11px; color: #64748b; margin-top: 6px; margin-bottom: 0;">※Google AI Studioで取得したAPIキーを入力すると、本物のGemini 3.5/2.5 Flashで文字起こし全文を超高精度リアルタイム解析します。</p>
+            </div>
+
             <h3 style="font-size: 16px; font-weight: 700; color: #047857; margin-bottom: 16px;">📥 新しいYouTube動画を解析</h3>
             
             <div style="display: flex; gap: 12px; margin-bottom: 16px;">

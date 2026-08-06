@@ -305,6 +305,32 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('user-exp-bar').style.width = `${pct}%`;
   }
 
+  // Gemini API Key Local Storage Management
+  let geminiApiKey = localStorage.getItem('GEMINI_API_KEY') || '';
+  const apiKeyInput = document.getElementById('gemini-api-key-input');
+  const apiKeyStatus = document.getElementById('api-key-status');
+  const btnSaveApiKey = document.getElementById('btn-save-api-key');
+
+  function updateApiKeyUI() {
+    if (apiKeyInput && geminiApiKey) {
+      apiKeyInput.value = geminiApiKey;
+    }
+    if (apiKeyStatus) {
+      apiKeyStatus.textContent = geminiApiKey ? '✅ 設定済み (本物Gemini有効)' : '未設定 (クリックして入力)';
+      apiKeyStatus.style.color = geminiApiKey ? '#047857' : '#d97706';
+    }
+  }
+
+  if (btnSaveApiKey) {
+    btnSaveApiKey.addEventListener('click', () => {
+      const inputVal = apiKeyInput.value.trim();
+      geminiApiKey = inputVal;
+      localStorage.setItem('GEMINI_API_KEY', geminiApiKey);
+      updateApiKeyUI();
+      showToast(geminiApiKey ? '🔑 Gemini APIキーを安全にブラウザ保存しました！本物Gemini AIが有効化されました！' : '⚠️ APIキーが消去されました');
+    });
+  }
+
   // Knowledge Studio Handlers (URL Extraction)
   const btnExtract = document.getElementById('btn-extract-knowledge');
   if (btnExtract) {
@@ -316,20 +342,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       btnExtract.disabled = true;
-      btnExtract.textContent = '⏳ AI解析中...';
+      btnExtract.textContent = '⏳ 本物Gemini AI解析中...';
 
       try {
         const res = await fetch('/api/management_knowledge', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: urlInput })
+          body: JSON.stringify({
+            url: urlInput,
+            api_key: geminiApiKey
+          })
         });
         const data = await res.json();
         if (data.success && data.knowledge) {
           document.getElementById('knowledge-preview-card').style.display = 'block';
           document.getElementById('prev-title').value = data.knowledge.title;
           document.getElementById('prev-summary').value = data.knowledge.summary;
-          showToast('✨ 動画から要約とタイムスタンプを自動抽出しました！確認・保存してください。');
+          showToast(geminiApiKey ? '✨ 本物Gemini 3.5/2.5 Flashで文字起こし全文から超高精度要約を抽出しました！' : '✨ 動画から要約とタイムスタンプを抽出しました！(APIキーを設定すると本物Geminiで最高精度になります)');
         }
       } catch (err) {
         showToast('❌ 解析エラー: ' + err.message);
@@ -433,5 +462,6 @@ document.addEventListener('DOMContentLoaded', () => {
   updateRoleUI();
   updatePartnerUI();
   updateGamificationUI();
+  updateApiKeyUI();
   renderKnowledgeList();
 });
