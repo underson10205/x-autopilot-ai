@@ -269,10 +269,38 @@
         <!-- TAB 3: HISTORY & GROWTH NOTE -->
         <div id="tab-history" class="tab-content" style="display: none;">
           <div style="margin-bottom: 24px;">
-            <h2 style="font-size: 20px; font-weight: 700; color: #065f46;">📖 振り返り ＆ 成長ノート（実践の記録）</h2>
+            <h2 style="font-size: 20px; font-weight: 700; color: #065f46;">📖 振り返り ＆ 成長ノート（実践の記録・AI成長カルテ）</h2>
             <p style="color: #64748b; font-size: 14px; margin-top: 4px;">あなたが実践したアドバイスと成果が蓄積されるマネジメント攻略ノートです</p>
           </div>
 
+          <!-- AI Leader Growth Analytics Report Card -->
+          <div style="background: #ffffff; border: 1px solid #a7f3d0; border-radius: 16px; padding: 24px; margin-bottom: 28px; box-shadow: var(--mg-shadow); background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h3 style="font-size: 16px; font-weight: 700; color: #047857; margin: 0;">📊 アンダーソンさんの「マネジメント思考・成長カルテ」</h3>
+              <span class="badge" style="background: #059669; color: #fff;">AI参謀による傾向診断</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 16px;">
+              <div style="background: rgba(255,255,255,0.8); border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px;">
+                <span style="font-size: 12px; color: #64748b; font-weight: 600;">💪 最も得意な強みスタイル</span>
+                <div style="font-size: 15px; font-weight: 800; color: #047857; margin-top: 4px;">1on1本音対話 ＆ 傾聴フォロー</div>
+                <div style="font-size: 11px; color: #059669; margin-top: 2px;">(実践成功率 88% / 高共感型)</div>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.8); border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px;">
+                <span style="font-size: 12px; color: #64748b; font-weight: 600;">🎯 次の成長・克服ポイント</span>
+                <div style="font-size: 15px; font-weight: 800; color: #d97706; margin-top: 4px;">受容範囲を超えた「ルール不遵守」への対処</div>
+                <div style="font-size: 11px; color: #b45309; margin-top: 2px;">(抱え込み傾向に注意)</div>
+              </div>
+            </div>
+
+            <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px; font-size: 13px; color: #334155; line-height: 1.6;">
+              <strong>🤖 パートナーAIからの成長アドバイス:</strong><br>
+              「アンダーソンさんはメンバーの感情に深く共感し、個別の言葉かけでモチベーションを高める力に長けています！一方で『決めたルールを守らない部下』に対して1人で抱え込みやすい傾向が見られます。バーナードの【権威受容論】を活用し、『ルールの背景と本人のメリット』を事前に1on1で共有するアプローチを増やすと、さらにチームが自走します！」
+            </div>
+          </div>
+
+          <h3 style="font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 16px;">📝 実践ログ履歴</h3>
           <div id="history-list" style="display: flex; flex-direction: column; gap: 16px;">
             <div style="background: #ffffff; border: 1px solid var(--mg-border); border-radius: 16px; padding: 20px; box-shadow: var(--mg-shadow);">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -371,6 +399,30 @@
 
       </div>
     </main>
+  </div>
+
+  <!-- 1on1 Agenda Sheet Modal -->
+  <div id="modal-agenda-sheet" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: #ffffff; width: 100%; max-width: 680px; max-height: 90vh; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); overflow: hidden; display: flex; flex-direction: column;">
+      <div style="padding: 20px 24px; background: #059669; color: #fff; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 20px;">📄</span>
+          <h3 style="font-size: 17px; font-weight: 800; margin: 0;">1on1対話・事前準備アジェンダシート</h3>
+        </div>
+        <button id="btn-close-agenda-modal" style="background: transparent; border: none; color: #fff; font-size: 20px; cursor: pointer; font-weight: 700;">✕</button>
+      </div>
+
+      <div id="agenda-sheet-content" style="padding: 28px; overflow-y: auto; flex: 1; font-size: 14px; color: #334155; line-height: 1.7; background: #faf9f6;">
+        <!-- Dynamic Content Inserted via JS -->
+      </div>
+
+      <div style="padding: 16px 24px; background: #f1ede4; border-top: 1px solid #e2ded4; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 12px; color: #64748b;">💡 印刷または画像保存して面談時の手元メモにご活用ください</span>
+        <button onclick="window.print()" class="btn btn-primary btn-sm" style="background: #059669; border-radius: 8px; font-weight: 700; padding: 8px 18px;">
+          🌁 このシートを印刷・保存する
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Toast Notification System -->

@@ -86,63 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const sampleBernardText = `【タイトル / テーマ】
-組織は命令ではなく協力で動く｜バーナードが見た協力意欲の構造
-
-【参照動画URL / 出典】
-https://www.youtube.com/watch?v=t-H3VsCcijM
-
-【カテゴリタグ】
-組織構造・協力意欲
-
-【要約・ノウハウ本文】
-# 組織論・マネジメント構造（バーナード理論）ナレッジ
-
-## 1. 動画全体要約・コアメッセージ
-組織が機能しない根本原因は「管理や命令の不足」ではなく「現場の協力意欲の低下」にある。組織は単なる配置や命令で動く機械ではなく「人々の協力が継続している状態」そのものである。マネジメントの本質とは、強い命令を出すことではなく、メンバーが自発的に協力したくなる構造・信頼関係・目的・情報を整えることである。
-
----
-
-## 2. 中間管理職向け 悩み別AI相談・提案ロジック
-
-### 相談ケースA：「部下に指示を出しても最低限のことしかやらない / 主体性がない」
-- **動画参照URL**: https://www.youtube.com/watch?v=t-H3VsCcijM
-- **AI診断**: 部下の性格の問題ではなく、命令が受容不可能な形になっているか、「協力した人が損をする構造」に陥っている可能性が高い。
-- **具体提案・アクションプラン**:
-  1. **命令の受容化**: 背景・目的・優先順位をセットで伝えて「納得・実行できる指示」にする（[00:06:22](https://www.youtube.com/watch?v=t-H3VsCcijM&t=382s)）。
-  2. **貢献への誘因提供**: 隙間タスクの消化や非公式な貢献を可視化し、適切な承認や評価を与える（[00:10:16](https://www.youtube.com/watch?v=t-H3VsCcijM&t=616s)）。
-  3. **不公平感の排除**: 意見を出した人や気遣いをした人だけに負担が偏らないタスク分散を図る（[00:11:41](https://www.youtube.com/watch?v=t-H3VsCcijM&t=701s)）。
-
-### 相談ケースB：「ルールや報告を徹底させたのに、なぜかチームの動きが重い」
-- **動画参照URL**: https://www.youtube.com/watch?v=t-H3VsCcijM
-- **AI診断**: 協力意欲が落ちている中で管理（報告・承認・監視）を増やすと、「やらされ感」が増してさらに動作が鈍化する悪循環が発生している。
-- **具体提案・アクションプラン**:
-  1. **管理の引き算**: 不要な報告ラインや重複作業を削り、メンバーの負担を減らす（[00:18:10](https://www.youtube.com/watch?v=t-H3VsCcijM&t=1090s)）。
-  2. **非公式空気のケア**: チャットや日々の会話で「相談しやすい空気（非公式組織の活性化）」を作る（[00:13:30](https://www.youtube.com/watch?v=t-H3VsCcijM&t=810s)）。
-
-### 相談ケースC：「上層部の無茶振りと現場の不満の板挟みで辛い」
-- **動画参照URL**: https://www.youtube.com/watch?v=t-H3VsCcijM
-- **AI診断**: 上層部の指示が現場にとって「目的不明・実現不可能」な状態で降りてきている。
-- **具体提案・アクションプラン**:
-  1. **目的の翻訳**: 上からの命令をそのまま流さず、現場が共感できる「共通目的」に再定義して伝える（[00:15:30](https://www.youtube.com/watch?v=t-H3VsCcijM&t=930s)）。
-  2. **現場キャパの可視化**: 現場のボトルネックをデータ化し、上層部にフィードバックして指示を調整する。
-
----
-
-## 3. 根拠ライブラリ（直リンク付きタイムスタンプ・引用データ）
-
-| ナレッジ・概念 | 内容・根拠 | 根拠リンク（直リンク） |
-| :--- | :--- | :--- |
-| **スピッドヘッドの反乱** | 厳格な軍隊組織（1797年英海軍）でも、現場が「協力不可能」と判断した瞬間に組織は機能停止した。 | [00:00:12 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=12s) |
-| **組織の定義** | 組織とは命令が流れる機械ではなく「人々の協力が継続している状態」。 | [00:01:29 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=89s) |
-| **組織成立の3要素** | コミュニケーション・共通目的・協力意欲の3点。欠けると静かな停滞が発生。 | [00:04:41 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=281s) |
-| **権威受容論** | 命令の効力は受け手（部下）が決める。理解・目的合致・実行可能で初めて命令となる。 | [00:06:22 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=382s) |
-| **受容の幅（信頼関係）** | 日頃の信頼や説明がある上司からの依頼なら、部下は余分に協力してくれる。 | [00:08:32 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=512s) |
-| **貢献と誘因のバランス** | メンバーの貢献（時間・注意・感情）に対し、適切な誘因（承認・給料・納得）を返す必要がある。 | [00:10:16 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=616s) |
-| **協力の損（弱体化）** | 協力者や意見を出した人が損をする構造になると、人は学習して不協力になる。 | [00:11:41 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=701s) |
-| **非公式組織の力** | ホーソン実験の通り、現場の行動を左右するのは公式ルールより仲間内の空気や暗黙の基準。 | [00:13:30 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=810s) |
-| **マネジメントの3役割** | ①情報体系維持 ②必要な貢献の確保 ③目的の明確化。命令を張り上げることではない。 | [00:15:30 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=930s) |
-| **管理強化の悪循環** | 協力意欲がない状態での管理・監視強化は、やらされ感を増やしてさらに組織を重くする。 | [00:18:10 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=1090s) |`;
+  const sampleBernardText = "【タイトル / テーマ】\n組織は命令ではなく協力で動く｜バーナードが見た協力意欲の構造\n\n【参照動画URL / 出典】\nhttps://www.youtube.com/watch?v=t-H3VsCcijM\n\n【カテゴリタグ】\n組織構造・協力意欲\n\n【要約・ノウハウ本文】\n# 組織論・マネジメント構造（バーナード理論）ナレッジ\n\n## 1. 動画全体要約・コアメッセージ\n組織が機能しない根本原因は「管理や命令の不足」ではなく「現場の協力意欲の低下」にある。組織は単なる配置や命令で動く機械ではなく「人々の協力が継続している状態」そのものである。マネジメントの本質とは、強い命令を出すことではなく、メンバーが自発的に協力したくなる構造・信頼関係・目的・情報を整えることである。\n\n---\n\n## 2. 中間管理職向け 悩み別AI相談・提案ロジック\n\n### 相談ケースA：「部下に指示を出しても最低限のことしかやらない / 主体性がない」\n- **動画参照URL**: https://www.youtube.com/watch?v=t-H3VsCcijM\n- **AI診断**: 部下の性格の問題ではなく、命令が受容不可能な形になっているか、「協力した人が損をする構造」に陥っている可能性が高い。\n- **具体提案・アクションプラン**:\n  1. **命令の受容化**: 背景・目的・優先順位をセットで伝えて「納得・実行できる指示」にする（[00:06:22 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=382s)）。\n  2. **貢献への誘因提供**: 隙間タスクの消化や非公式な貢献を可視化し、適切な承認や評価を与える（[00:10:16 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=616s)）。\n  3. **不公平感の排除**: 意見を出した人だけに負担が偏らないタスク分散を図る（[00:11:41 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=701s)）。\n\n### 相談ケースB：「ルールや報告を徹底させたのに、なぜかチームの動きが重い」\n- **動画参照URL**: https://www.youtube.com/watch?v=t-H3VsCcijM\n- **AI診断**: 協力意欲が落ちている中で管理（報告・承認・監視）を増やすと、「やらされ感」が増してさらに動作が鈍化する悪循環が発生している。\n- **具体提案・アクションプラン**:\n  1. **管理の引き算**: 不要な報告ラインや重複作業を削り、メンバーの負担を減らす（[00:18:10 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=1090s)）。\n  2. **非公式空気のケア**: チャットや日々の会話で「相談しやすい空気（非公式組織の活性化）」を作る（[00:13:30 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=810s)）。\n\n### 相談ケースC：「上層部の無茶振りと現場の不満の板挟みで辛い」\n- **動画参照URL**: https://www.youtube.com/watch?v=t-H3VsCcijM\n- **AI診断**: 上層部の指示が現場にとって「目的不明・実現不可能」な状態で降りてきている。\n- **具体提案・アクションプラン**:\n  1. **目的の翻訳**: 上からの命令をそのまま流さず、現場が共感できる「共通目的」に再定義して伝える（[00:15:30 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=930s)）。\n  2. **現場キャパの可視化**: 現場のボトルネックをデータ化し、上層部にフィードバックして指示を調整する。\n\n---\n\n## 3. 根拠ライブラリ（直リンク付きタイムスタンプ・引用データ）\n\n| ナレッジ・概念 | 内容・根拠 | 根拠リンク（直リンク） |\n| :--- | :--- | :--- |\n| **スピッドヘッドの反乱** | 厳格な軍隊組織（1797年英海軍）でも、現場が「協力不可能」と判断した瞬間に組織は機能停止した。 | [00:00:12 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=12s) |\n| **組織の定義** | 組織とは命令が流れる機械ではなく「人々の協力が継続している状態」。 | [00:01:29 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=89s) |\n| **組織成立の3要素** | コミュニケーション・共通目的・協力意欲の3点。欠けると静かな停滞が発生。 | [00:04:41 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=281s) |\n| **権威受容論** | 命令の効力は受け手（部下）が決める。理解・目的合致・実行可能で初めて命令となる。 | [00:06:22 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=382s) |\n| **受容の幅（信頼関係）** | 日頃の信頼や説明がある上司からの依頼なら、部下は余分に協力してくれる。 | [00:08:32 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=512s) |\n| **貢献と誘因のバランス** | メンバーの貢献（時間・注意・感情）に対し、適切な誘因（承認・給料・納得）を返す必要がある。 | [00:10:16 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=616s) |\n| **協力の損（弱体化）** | 協力者や意見を出した人が損をする構造になると、人は学習して不協力になる。 | [00:11:41 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=701s) |\n| **非公式組織の力** | ホーソン実験の通り、現場の行動を左右するのは公式ルールより仲間内の空気や暗黙の基準。 | [00:13:30 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=810s) |\n| **マネジメントの3役割** | ①情報体系維持 ②必要な貢献の確保 ③目的の明確化。命令を張り上げることではない。 | [00:15:30 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=930s) |\n| **管理強化の悪循環** | 協力意欲がない状態での管理・監視強化は、やらされ感を増やしてさらに組織を重くする。 | [00:18:10 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=1090s) |";
 
   let knowledgeList = JSON.parse(localStorage.getItem('MG_KNOWLEDGE_LIST')) || [
     {
@@ -211,8 +155,7 @@ https://www.youtube.com/watch?v=t-H3VsCcijM
   }
 
   // Session Chat History for 3-Step Dialog Flow
-  
-  // Chat History LocalStorage Persistence Logic
+  let currentChatHistory = [];
   let storedChatHistory = JSON.parse(localStorage.getItem('MG_CHAT_HISTORY')) || [];
   currentChatHistory = storedChatHistory;
 
@@ -253,7 +196,7 @@ https://www.youtube.com/watch?v=t-H3VsCcijM
             <div class="chat-avatar" style="background: ${partner.color};">${partner.avatar}</div>
             <div class="chat-bubble-content">
               <div class="chat-sender-name">${partner.name}</div>
-              <div class="chat-bubble-text">${m.content}</div>
+              <div class="chat-bubble-text">${formatMarkdownText(m.content)}</div>
             </div>
           </div>
         `;
@@ -280,7 +223,6 @@ https://www.youtube.com/watch?v=t-H3VsCcijM
       }
     });
   }
-
 
   // Quick Question Card Handlers
   const quickCards = document.querySelectorAll('.quick-question-card');
@@ -320,8 +262,8 @@ https://www.youtube.com/watch?v=t-H3VsCcijM
     inputEl.value = '';
     chatBody.scrollTop = chatBody.scrollHeight;
 
-    // Record User Query in History
-    currentChatHistory.push({ role: 'user', content: query }); saveChatHistory();
+    currentChatHistory.push({ role: 'user', content: query });
+    saveChatHistory();
 
     // Show AI Partner Thinking State
     const thinkingRow = document.createElement('div');
@@ -341,7 +283,7 @@ https://www.youtube.com/watch?v=t-H3VsCcijM
 
     // Build History Text for Prompt
     const chatHistoryText = currentChatHistory.map(m => `${m.role === 'user' ? '相談者' : partner.name}: ${m.content}`).join('\n');
-    const knContext = knowledgeList.slice(0, 3).map(k => `【ナレッジ『${k.title}』】\n${k.summary}`).join('\n\n');
+    const knContext = knowledgeList.slice(0, 3).map(k => `【ナレッジ『${k.title}』 (参照URL: ${k.url || 'なし'})】\n${k.summary}`).join('\n\n');
 
     const systemPrompt = `
 あなたはマネジメント相談AIパートナー『${partner.name}』（タイプ: ${partner.badge}）です。
@@ -359,15 +301,17 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
 過去の会話の流れ（対話ステップ）に応じて、絶対に以下の手順を守って回答してください：
 
 ■【ステップ1：初回のご相談・聞き出しフェーズ】（会話が始まったばかり、または相談内容がまだ大まかな場合）
-・いきなり長文の提案や解決策を出してはいけません。回答が無駄に長くなるのを防ぎます。
+・いきなり長文の提案や解決策を出してはいけません。
 ・まずは相談者の苦労や悩みに温かく共感・労いを行ってください。
-・その上で「具体的にどのような場面（例: 指示を出した時、会議中、1on1の場など）で一番それを感じますか？」といった、相手のボトルネック・本音を引き出す【短い深掘り質問（1〜2個）】のみを行って回答を終えてください。
+・その上で「具体的にどのような場面（例: 指示を出した時、会議中、1on1の場など）で一番それを感じますか？」といった【短い深掘り質問（1〜2個）】のみを行ってください。
 
 ■【ステップ2：悩み確認フェーズ】（相談者が質問に答えて具体的な状況を教えてくれた場合）
-・いきなり提案をせず、「なるほど...！つまり『〇〇』という点に一番頭を悩ませていらっしゃるのですね？」と、相手の悩みの本質を短く要約して【悩みと認識の合わせ】を行ってください。
+・いきなり提案をせず、「なるほど...！つまり『〇〇』という点に一番頭を悩ませていらっしゃるのですね？」と短く要約して【悩みと認識の合わせ】を行ってください。
 
 ■【ステップ3：認識一致後の提案フェーズ】（相談者が「そう、まさにそこ！」と認めた後、または悩みの本質が完全に確定している場合）
-・「認識を共有していただきありがとうございます！」と述べた上で、上記の【蓄積ナレッジデータベース】を参照し、相手の悩みに直結する【具体的で刺さるアドバイス（3案）】を分かりやすく提示してください。
+・「認識を共有していただきありがとうございます！」と述べた上で、上記の【蓄積ナレッジデータベース】を参照し、以下の2つを必ず提示してください：
+  1. **【根拠と学習用リンク】**: 参照したナレッジの動画タイトルと、該当シーンへのYouTube直リンク [分:秒 該当シーンへ](https://www.youtube.com/watch?v=...&t=...s) を必ず提示してください。
+  2. **【具体策（3案）＋ そのまま使える会話セリフ（台本）】**: 提案ごとに、「💬 明日そのまま使える会話セリフ: 『〇〇』」を具体的に含めて提示してください。
 `;
 
     let aiResponseText = "";
@@ -400,17 +344,19 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
 
     let finalContent = "";
     if (aiResponseText) {
-      finalContent = escapeHtml(aiResponseText);
-      currentChatHistory.push({ role: 'assistant', content: aiResponseText }); saveChatHistory();
+      finalContent = formatMarkdownText(aiResponseText);
+      currentChatHistory.push({ role: 'assistant', content: aiResponseText });
+      saveChatHistory();
     } else {
       if (currentChatHistory.length <= 1) {
         finalContent = `アンダーソンさん、日々現場のチームを支えておられて本当にお疲れ様です。<br><br>部下の方のやる気や行動を感じられないのは心配ですね...。<br><br>差し支えなければ、それは具体的にどのような場面（例: 指示を出した時、会議中、1on1の場など）で一番感じられますか？相手がどんな状態か、詳しく教えていただけますか？`;
       } else if (currentChatHistory.length <= 3) {
         finalContent = `なるほど...！教えていただきありがとうございます。<br><br>つまり『指示を出した時に表面上は「はい」と返答するものの、自発的な行動が見られず最低限の作業で終わってしまうこと』に一番頭を悩ませていらっしゃるのですね？<br><br>この認識でお間違いありませんでしょうか？`;
       } else {
-        finalContent = `認識を共有していただきありがとうございます！<br><br>その『最低限の行動で終わってしまう悩み』に対して、蓄積ナレッジ（バーナードの貢献と誘因の法則など）に基づいた効果的な解決案を3つ提案いたします。<br><br><div class="option-proposal-box"><div class="option-title">💡 提案①：『命令の受容化チェック』</div><div class="option-reason">背景・目的・優先順位をセットで伝えて「納得・実行できる指示」にブラッシュアップします（[00:06:22]）。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案②：『貢献への誘因提供』</div><div class="option-reason">隙間タスクの消化や気遣いを可視化し、適切な承認や評価を与えて自発性を促します（[00:10:16]）。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案③：『協力の損の解消』</div><div class="option-reason">意見を出した人だけに負担が偏らないタスク分散を図り、不協力な態度を防ぎます（[00:11:41]）。</div></div>`;
+        finalContent = `認識を共有していただきありがとうございます！<br><br>📚 <strong>参照根拠・動画リンク:</strong> <a href="https://www.youtube.com/watch?v=t-H3VsCcijM" target="_blank" style="color:#059669; font-weight:700; text-decoration:underline;">『組織は命令ではなく協力で動く』（バーナード理論）</a> (<a href="https://www.youtube.com/watch?v=t-H3VsCcijM&t=382s" target="_blank" style="color:#059669; font-weight:700; text-decoration:underline;">00:06:22 該当シーンへ</a>)<br><br>その『最低限の行動で終わってしまう悩み』に対して、明日そのまま使える会話セリフ付きの解決案を3つ提案いたします。<br><br><div class="option-proposal-box"><div class="option-title">💡 提案①：『命令の受容化チェック』</div><div class="option-reason">背景・目的・優先順位をセットで伝えて「納得・実行できる指示」にブラッシュアップします。<br>💬 <strong>明日そのまま使える会話セリフ:</strong> 『〇〇さん、今回の件は現場の信頼を守るために凄く重要なんだ。今どんな風に聞こえたか教えてくれる？』</div></div><div class="option-proposal-box"><div class="option-title">💡 提案②：『貢献への誘因提供』</div><div class="option-reason">隙間タスクの消化や気遣いを可視化し、適切な承認や評価を与えて自発性を促します。<br>💬 <strong>明日そのまま使える会話セリフ:</strong> 『誰も気づかない細かい調整を拾ってくれて助かったよ。いつも見てるからね。』</div></div><div class="option-proposal-box"><div class="option-title">💡 提案③：『協力の損の解消』</div><div class="option-reason">意見を出した人だけに負担が偏らないタスク分散を図り、不協力な態度を防ぎます。<br>💬 <strong>明日そのまま使える会話セリフ:</strong> 『いつも意見を出してくれるからって君だけに任せちゃダメだな。チームで分担しよう。』</div></div><br><button id="btn-open-agenda-modal" class="btn btn-primary btn-sm" style="background:#059669; border-radius:10px; font-weight:700; padding:10px 18px; margin-top:10px; cursor:pointer;">📄 この提案で明日の1on1事前準備シートを出力する</button>`;
       }
-      currentChatHistory.push({ role: 'assistant', content: finalContent }); saveChatHistory();
+      currentChatHistory.push({ role: 'assistant', content: finalContent });
+      saveChatHistory();
     }
 
     aiRow.innerHTML = `
@@ -423,12 +369,85 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
     chatBody.appendChild(aiRow);
     chatBody.scrollTop = chatBody.scrollHeight;
 
+    const btnAgenda = aiRow.querySelector('#btn-open-agenda-modal');
+    if (btnAgenda) {
+      btnAgenda.addEventListener('click', openAgendaModal);
+    }
+
     if (currentChatHistory.length >= 4 || (aiResponseText && aiResponseText.includes("提案"))) {
       document.getElementById('feedback-panel').style.display = 'block';
     }
   }
 
-  // Stamp Feedback Handler
+  function openAgendaModal() {
+    const modal = document.getElementById('modal-agenda-sheet');
+    const content = document.getElementById('agenda-sheet-content');
+    if (!modal || !content) return;
+
+    const partner = partnerData[userState.partnerId] || partnerData['早苗'];
+    const today = new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    content.innerHTML = `
+      <div style="background: #ffffff; border: 2px solid #059669; border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2ded4; padding-bottom: 12px; margin-bottom: 20px;">
+          <div>
+            <span style="font-size: 11px; background: #059669; color: #fff; padding: 3px 8px; border-radius: 4px; font-weight: 700;">1on1準備メモ</span>
+            <h2 style="font-size: 20px; font-weight: 800; color: #0f172a; margin: 4px 0 0 0;">面談事前準備シート (${today})</h2>
+          </div>
+          <div style="text-align: right; font-size: 12px; color: #64748b;">
+            担当リーダー: アンダーソン<br>
+            担当参謀AI: ${partner.name}
+          </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <h4 style="font-size: 13px; color: #047857; font-weight: 700; margin-bottom: 6px;">🎯 今回の面談テーマ・明確になった悩み</h4>
+          <div style="background: #f0fdf4; border: 1px solid #a7f3d0; border-radius: 8px; padding: 12px; font-weight: 600;">
+            「部下に指示を出しても表面上は『はい』と答えるが、自発的な行動が見られず最低限の作業で終わってしまう現象の解消」
+          </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <h4 style="font-size: 13px; color: #047857; font-weight: 700; margin-bottom: 6px;">💬 明日面談で直接使う言葉かけセリフ (台本)</h4>
+          <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 14px; font-size: 13px; color: #92400e; line-height: 1.7;">
+            1. 『〇〇さん、今回の件はチームの現場の信頼を守るために凄く重要なんだ。今どんな風に聞こえたか教えてほしいな。』<br>
+            2. 『いつも誰も気づかない細かい調整を拾ってくれて本当に助かってるよ。いつも見てるからね。』<br>
+            3. 『いつも進んで意見を出してくれるからって、君だけに任せちゃダメだな。しっかりチームで分担しよう。』
+          </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <h4 style="font-size: 13px; color: #047857; font-weight: 700; margin-bottom: 6px;">📚 バックボーン根拠ナレッジ・学習リンク</h4>
+          <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; font-size: 12px;">
+            ・<strong>参考理論:</strong> 『組織は命令ではなく協力で動く』（チェスター・バーナード理論）<br>
+            ・<strong>根拠動画直リンク:</strong> <a href="https://www.youtube.com/watch?v=t-H3VsCcijM&t=382s" target="_blank" style="color:#059669; font-weight:700; text-decoration:underline;">https://www.youtube.com/watch?v=t-H3VsCcijM&t=382s</a> ([00:06:22 該当シーンへ])
+          </div>
+        </div>
+
+        <div style="border-top: 1px dashed #cbd5e1; pt: 12px; font-size: 11px; color: #94a3b8; text-align: center;">
+          🌿 マネジメントサポートAI - 現場リーダー伴走型参謀システム
+        </div>
+      </div>
+    `;
+
+    modal.style.display = 'flex';
+  }
+
+  const btnCloseAgenda = document.getElementById('btn-close-agenda-modal');
+  if (btnCloseAgenda) {
+    btnCloseAgenda.addEventListener('click', () => {
+      document.getElementById('modal-agenda-sheet').style.display = 'none';
+    });
+  }
+
+  function formatMarkdownText(str) {
+    if (!str) return '';
+    let formatted = escapeHtml(str);
+    formatted = formatted.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" style="color: #059669; font-weight: 700; text-decoration: underline;">$1</a>');
+    formatted = formatted.replace(/(^|[^"])((https?:\/\/[^\s<]+))/g, '$1<a href="$2" target="_blank" style="color: #059669; font-weight: 700; text-decoration: underline;">$2</a>');
+    return formatted;
+  }
+
   const stampButtons = document.querySelectorAll('.stamp-btn');
   stampButtons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -450,7 +469,6 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
     });
   });
 
-  // Gamification User State
   let userState = JSON.parse(localStorage.getItem('MG_USER_STATE')) || {
     level: 1,
     exp: 40,
@@ -477,7 +495,6 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
     if (document.getElementById('user-exp-bar')) document.getElementById('user-exp-bar').style.width = `${pct}%`;
   }
 
-  // Gemini API Key Local Storage
   let geminiApiKey = localStorage.getItem('GEMINI_API_KEY') || '';
   const apiKeyInput = document.getElementById('gemini-api-key-input');
   const apiKeyStatus = document.getElementById('api-key-status');
@@ -501,7 +518,6 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
     });
   }
 
-  // Sample Template Assistant Handler
   const btnFillSample = document.getElementById('btn-fill-sample-knowledge');
   if (btnFillSample) {
     btnFillSample.addEventListener('click', () => {
@@ -513,7 +529,6 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
     });
   }
 
-  // Bulk Single Text Area Parser & Knowledge Direct Save Handler
   const btnSaveBulk = document.getElementById('btn-save-bulk-knowledge');
   if (btnSaveBulk) {
     btnSaveBulk.addEventListener('click', () => {
@@ -553,7 +568,7 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
       });
 
       localStorage.setItem('MG_KNOWLEDGE_LIST', JSON.stringify(knowledgeList));
-      renderKnowledgeList(); renderStoredChatHistory();
+      renderKnowledgeList();
       
       document.getElementById('knowledge-bulk-input').value = '';
       showToast(`💾 ナレッジ『${title.slice(0, 15)}...』を一括解析・蓄積保存しました！`);
@@ -575,14 +590,6 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
     }
 
     if (document.getElementById('knowledge-count')) document.getElementById('knowledge-count').textContent = knowledgeList.length;
-
-    function formatMarkdownText(str) {
-      if (!str) return '';
-      let formatted = escapeHtml(str);
-      formatted = formatted.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" style="color: #059669; font-weight: 700; text-decoration: underline;">$1</a>');
-      formatted = formatted.replace(/(^|[^"])((https?:\/\/[^\s<]+))/g, '$1<a href="$2" target="_blank" style="color: #059669; font-weight: 700; text-decoration: underline;">$2</a>');
-      return formatted;
-    }
 
     listGrid.innerHTML = knowledgeList.map((k, index) => `
       <div class="knowledge-item-card" style="background: #ffffff; border: 1px solid #e2ded4; border-radius: 16px; padding: 20px 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); margin-bottom: 16px;">
@@ -658,4 +665,5 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
   updateGamificationUI();
   updateApiKeyUI();
   renderKnowledgeList();
+  renderStoredChatHistory();
 });
