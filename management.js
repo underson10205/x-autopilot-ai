@@ -4,6 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   // State Storage
+  let currentChatHistory = [];
   let userState = JSON.parse(localStorage.getItem('MG_USER_STATE')) || {
     level: 1,
     exp: 25,
@@ -20,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       color: '#f59e0b',
       badge: '① ポジティブ・共感型 (女性)',
       motto: '「アンダーソンさん、今日もお仕事お疲れ様です✨ 大丈夫、一緒に解決していきましょう！」',
-      greeting: 'アンダーソンさん！毎日チームを支えておられて本当にお疲れ様です✨\nどんな些細な悩みでも遠慮なく話してくださいね！温かくポジティブな3〜4案の解決策をご提案します♪'
+      greeting: 'アンダーソンさん！毎日チームを支えておられて本当にお疲れ様です✨\nどんな些細な悩みでも遠慮なく教えてくださいね。まずはどんなことで悩んでいるか、詳しく聞かせてください♪'
     },
     '冷泉': {
       name: '冷泉 (れいせん)',
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
       color: '#3b82f6',
       badge: '② クール・ロジカル型 (女性)',
       motto: '「…アンダーソンさん。感情論は不要です。問題の根本原因を淡々と分析し、改善策を提示します」',
-      greeting: 'アンダーソンさん、お疲れ様です。現状のチームの課題や問題点を客観的にお知らせください。冷徹かつ論理的に根拠のある3〜4個のアクションプランを提示します。'
+      greeting: 'アンダーソンさん、お疲れ様です。現状のチームの課題や気になる点をお知らせください。どのような点に頭を悩ませているか、まずは詳しく伺います。'
     },
     '早苗': {
       name: 'AI秘書 早苗ちゃん',
@@ -36,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
       color: '#059669',
       badge: '③ ツンデレ・スパルタ型 (女性)',
       motto: '「…ふん。アンダーソンさん、甘えは厳禁です。成果を出したら認めてあげます」',
-      greeting: 'アンダーソンさん、今日もお仕事お疲れ様です。\n誰にも言えない現場の悩みや、部下との接し方で引っかかっていることがあれば何でも話してください。厳しく、ですが合理的な3〜4案の解決策を提示いたします。'
+      greeting: 'アンダーソンさん、今日もお仕事お疲れ様です。\n誰にも言えない現場の悩みや、部下との接し方で引っかかっていることがあれば何でも話してください。どんな悩みなのか、まずはしっかり聴いてあげますからね。'
     },
     '太陽': {
       name: '太陽 (たいよう)',
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
       color: '#ea580c',
       badge: '① ポジティブ・共感型 (男性)',
       motto: '「アンダーソンさん！熱い志でチームを導きましょう！僕が全力で応援します！」',
-      greeting: 'アンダーソンさん！今日も熱いリーダーシップお見事です！\n悩んだ時は何でも僕にぶつけてください！一緒にチームを最高に盛り上げる熱い解決案を提案します！'
+      greeting: 'アンダーソンさん！今日も熱いリーダーシップお見事です！\n悩んだ時は何でも僕にぶつけてください！どんな状況で困っているのか、熱く詳しく聞かせてください！'
     },
     '冴島': {
       name: '冴島 (さえじま)',
@@ -52,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
       color: '#0284c7',
       badge: '② クール・ロジカル型 (男性)',
       motto: '「アンダーソンさん、マネジメントに感情のムラは敵です。構造と根拠で解決しましょう」',
-      greeting: 'アンダーソンさん、お疲れ様です。現状の数字や部下の行動データをお聞かせください。問題点をロジカルに分解し、最適な構造的アプローチを提示します。'
+      greeting: 'アンダーソンさん、お疲れ様です。現状のチームの気になる状況をお聞かせください。問題の本質を整理するために、まずは詳細をヒアリングさせてください。'
     },
     '凛太郎': {
       name: '凛太郎 (りんたろう)',
@@ -60,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
       color: '#7c3aed',
       badge: '③ ツンデレ・スパルタ型 (男性)',
       motto: '「…フッ、アンダーソンさん。その程度の悩みでへばるな。成果を出したら一杯奢ってやる」',
-      greeting: 'アンダーソンさん、お疲れ。弱音を吐くヒマがあったら相談に乗ってやる。\nだが甘えはナシだ。結果を出すための現実的な3〜4案を叩き込んでやるよ。'
+      greeting: 'アンダーソンさん、お疲れ。弱音を吐くヒマがあったら何でも言ってみろ。\nまずは具体的に何に引っかかっているのか、じっくり聴いてやるよ。'
     }
   };
 
@@ -116,115 +117,170 @@ https://www.youtube.com/watch?v=t-H3VsCcijM
 | **組織成立の3要素** | コミュニケーション・共通目的・協力意欲の3点。欠けると静かな停滞が発生。 | [00:04:41 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=281s) |
 | **権威受容論** | 命令の効力は受け手（部下）が決める。理解・目的合致・実行可能で初めて命令となる。 | [00:06:22 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=382s) |
 | **受容の幅（信頼関係）** | 日頃の信頼や説明がある上司からの依頼なら、部下は余分に協力してくれる。 | [00:08:32 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=512s) |
-| **貢献と誘因のバランス** | メンバーの貢献（時間・注意・感情）に対し、適切な誘因（承認・給料・納得）を返す必要がある。 | [00:10:16 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=616s) |
-| **協力の損（弱体化）** | 協力者や意見を出した人が損をする構造になると、人は学習して不協力になる。 | [00:11:41 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=701s) |
-| **非公式組織の力** | ホーソン実験の通り、現場の行動を左右するのは公式ルールより仲間内の空気や暗黙の基準。 | [00:13:30 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=810s) |
-| **マネジメントの3役割** | ①情報体系維持 ②必要な貢献の確保 ③目的の明確化。命令を張り上げることではない。 | [00:15:30 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=930s) |
-| **管理強化の悪循環** | 協力意欲がない状態での管理・監視強化は、やらされ感を増やしてさらに組織を重くする。 | [00:18:10 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=1090s) |`;
+| **貢献と誘因のバランス** | メンバーの貢献（時間・注意・感情）に対し、適切な誘因（承認・給料・納得）を返す必要がある�  // Chat Session History Storage
+  let chatSessionMessages = [];
 
-  let knowledgeList = JSON.parse(localStorage.getItem('MG_KNOWLEDGE_LIST')) || [
-    {
-      title: '組織は命令ではなく協力で動く｜バーナードが見た協力意欲の構造',
-      url: 'https://www.youtube.com/watch?v=t-H3VsCcijM',
-      category: '組織構造・協力意欲の法則',
-      summary: sampleBernardText
-    }
-  ];
-
-  // Role Switcher Logic (Admin vs General User)
-  let isAdminMode = JSON.parse(localStorage.getItem('MG_ADMIN_MODE')) || false;
-  const roleToggle = document.getElementById('role-toggle');
-  const roleText = document.getElementById('role-status-text');
-  const adminTabItem = document.querySelector('.admin-only-item');
-
-  function updateRoleUI() {
-    if (roleToggle) roleToggle.checked = isAdminMode;
-    if (roleText) {
-      roleText.textContent = isAdminMode ? '現在: 👑 管理者表示 (全機能解放)' : '現在: 👤 一般利用者表示';
-      roleText.style.color = isAdminMode ? '#b45309' : '#94a3b8';
-    }
-    if (adminTabItem) {
-      adminTabItem.style.display = isAdminMode ? 'flex' : 'none';
-    }
+  // Send Consultation Handler
+  const btnSend = document.getElementById('btn-send-consult');
+  if (btnSend) {
+    btnSend.addEventListener('click', handleSendConsult);
   }
 
-  if (roleToggle) {
-    roleToggle.addEventListener('change', () => {
-      isAdminMode = roleToggle.checked;
-      localStorage.setItem('MG_ADMIN_MODE', JSON.stringify(isAdminMode));
-      updateRoleUI();
-      showToast(isAdminMode ? '👑 管理者モードを有効化しました (ナレッジ登録機能が解放されます)' : '👤 一般利用者モードに切り替えました (管理メニューが非表示になります)');
-    });
-  }
+  async function handleSendConsult() {
+    const inputEl = document.getElementById('chat-input-text');
+    const query = inputEl.value.trim();
+    if (!query) return;
 
-  // Tab Navigation Handler
-  const navButtons = document.querySelectorAll('.nav-item');
-  const tabContents = document.querySelectorAll('.tab-content');
+    const chatBody = document.getElementById('chat-messages-body');
+    const partner = partnerData[userState.partnerId] || partnerData['早苗'];
 
-  function switchTab(tabId) {
-    navButtons.forEach(b => {
-      if (b.getAttribute('data-tab') === tabId) {
-        b.classList.add('active');
+    // Append User Message to UI & Session History
+    const userRow = document.createElement('div');
+    userRow.className = 'chat-bubble-row user';
+    userRow.innerHTML = `
+      <div class="chat-avatar" style="background: #059669;">アン</div>
+      <div class="chat-bubble-content">
+        <div class="chat-sender-name">アンダーソンさん</div>
+        <div class="chat-bubble-text">${escapeHtml(query)}</div>
+      </div>
+    `;
+    chatBody.appendChild(userRow);
+    inputEl.value = '';
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    chatSessionMessages.push({ role: 'user', content: query });
+
+    // Show AI Partner Thinking State
+    const thinkingRow = document.createElement('div');
+    thinkingRow.className = 'chat-bubble-row partner';
+    thinkingRow.id = 'thinking-row';
+    thinkingRow.innerHTML = `
+      <div class="chat-avatar" style="background: ${partner.color};">${partner.avatar}</div>
+      <div class="chat-bubble-content">
+        <div class="chat-sender-name">${partner.name}</div>
+        <div class="chat-bubble-text" style="color: #64748b;">
+          ⚡️ 蓄積ナレッジを参照し、Gemini 3.6 Flash で回答を生成中...
+        </div>
+      </div>
+    `;
+    chatBody.appendChild(thinkingRow);
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    // Build History Text for Prompt
+    const historyText = chatSessionMessages.map(m => `${m.role === 'user' ? '相談者(アンダーソンさん)' : partner.name}: 「${m.content}」`).join('\n');
+
+    // Build System Prompt with Strict Step-by-Step Guidance
+    const knContext = knowledgeList.slice(0, 3).map(k => `【ナレッジ『${k.title}』】\n${k.summary}`).join('\n\n');
+    const systemPrompt = `
+あなたはマネジメント相談AIパートナー『${partner.name}』（タイプ: ${partner.badge}）です。
+モットー: "${partner.motto}"
+
+【重要：あなたの役割と対話ステップルール】
+相談者（アンダーソンさん / 現場リーダー）との会話において、必ず以下の【3つのステップルール】を厳格に守って回答してください。
+
+■ ステップ1：【傾聴・ヒアリングフェーズ】
+・相談内容がざっくりしている場合（例: 「ちょっと部下に対して悩んでます」「関係がうまくいかない」等）や、具体例がまだ不明な段階では、絶対にいきなり具体的な解決策や提案（3〜4案など）を出さないでください！
+・相談者の気持ちに寄り添って共感し、「具体的に部下のどのような言動や状況で困っているのか」「どんな場面でそう感じたか」を丁寧に聞き出す質問をして傾聴に徹底してください。
+
+■ ステップ2：【悩みの一致・確認フェーズ】
+・相談者から具体的な状況や悩みの内容が語られた段階では、まだ提案はせず、相談者の悩みを一度要約して確認してください。
+・必ず「なるほど！つまり〇〇ということに悩んでいるということで合ってるかな？」という形式（またはあなたのキャラの口調に合わせた表現）で、悩みの確認を行ってください。
+
+■ ステップ3：【解決策の提案フェーズ】
+・相談者が「そう！」「合ってる」「まさにそれです」など、悩み確認に同意・一致した場合、初めて「確認ありがとう！それでは〇〇について具体策を提案するね」と述べ、蓄積ナレッジデータベースを参照した具体的な解決策・アクションプラン（3〜4案）を提示してください。
+
+---
+【これまでの会話履歴】
+${historyText}
+
+【蓄積ナレッジデータベース】
+${knContext ? knContext : "基本マネジメント原則を適用"}
+
+【指示】
+上記の会話履歴とステップルールに照らし合わせ、現在のフェーズに適した回答を『${partner.name}』になりきって出力してください。
+`;
+
+    let aiResponseText = "";
+    const modelsToTry = ["gemini-3.6-flash", "gemini-3.5-flash", "gemini-2.5-flash"];
+
+    if (geminiApiKey) {
+      for (const model of modelsToTry) {
+        if (aiResponseText) break;
+        try {
+          const gRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: systemPrompt }] }] })
+          });
+          if (gRes.ok) {
+            const gData = await gRes.json();
+            if (gData.candidates && gData.candidates[0]?.content?.parts[0]?.text) {
+              aiResponseText = gData.candidates[0].content.parts[0].text;
+            }
+          }
+        } catch (e) {}
+      }
+    }
+
+    const thinking = document.getElementById('thinking-row');
+    if (thinking) thinking.remove();
+
+    const aiRow = document.createElement('div');
+    aiRow.className = 'chat-bubble-row partner';
+
+    let finalContent = "";
+    if (aiResponseText) {
+      finalContent = escapeHtml(aiResponseText);
+      currentChatHistory.push({ role: 'assistant', content: aiResponseText });
+    } else {
+      // Fallback Engine supporting Step 1 -> Step 2 -> Step 3
+      const userMessageCount = chatSessionMessages.filter(m => m.role === 'user').length;
+      const lowerQuery = query.toLowerCase();
+
+      // Check if user is confirming a diagnosis (Step 3 Trigger)
+      const isConfirming = lowerQuery.includes('合っ') || lowerQuery.includes('そう') || lowerQuery.includes('まさに') || lowerQuery.includes('はい') || lowerQuery.includes('それ');
+
+      if (userMessageCount === 1 && !isConfirming) {
+        // Step 1: Listening & Questioning
+        if (userState.partnerId === '凛太郎') {
+          finalContent = `…フッ、アンダーソンさん。挨拶は威勢がいいが、肝心の悩みがざっくりしすぎだろ。<br>まあいい、部下の件で頭を抱えている顔が目に浮かぶぜ。具体的に、部下のどんな言動や状況に困ってるんだ？まずは詳しく聞かせろ。`;
+        } else if (userState.partnerId === '早苗') {
+          finalContent = `アンダーソンさん、今日もお仕事お疲れ様です。<br>部下の方のことで悩まれているのですね。具体的にどんな言動やどんな場面で引っかかっていますか？まずは詳しく聴かせてくださいね。`;
+        } else if (userState.partnerId === '陽葵') {
+          finalContent = `アンダーソンさん！毎日お仕事本当にお疲れ様です✨<br>部下さんのことですね。どんな些細なことでも大丈夫ですよ♪ 具体的にどんなことで悩んでいるか、詳しく聴かせていただけますか？`;
+        } else if (userState.partnerId === '冷泉') {
+          finalContent = `アンダーソンさん、お疲れ様です。<br>部下に関する課題ですね。どのような状況や行動データに問題を感じているか、まずは具体的に状況をお聞かせください。`;
+        } else if (userState.partnerId === '太陽') {
+          finalContent = `アンダーソンさん！今日も熱いリーダーシップお見事です！<br>部下さんの悩みですね！どんな状況で困っているのか、熱く詳しく教えちゃってください！`;
+        } else {
+          finalContent = `アンダーソンさん、お疲れ様です。<br>部下との関係で気になることがあるのですね。具体的にどんな言動や状況で困っているか、まずは詳しくヒアリングさせてください。`;
+        }
+      } else if (!isConfirming && userMessageCount === 2) {
+        // Step 2: Paraphrasing & Confirmation
+        finalContent = `なるほど！お話を聞かせてくれてありがとう。<br><br>つまり、<strong>「${escapeHtml(query)}」ということで合ってるかな？</strong><br><br>悩みのポイントが合っていたら教えてね！一致していたら、蓄積ナレッジから具体的な解決案を提案するよ！`;
       } else {
-        b.classList.remove('active');
+        // Step 3: Proposal & Action Plan
+        finalContent = `<strong>【悩みの一致を確認】</strong><br>なるほど！確認ありがとう、アンダーソンさん。<br>『部下との関係・自発的協力を引き出す解決策』について、蓄積されたナレッジを元に最適な4つのアドバイス提案をまとめたよ。<br><br><strong>【ナレッジ参照根拠】</strong> 📚 <em>『組織は命令ではなく協力で動く』（[[01:48]]）より参照</em><br><br><div class="option-proposal-box"><div class="option-title">💡 提案①：『共感ファースト原則』</div><div class="option-reason">まず「君が悩んでいる気持ち、よくわかるよ」と相手の感情を受け止めてから本題に入ります。相手の防衛本能が解けます。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案②：『沈黙を恐れない10秒間』</div><div class="option-reason">黙り込んだ時は無理に話しかけず、10秒間待つことで、部下自らが考えを言葉にする時間を確保します。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案③：『貢献と誘因のバランス共有』</div><div class="option-reason">指示ではなく「この仕事が完成するとチームや本人にどんな良い価値があるか」の理由を共有します。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案④：『直後のワンポイント労い』</div><div class="option-reason">指導が終わった直後に「期待しているから伝えたんだよ」と笑顔で1言添えてフォローします。</div></div>`;
       }
-    });
+    }
 
-    tabContents.forEach(c => {
-      if (c.id === `tab-${tabId}`) {
-        c.style.display = 'block';
-        c.classList.add('active');
-      } else {
-        c.style.display = 'none';
-        c.classList.remove('active');
-      }
-    });
-  }
+    chatSessionMessages.push({ role: 'assistant', content: finalContent });
 
-  navButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const tabId = btn.getAttribute('data-tab');
-      if (tabId) {
-        switchTab(tabId);
-      }
-    });
-  });
+    aiRow.innerHTML = `
+      <div class="chat-avatar" style="background: ${partner.color};">${partner.avatar}</div>
+      <div class="chat-bubble-content">
+        <div class="chat-sender-name">${partner.name}</div>
+        <div class="chat-bubble-text">${finalContent}</div>
+      </div>
+    `;
+    chatBody.appendChild(aiRow);
+    chatBody.scrollTop = chatBody.scrollHeight;
 
-  // Partner Selection Handler
-  const partnerCards = document.querySelectorAll('.partner-select-card');
-  partnerCards.forEach(card => {
-    card.addEventListener('click', () => {
-      partnerCards.forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-      
-      const partnerId = card.getAttribute('data-partner-id');
-      userState.partnerId = partnerId;
-      saveUserState();
-      updatePartnerUI();
-      showToast(`👥 AIパートナーを『${partnerData[partnerId].name}』に変更しました！`);
-    });
-  });
-
-  document.getElementById('btn-change-partner').addEventListener('click', () => {
-    document.querySelector('[data-tab="settings"]').click();
-  });
-
-  function updatePartnerUI() {
-    const p = partnerData[userState.partnerId] || partnerData['早苗'];
-    document.getElementById('partner-avatar').textContent = p.avatar;
-    document.getElementById('partner-avatar').style.background = p.color;
-    document.getElementById('partner-name').textContent = p.name;
-    document.getElementById('partner-type-badge').textContent = p.badge;
-    document.getElementById('partner-motto').textContent = p.motto;
-  }
-
-  // Quick Question Card Handlers
-  const quickCards = document.querySelectorAll('.quick-question-card');
-  quickCards.forEach(card => {
-    card.addEventListener('click', () => {
-      const questionText = card.getAttribute('data-q');
-      document.getElementById('chat-input-text').value = questionText;
+    // Show Feedback Stamps on proposal
+    if (finalContent.includes('提案')) {
+      document.getElementById('feedback-panel').style.display = 'block';
+    }
+  }yId('chat-input-text').value = questionText;
       handleSendConsult();
     });
   });
@@ -257,6 +313,8 @@ https://www.youtube.com/watch?v=t-H3VsCcijM
     inputEl.value = '';
     chatBody.scrollTop = chatBody.scrollHeight;
 
+    currentChatHistory.push({ role: 'user', content: query });
+
     // Show AI Partner Thinking State
     const thinkingRow = document.createElement('div');
     thinkingRow.className = 'chat-bubble-row partner';
@@ -275,22 +333,34 @@ https://www.youtube.com/watch?v=t-H3VsCcijM
 
     // Build Prompt with Accumulated Knowledge
     const knContext = knowledgeList.slice(0, 3).map(k => `【ナレッジ『${k.title}』】\n${k.summary}`).join('\n\n');
+    const chatHistoryText = currentChatHistory.map(m => `${m.role === 'user' ? '相談者' : partner.name}: ${m.content}`).join('\n');
     const systemPrompt = `
 あなたはマネジメント相談AIパートナー『${partner.name}』（タイプ: ${partner.badge}）です。
 モットー: "${partner.motto}"
 
-相談者（アンダーソンさん / 現場リーダー）から以下の悩みが寄せられました。
-相談内容: 「${query}」
+【相談者（アンダーソンさん / 現場リーダー）とのこれまでの会話履歴】
+${chatHistoryText}
+
+最新の相談入力: 「${query}」
 
 以下の【蓄積ナレッジデータベース】を参照し、あなたのキャラクター（${partner.name}）になりきって回答してください。
 
 【蓄積ナレッジデータベース】
 ${knContext ? knContext : "基本マネジメント原則を適用"}
 
-【回答要件】
-1. 冒頭で、キャラクターに応じた温かい労いまたはキャラクターらしい受け答え（1〜2行）を述べてください。
-2. 参照したナレッジの根拠（例: 『組織は命令ではなく協力で動く』より参照 [[01:48]] など）を提示してください。
-3. 相談者へ提案する【具体策・アクションプランを3〜4案】、それぞれの理由と一緒に提示してください。
+【あなたの必須対話行動ルール】
+過去の会話の流れ（対話ステップ）に応じて、絶対に以下の手順を守って回答してください：
+
+■【ステップ1：初回のご相談・聞き出しフェーズ】（会話が始まったばかり、または相談内容がまだ大まかな場合）
+・いきなり長文の提案や解決策を出してはいけません。回答が無駄に長くなるのを防ぎます。
+・まずは相談者の苦労や悩みに温かく共感・労いを行ってください。
+・その上で「具体的にどのような場面（例: 指示を出した時、会議中、1on1の場など）で一番それを感じますか？」といった、相手のボトルネック・本音を引き出す【短い深掘り質問（1〜2個）】のみを行って回答を終えてください。
+
+■【ステップ2：悩み確認フェーズ】（相談者が質問に答えて具体的な状況を教えてくれた場合）
+・いきなり提案をせず、「なるほど...！つまり『〇〇』という点に一番頭を悩ませていらっしゃるのですね？」と、相手の悩みの本質を短く要約して【悩みと認識の合わせ】を行ってください。
+
+■【ステップ3：認識一致後の提案フェーズ】（相談者が「そう、まさにそこ！」と認めた後、または悩みの本質が完全に確定している場合）
+・「認識を共有していただきありがとうございます！」と述べた上で、上記の【蓄積ナレッジデータベース】を参照し、相手の悩みに直結する【具体的で刺さるアドバイス（3案）】を分かりやすく提示してください。
 `;
 
     let aiResponseText = "";
@@ -325,7 +395,13 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
     if (aiResponseText) {
       finalContent = escapeHtml(aiResponseText);
     } else {
-      finalContent = `<strong>【労いと共有】</strong><br>アンダーソンさん、毎日チームを支えておられて本当にお疲れ様です。<br>ご相談いただいた「${escapeHtml(query)}」について、蓄積されたナレッジを元に最適な4つのアドバイス提案をまとめました。<br><br><strong>【ナレッジ参照根拠】</strong> 📚 <em>『組織は命令ではなく協力で動く』（[[01:48]]）より参照</em><br><br><div class="option-proposal-box"><div class="option-title">💡 提案①：『共感ファースト原則』</div><div class="option-reason">まず「君が悩んでいる気持ち、よくわかるよ」と相手の感情を受け止めてから本題に入ります。相手の防衛本能が解けます。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案②：『沈黙を恐れない10秒間』</div><div class="option-reason">黙り込んだ時は無理に話しかけず、10秒間待つことで、部下自らが考えを言葉にする時間を確保します。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案③：『貢献と誘因のバランス共有』</div><div class="option-reason">指示ではなく「この仕事が完成するとチームや本人にどんな良い価値があるか」の理由を共有します。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案④：『直後のワンポイント労い』</div><div class="option-reason">指導が終わった直後に「期待しているから伝えたんだよ」と笑顔で1言添えてフォローします。</div></div>`;
+      if (currentChatHistory.length <= 1) {
+        finalContent = `アンダーソンさん、日々現場のチームを支えておられて本当にお疲れ様です。<br><br>部下の方のやる気や行動を感じられないのは心配ですね...。<br><br>差し支えなければ、それは具体的にどのような場面（例: 指示を出した時、会議中、1on1の場など）で一番感じられますか？相手がどんな状態か、詳しく教えていただけますか？`;
+      } else if (currentChatHistory.length <= 3) {
+        finalContent = `なるほど...！教えていただきありがとうございます。<br><br>つまり『指示を出した時に表面上は「はい」と返答するものの、自発的な行動が見られず最低限の作業で終わってしまうこと』に一番頭を悩ませていらっしゃるのですね？<br><br>この認識でお間違いありませんでしょうか？`;
+      } else {
+        finalContent = `認識を共有していただきありがとうございます！<br><br>その『最低限の行動で終わってしまう悩み』に対して、蓄積ナレッジ（バーナードの貢献と誘因の法則など）に基づいた効果的な解決案を3つ提案いたします。<br><br><div class="option-proposal-box"><div class="option-title">💡 提案①：『命令の受容化チェック』</div><div class="option-reason">背景・目的・優先順位をセットで伝えて「納得・実行できる指示」にブラッシュアップします（[00:06:22]）。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案②：『貢献への誘因提供』</div><div class="option-reason">隙間タスクの消化や気遣いを可視化し、適切な承認や評価を与えて自発性を促します（[00:10:16]）。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案③：『協力の損の解消』</div><div class="option-reason">意見を出した人だけに負担が偏らないタスク分散を図り、不協力な態度を防ぎます（[00:11:41]）。</div></div>`;
+      }
     }
 
     aiRow.innerHTML = `
