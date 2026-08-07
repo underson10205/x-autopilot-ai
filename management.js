@@ -1,9 +1,6 @@
-/* ==========================================================================
-   Management Support AI Dynamic Engine & Gamification System
-   ========================================================================== */
-
 document.addEventListener('DOMContentLoaded', () => {
-  // Tab Navigation Handler (Restored)
+
+  // Tab Navigation Handler
   const navButtons = document.querySelectorAll('.nav-item');
   const tabContents = document.querySelectorAll('.tab-content');
 
@@ -37,41 +34,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // State Storage
-  let currentChatHistory = [];
-  let userState = JSON.parse(localStorage.getItem('MG_USER_STATE')) || {
-    level: 1,
-    exp: 25,
-    maxExp: 100,
-    streak: 3,
-    partnerId: '早苗',
-    history: []
-  };
-
-  let partnerData = {
-    '陽葵': {
-      name: '陽葵 (ひまり)',
-      avatar: '陽',
-      color: '#f59e0b',
-      badge: '① ポジティブ・共感型 (女性)',
-      motto: '「アンダーソンさん、今日もお仕事お疲れ様です✨ 大丈夫、一緒に解決していきましょう！」',
-      greeting: 'アンダーソンさん！毎日チームを支えておられて本当にお疲れ様です✨\nどんな些細な悩みでも遠慮なく教えてくださいね。まずはどんなことで悩んでいるか、詳しく聞かせてください♪'
-    },
-    '冷泉': {
-      name: '冷泉 (れいせん)',
-      avatar: '冷',
-      color: '#3b82f6',
-      badge: '② クール・ロジカル型 (女性)',
-      motto: '「…アンダーソンさん。感情論は不要です。問題の根本原因を淡々と分析し、改善策を提示します」',
-      greeting: 'アンダーソンさん、お疲れ様です。現状のチームの課題や気になる点をお知らせください。どのような点に頭を悩ませているか、まずは詳しく伺います。'
-    },
+  // Partner Personas Data
+  const partnerData = {
     '早苗': {
       name: 'AI秘書 早苗ちゃん',
       avatar: '早苗',
       color: '#059669',
-      badge: '③ ツンデレ・スパルタ型 (女性)',
+      badge: 'ツンデレ・スパルタ型 (女性)',
       motto: '「…ふん。アンダーソンさん、甘えは厳禁です。成果を出したら認めてあげます」',
-      greeting: 'アンダーソンさん、今日もお仕事お疲れ様です。\n誰にも言えない現場の悩みや、部下との接し方で引っかかっていることがあれば何でも話してください。どんな悩みなのか、まずはしっかり聴いてあげますからね。'
+      greeting: 'アンダーソンさん、今日もお仕事お疲れ様です。\n誰にも言えない現場の悩みや、部下との接し方で引っかかっていることがあれば何でも話してください。厳しく、ですが合理的な解決策を提示いたします。'
+    },
+    '陽葵': {
+      name: '陽葵 (ひまり)',
+      avatar: '陽',
+      color: '#d97706',
+      badge: '① ポジティブ・共感型 (女性)',
+      motto: '「アンダーソンさん！毎日本当によく頑張ってます！一緒に最高のチーム作りましょう！」',
+      greeting: 'アンダーソンさん、今日もお疲れ様です！私でよければ何でも話してくださいね！いつも応援しています！'
+    },
+    '冷泉': {
+      name: '冷泉 (れいせん)',
+      avatar: '冷',
+      color: '#2563eb',
+      badge: '② クール・ロジカル型 (女性)',
+      motto: '「感情論は横に置きましょう。データとナレッジに基づいた最善手を計算します」',
+      greeting: 'アンダーソンさん、お疲れ様です。現状のボトルネックとデータを提示してください。即座に構造的課題を抽出します。'
     },
     '太陽': {
       name: '太陽 (たいよう)',
@@ -79,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
       color: '#ea580c',
       badge: '① ポジティブ・共感型 (男性)',
       motto: '「アンダーソンさん！熱い志でチームを導きましょう！僕が全力で応援します！」',
-      greeting: 'アンダーソンさん！今日も熱いリーダーシップお見事です！\n悩んだ時は何でも僕にぶつけてください！どんな状況で困っているのか、熱く詳しく聞かせてください！'
+      greeting: 'アンダーソンさん！今日も熱いリーダーシップお見事です！悩んだ時は何でも僕にぶつけてください！'
     },
     '冴島': {
       name: '冴島 (さえじま)',
@@ -87,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
       color: '#0284c7',
       badge: '② クール・ロジカル型 (男性)',
       motto: '「アンダーソンさん、マネジメントに感情のムラは敵です。構造と根拠で解決しましょう」',
-      greeting: 'アンダーソンさん、お疲れ様です。現状のチームの気になる状況をお聞かせください。問題の本質を整理するために、まずは詳細をヒアリングさせてください。'
+      greeting: 'アンダーソンさん、お疲れ様です。現状の数字や部下の行動データをお聞かせください。'
     },
     '凛太郎': {
       name: '凛太郎 (りんたろう)',
@@ -95,11 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
       color: '#7c3aed',
       badge: '③ ツンデレ・スパルタ型 (男性)',
       motto: '「…フッ、アンダーソンさん。その程度の悩みでへばるな。成果を出したら一杯奢ってやる」',
-      greeting: 'アンダーソンさん、お疲れ。弱音を吐くヒマがあったら何でも言ってみろ。\nまずは具体的に何に引っかかっているのか、じっくり聴いてやるよ。'
+      greeting: 'アンダーソンさん、お疲れ。弱音を吐くヒマがあったら相談に乗ってやる。結果を出すための提案を叩き込んでやるよ。'
     }
   };
 
-  let sampleBernardText = `【タイトル / テーマ】
+  const sampleBernardText = `【タイトル / テーマ】
 組織は命令ではなく協力で動く｜バーナードが見た協力意欲の構造
 
 【参照動画URL / 出典】
@@ -151,170 +138,87 @@ https://www.youtube.com/watch?v=t-H3VsCcijM
 | **組織成立の3要素** | コミュニケーション・共通目的・協力意欲の3点。欠けると静かな停滞が発生。 | [00:04:41 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=281s) |
 | **権威受容論** | 命令の効力は受け手（部下）が決める。理解・目的合致・実行可能で初めて命令となる。 | [00:06:22 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=382s) |
 | **受容の幅（信頼関係）** | 日頃の信頼や説明がある上司からの依頼なら、部下は余分に協力してくれる。 | [00:08:32 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=512s) |
-| **貢献と誘因のバランス** | メンバーの貢献（時間・注意・感情）に対し、適切な誘因（承認・給料・納得）を返す必要がある�  // Chat Session History Storage
-  let chatSessionMessages = [];
+| **貢献と誘因のバランス** | メンバーの貢献（時間・注意・感情）に対し、適切な誘因（承認・給料・納得）を返す必要がある。 | [00:10:16 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=616s) |
+| **協力の損（弱体化）** | 協力者や意見を出した人が損をする構造になると、人は学習して不協力になる。 | [00:11:41 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=701s) |
+| **非公式組織の力** | ホーソン実験の通り、現場の行動を左右するのは公式ルールより仲間内の空気や暗黙の基準。 | [00:13:30 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=810s) |
+| **マネジメントの3役割** | ①情報体系維持 ②必要な貢献の確保 ③目的の明確化。命令を張り上げることではない。 | [00:15:30 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=930s) |
+| **管理強化の悪循環** | 協力意欲がない状態での管理・監視強化は、やらされ感を増やしてさらに組織を重くする。 | [00:18:10 該当シーンへ](https://www.youtube.com/watch?v=t-H3VsCcijM&t=1090s) |`;
 
-  // Send Consultation Handler
-  const btnSend = document.getElementById('btn-send-consult');
-  if (btnSend) {
-    btnSend.addEventListener('click', handleSendConsult);
+  let knowledgeList = JSON.parse(localStorage.getItem('MG_KNOWLEDGE_LIST')) || [
+    {
+      title: '組織は命令ではなく協力で動く｜バーナードが見た協力意欲の構造',
+      url: 'https://www.youtube.com/watch?v=t-H3VsCcijM',
+      category: '組織構造・協力意欲の法則',
+      summary: sampleBernardText
+    }
+  ];
+
+  // Role Switcher Logic (Admin vs General User)
+  let isAdminMode = JSON.parse(localStorage.getItem('MG_ADMIN_MODE')) || false;
+  const roleToggle = document.getElementById('role-toggle');
+  const roleText = document.getElementById('role-status-text');
+  const adminTabItem = document.querySelector('.admin-only-item');
+
+  function updateRoleUI() {
+    if (roleToggle) roleToggle.checked = isAdminMode;
+    if (roleText) {
+      roleText.textContent = isAdminMode ? '現在: 👑 管理者表示 (全機能解放)' : '現在: 👤 一般利用者表示';
+      roleText.style.color = isAdminMode ? '#b45309' : '#94a3b8';
+    }
+    if (adminTabItem) {
+      adminTabItem.style.display = isAdminMode ? 'flex' : 'none';
+    }
   }
 
-  async function handleSendConsult() {
-    const inputEl = document.getElementById('chat-input-text');
-    const query = inputEl.value.trim();
-    if (!query) return;
+  if (roleToggle) {
+    roleToggle.addEventListener('change', () => {
+      isAdminMode = roleToggle.checked;
+      localStorage.setItem('MG_ADMIN_MODE', JSON.stringify(isAdminMode));
+      updateRoleUI();
+      showToast(isAdminMode ? '👑 管理者モードを有効化しました' : '👤 一般利用者モードに切り替えました');
+    });
+  }
 
-    const chatBody = document.getElementById('chat-messages-body');
-    const partner = partnerData[userState.partnerId] || partnerData['早苗'];
+  // Partner Selection Handler
+  const partnerCards = document.querySelectorAll('.partner-select-card');
+  partnerCards.forEach(card => {
+    card.addEventListener('click', () => {
+      partnerCards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      
+      const partnerId = card.getAttribute('data-partner-id');
+      userState.partnerId = partnerId;
+      saveUserState();
+      updatePartnerUI();
+      showToast(`👥 AIパートナーを『${partnerData[partnerId].name}』に変更しました！`);
+    });
+  });
 
-    // Append User Message to UI & Session History
-    const userRow = document.createElement('div');
-    userRow.className = 'chat-bubble-row user';
-    userRow.innerHTML = `
-      <div class="chat-avatar" style="background: #059669;">アン</div>
-      <div class="chat-bubble-content">
-        <div class="chat-sender-name">アンダーソンさん</div>
-        <div class="chat-bubble-text">${escapeHtml(query)}</div>
-      </div>
-    `;
-    chatBody.appendChild(userRow);
-    inputEl.value = '';
-    chatBody.scrollTop = chatBody.scrollHeight;
+  const btnChangeP = document.getElementById('btn-change-partner');
+  if (btnChangeP) {
+    btnChangeP.addEventListener('click', () => {
+      switchTab('settings');
+    });
+  }
 
-    chatSessionMessages.push({ role: 'user', content: query });
+  function updatePartnerUI() {
+    const p = partnerData[userState.partnerId] || partnerData['早苗'];
+    if (document.getElementById('partner-avatar')) document.getElementById('partner-avatar').textContent = p.avatar;
+    if (document.getElementById('partner-avatar')) document.getElementById('partner-avatar').style.background = p.color;
+    if (document.getElementById('partner-name')) document.getElementById('partner-name').textContent = p.name;
+    if (document.getElementById('partner-type-badge')) document.getElementById('partner-type-badge').textContent = p.badge;
+    if (document.getElementById('partner-motto')) document.getElementById('partner-motto').textContent = p.motto;
+  }
 
-    // Show AI Partner Thinking State
-    const thinkingRow = document.createElement('div');
-    thinkingRow.className = 'chat-bubble-row partner';
-    thinkingRow.id = 'thinking-row';
-    thinkingRow.innerHTML = `
-      <div class="chat-avatar" style="background: ${partner.color};">${partner.avatar}</div>
-      <div class="chat-bubble-content">
-        <div class="chat-sender-name">${partner.name}</div>
-        <div class="chat-bubble-text" style="color: #64748b;">
-          ⚡️ 蓄積ナレッジを参照し、Gemini 3.6 Flash で回答を生成中...
-        </div>
-      </div>
-    `;
-    chatBody.appendChild(thinkingRow);
-    chatBody.scrollTop = chatBody.scrollHeight;
+  // Session Chat History for 3-Step Dialog Flow
+  let currentChatHistory = [];
 
-    // Build History Text for Prompt
-    const historyText = chatSessionMessages.map(m => `${m.role === 'user' ? '相談者(アンダーソンさん)' : partner.name}: 「${m.content}」`).join('\n');
-
-    // Build System Prompt with Strict Step-by-Step Guidance
-    const knContext = knowledgeList.slice(0, 3).map(k => `【ナレッジ『${k.title}』】\n${k.summary}`).join('\n\n');
-    const systemPrompt = `
-あなたはマネジメント相談AIパートナー『${partner.name}』（タイプ: ${partner.badge}）です。
-モットー: "${partner.motto}"
-
-【重要：あなたの役割と対話ステップルール】
-相談者（アンダーソンさん / 現場リーダー）との会話において、必ず以下の【3つのステップルール】を厳格に守って回答してください。
-
-■ ステップ1：【傾聴・ヒアリングフェーズ】
-・相談内容がざっくりしている場合（例: 「ちょっと部下に対して悩んでます」「関係がうまくいかない」等）や、具体例がまだ不明な段階では、絶対にいきなり具体的な解決策や提案（3〜4案など）を出さないでください！
-・相談者の気持ちに寄り添って共感し、「具体的に部下のどのような言動や状況で困っているのか」「どんな場面でそう感じたか」を丁寧に聞き出す質問をして傾聴に徹底してください。
-
-■ ステップ2：【悩みの一致・確認フェーズ】
-・相談者から具体的な状況や悩みの内容が語られた段階では、まだ提案はせず、相談者の悩みを一度要約して確認してください。
-・必ず「なるほど！つまり〇〇ということに悩んでいるということで合ってるかな？」という形式（またはあなたのキャラの口調に合わせた表現）で、悩みの確認を行ってください。
-
-■ ステップ3：【解決策の提案フェーズ】
-・相談者が「そう！」「合ってる」「まさにそれです」など、悩み確認に同意・一致した場合、初めて「確認ありがとう！それでは〇〇について具体策を提案するね」と述べ、蓄積ナレッジデータベースを参照した具体的な解決策・アクションプラン（3〜4案）を提示してください。
-
----
-【これまでの会話履歴】
-${historyText}
-
-【蓄積ナレッジデータベース】
-${knContext ? knContext : "基本マネジメント原則を適用"}
-
-【指示】
-上記の会話履歴とステップルールに照らし合わせ、現在のフェーズに適した回答を『${partner.name}』になりきって出力してください。
-`;
-
-    let aiResponseText = "";
-    const modelsToTry = ["gemini-3.6-flash", "gemini-3.5-flash", "gemini-2.5-flash"];
-
-    if (geminiApiKey) {
-      for (const model of modelsToTry) {
-        if (aiResponseText) break;
-        try {
-          const gRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: [{ parts: [{ text: systemPrompt }] }] })
-          });
-          if (gRes.ok) {
-            const gData = await gRes.json();
-            if (gData.candidates && gData.candidates[0]?.content?.parts[0]?.text) {
-              aiResponseText = gData.candidates[0].content.parts[0].text;
-            }
-          }
-        } catch (e) {}
-      }
-    }
-
-    const thinking = document.getElementById('thinking-row');
-    if (thinking) thinking.remove();
-
-    const aiRow = document.createElement('div');
-    aiRow.className = 'chat-bubble-row partner';
-
-    let finalContent = "";
-    if (aiResponseText) {
-      finalContent = escapeHtml(aiResponseText);
-      currentChatHistory.push({ role: 'assistant', content: aiResponseText });
-    } else {
-      // Fallback Engine supporting Step 1 -> Step 2 -> Step 3
-      const userMessageCount = chatSessionMessages.filter(m => m.role === 'user').length;
-      const lowerQuery = query.toLowerCase();
-
-      // Check if user is confirming a diagnosis (Step 3 Trigger)
-      const isConfirming = lowerQuery.includes('合っ') || lowerQuery.includes('そう') || lowerQuery.includes('まさに') || lowerQuery.includes('はい') || lowerQuery.includes('それ');
-
-      if (userMessageCount === 1 && !isConfirming) {
-        // Step 1: Listening & Questioning
-        if (userState.partnerId === '凛太郎') {
-          finalContent = `…フッ、アンダーソンさん。挨拶は威勢がいいが、肝心の悩みがざっくりしすぎだろ。<br>まあいい、部下の件で頭を抱えている顔が目に浮かぶぜ。具体的に、部下のどんな言動や状況に困ってるんだ？まずは詳しく聞かせろ。`;
-        } else if (userState.partnerId === '早苗') {
-          finalContent = `アンダーソンさん、今日もお仕事お疲れ様です。<br>部下の方のことで悩まれているのですね。具体的にどんな言動やどんな場面で引っかかっていますか？まずは詳しく聴かせてくださいね。`;
-        } else if (userState.partnerId === '陽葵') {
-          finalContent = `アンダーソンさん！毎日お仕事本当にお疲れ様です✨<br>部下さんのことですね。どんな些細なことでも大丈夫ですよ♪ 具体的にどんなことで悩んでいるか、詳しく聴かせていただけますか？`;
-        } else if (userState.partnerId === '冷泉') {
-          finalContent = `アンダーソンさん、お疲れ様です。<br>部下に関する課題ですね。どのような状況や行動データに問題を感じているか、まずは具体的に状況をお聞かせください。`;
-        } else if (userState.partnerId === '太陽') {
-          finalContent = `アンダーソンさん！今日も熱いリーダーシップお見事です！<br>部下さんの悩みですね！どんな状況で困っているのか、熱く詳しく教えちゃってください！`;
-        } else {
-          finalContent = `アンダーソンさん、お疲れ様です。<br>部下との関係で気になることがあるのですね。具体的にどんな言動や状況で困っているか、まずは詳しくヒアリングさせてください。`;
-        }
-      } else if (!isConfirming && userMessageCount === 2) {
-        // Step 2: Paraphrasing & Confirmation
-        finalContent = `なるほど！お話を聞かせてくれてありがとう。<br><br>つまり、<strong>「${escapeHtml(query)}」ということで合ってるかな？</strong><br><br>悩みのポイントが合っていたら教えてね！一致していたら、蓄積ナレッジから具体的な解決案を提案するよ！`;
-      } else {
-        // Step 3: Proposal & Action Plan
-        finalContent = `<strong>【悩みの一致を確認】</strong><br>なるほど！確認ありがとう、アンダーソンさん。<br>『部下との関係・自発的協力を引き出す解決策』について、蓄積されたナレッジを元に最適な4つのアドバイス提案をまとめたよ。<br><br><strong>【ナレッジ参照根拠】</strong> 📚 <em>『組織は命令ではなく協力で動く』（[[01:48]]）より参照</em><br><br><div class="option-proposal-box"><div class="option-title">💡 提案①：『共感ファースト原則』</div><div class="option-reason">まず「君が悩んでいる気持ち、よくわかるよ」と相手の感情を受け止めてから本題に入ります。相手の防衛本能が解けます。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案②：『沈黙を恐れない10秒間』</div><div class="option-reason">黙り込んだ時は無理に話しかけず、10秒間待つことで、部下自らが考えを言葉にする時間を確保します。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案③：『貢献と誘因のバランス共有』</div><div class="option-reason">指示ではなく「この仕事が完成するとチームや本人にどんな良い価値があるか」の理由を共有します。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案④：『直後のワンポイント労い』</div><div class="option-reason">指導が終わった直後に「期待しているから伝えたんだよ」と笑顔で1言添えてフォローします。</div></div>`;
-      }
-    }
-
-    chatSessionMessages.push({ role: 'assistant', content: finalContent });
-
-    aiRow.innerHTML = `
-      <div class="chat-avatar" style="background: ${partner.color};">${partner.avatar}</div>
-      <div class="chat-bubble-content">
-        <div class="chat-sender-name">${partner.name}</div>
-        <div class="chat-bubble-text">${finalContent}</div>
-      </div>
-    `;
-    chatBody.appendChild(aiRow);
-    chatBody.scrollTop = chatBody.scrollHeight;
-
-    // Show Feedback Stamps on proposal
-    if (finalContent.includes('提案')) {
-      document.getElementById('feedback-panel').style.display = 'block';
-    }
-  }yId('chat-input-text').value = questionText;
+  // Quick Question Card Handlers
+  const quickCards = document.querySelectorAll('.quick-question-card');
+  quickCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const questionText = card.getAttribute('data-q');
+      document.getElementById('chat-input-text').value = questionText;
       handleSendConsult();
     });
   });
@@ -333,7 +237,7 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
     const chatBody = document.getElementById('chat-messages-body');
     const partner = partnerData[userState.partnerId] || partnerData['早苗'];
 
-    // Append User Message
+    // Append User Message to UI
     const userRow = document.createElement('div');
     userRow.className = 'chat-bubble-row user';
     userRow.innerHTML = `
@@ -347,6 +251,7 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
     inputEl.value = '';
     chatBody.scrollTop = chatBody.scrollHeight;
 
+    // Record User Query in History
     currentChatHistory.push({ role: 'user', content: query });
 
     // Show AI Partner Thinking State
@@ -358,26 +263,25 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
       <div class="chat-bubble-content">
         <div class="chat-sender-name">${partner.name}</div>
         <div class="chat-bubble-text" style="color: #64748b;">
-          ⚡️ 蓄積ナレッジを参照し、Gemini 3.6 Flash で回答を生成中...
+          ⚡️ 蓄積ナレッジを参照し、Gemini 3.6 Flash で対話中...
         </div>
       </div>
     `;
     chatBody.appendChild(thinkingRow);
     chatBody.scrollTop = chatBody.scrollHeight;
 
-    // Build Prompt with Accumulated Knowledge
-    const knContext = knowledgeList.slice(0, 3).map(k => `【ナレッジ『${k.title}』】\n${k.summary}`).join('\n\n');
+    // Build History Text for Prompt
     const chatHistoryText = currentChatHistory.map(m => `${m.role === 'user' ? '相談者' : partner.name}: ${m.content}`).join('\n');
+    const knContext = knowledgeList.slice(0, 3).map(k => `【ナレッジ『${k.title}』】\n${k.summary}`).join('\n\n');
+
     const systemPrompt = `
 あなたはマネジメント相談AIパートナー『${partner.name}』（タイプ: ${partner.badge}）です。
 モットー: "${partner.motto}"
 
-【相談者（アンダーソンさん / 現場リーダー）とのこれまでの会話履歴】
+【相談者（アンダーソンさん / 現場リーダー）との会話履歴】
 ${chatHistoryText}
 
 最新の相談入力: 「${query}」
-
-以下の【蓄積ナレッジデータベース】を参照し、あなたのキャラクター（${partner.name}）になりきって回答してください。
 
 【蓄積ナレッジデータベース】
 ${knContext ? knContext : "基本マネジメント原則を適用"}
@@ -428,6 +332,7 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
     let finalContent = "";
     if (aiResponseText) {
       finalContent = escapeHtml(aiResponseText);
+      currentChatHistory.push({ role: 'assistant', content: aiResponseText });
     } else {
       if (currentChatHistory.length <= 1) {
         finalContent = `アンダーソンさん、日々現場のチームを支えておられて本当にお疲れ様です。<br><br>部下の方のやる気や行動を感じられないのは心配ですね...。<br><br>差し支えなければ、それは具体的にどのような場面（例: 指示を出した時、会議中、1on1の場など）で一番感じられますか？相手がどんな状態か、詳しく教えていただけますか？`;
@@ -436,6 +341,7 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
       } else {
         finalContent = `認識を共有していただきありがとうございます！<br><br>その『最低限の行動で終わってしまう悩み』に対して、蓄積ナレッジ（バーナードの貢献と誘因の法則など）に基づいた効果的な解決案を3つ提案いたします。<br><br><div class="option-proposal-box"><div class="option-title">💡 提案①：『命令の受容化チェック』</div><div class="option-reason">背景・目的・優先順位をセットで伝えて「納得・実行できる指示」にブラッシュアップします（[00:06:22]）。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案②：『貢献への誘因提供』</div><div class="option-reason">隙間タスクの消化や気遣いを可視化し、適切な承認や評価を与えて自発性を促します（[00:10:16]）。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案③：『協力の損の解消』</div><div class="option-reason">意見を出した人だけに負担が偏らないタスク分散を図り、不協力な態度を防ぎます（[00:11:41]）。</div></div>`;
       }
+      currentChatHistory.push({ role: 'assistant', content: finalContent });
     }
 
     aiRow.innerHTML = `
@@ -448,53 +354,68 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
     chatBody.appendChild(aiRow);
     chatBody.scrollTop = chatBody.scrollHeight;
 
-    // Show Feedback Stamps
-    document.getElementById('feedback-panel').style.display = 'block';
+    if (currentChatHistory.length >= 4 || (aiResponseText && aiResponseText.includes("提案"))) {
+      document.getElementById('feedback-panel').style.display = 'block';
+    }
   }
 
-  // Stamp Feedback Handler (PDCA & Exp Gamification)
-  const stampBtns = document.querySelectorAll('.stamp-btn');
-  stampBtns.forEach(btn => {
+  // Stamp Feedback Handler
+  const stampButtons = document.querySelectorAll('.stamp-btn');
+  stampButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-      const res = btn.getAttribute('data-result');
-      let gainedExp = 30;
-      if (res === 'so-so') gainedExp = 20;
-      if (res === 'skip') gainedExp = 10;
+      stampButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
 
-      addExp(gainedExp);
+      const expGain = parseInt(btn.getAttribute('data-exp'), 10);
+      const actionType = btn.getAttribute('data-action');
+
+      addExp(expGain);
       document.getElementById('feedback-panel').style.display = 'none';
-      showToast(`🎉 実践フィードバック完了！ +${gainedExp} EXPを獲得しました！`);
+
+      let msg = '';
+      if (actionType === 'success') msg = '🎉 実践成果のフィードバックありがとうございます！素晴らしい前進です！';
+      else if (actionType === 'subtle') msg = '🤔 振り返りありがとうございます！PDCAを回して次へ活かしましょう！';
+      else msg = '⏳ 振り返り記録完了です！焦らず自分のペースで実践してみましょう！';
+
+      showToast(`${msg} (+${expGain} EXP)`);
     });
   });
+
+  // Gamification User State
+  let userState = JSON.parse(localStorage.getItem('MG_USER_STATE')) || {
+    level: 1,
+    exp: 40,
+    maxExp: 100,
+    streak: 3,
+    partnerId: '早苗'
+  };
 
   function addExp(amount) {
     userState.exp += amount;
     if (userState.exp >= userState.maxExp) {
       userState.level += 1;
       userState.exp -= userState.maxExp;
-      userState.maxExp = Math.floor(userState.maxExp * 1.2);
-      showToast(`🎊 LEVEL UP! Lv.${userState.level} へ昇格しました！新たなマネジメントバッジを獲得！`, 6000);
+      userState.maxExp = Math.floor(userState.maxExp * 1.3);
+      showToast(`🎉 レベルアップ！ Lv.${userState.level} リーダーに成長しました！`, 6000);
     }
     saveUserState();
     updateGamificationUI();
   }
 
   function updateGamificationUI() {
-    document.getElementById('user-level-label').textContent = `Lv.${userState.level} リーダー`;
+    if (document.getElementById('user-level-label')) document.getElementById('user-level-label').textContent = `Lv.${userState.level} リーダー`;
     const pct = Math.min(100, Math.floor((userState.exp / userState.maxExp) * 100));
-    document.getElementById('user-exp-bar').style.width = `${pct}%`;
+    if (document.getElementById('user-exp-bar')) document.getElementById('user-exp-bar').style.width = `${pct}%`;
   }
 
-  // Gemini API Key Local Storage Management
+  // Gemini API Key Local Storage
   let geminiApiKey = localStorage.getItem('GEMINI_API_KEY') || '';
   const apiKeyInput = document.getElementById('gemini-api-key-input');
   const apiKeyStatus = document.getElementById('api-key-status');
   const btnSaveApiKey = document.getElementById('btn-save-api-key');
 
   function updateApiKeyUI() {
-    if (apiKeyInput && geminiApiKey) {
-      apiKeyInput.value = geminiApiKey;
-    }
+    if (apiKeyInput && geminiApiKey) apiKeyInput.value = geminiApiKey;
     if (apiKeyStatus) {
       apiKeyStatus.textContent = geminiApiKey ? '✅ 設定済み (本物Gemini有効)' : '未設定 (クリックして入力)';
       apiKeyStatus.style.color = geminiApiKey ? '#047857' : '#d97706';
@@ -507,11 +428,11 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
       geminiApiKey = inputVal;
       localStorage.setItem('GEMINI_API_KEY', geminiApiKey);
       updateApiKeyUI();
-      showToast(geminiApiKey ? '🔑 Gemini APIキーを安全にブラウザ保存しました！本物Gemini AIが有効化されました！' : '⚠️ APIキーが消去されました');
+      showToast(geminiApiKey ? '🔑 Gemini APIキーを安全にブラウザ保存しました！' : '⚠️ APIキーが消去されました');
     });
   }
 
-  // Fill Sample Template Assistant Handler
+  // Sample Template Assistant Handler
   const btnFillSample = document.getElementById('btn-fill-sample-knowledge');
   if (btnFillSample) {
     btnFillSample.addEventListener('click', () => {
@@ -533,39 +454,27 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
         return;
       }
 
-      // Smart Parser
       let title = "一括入力ナレッジ";
       let url = "";
       let category = "マネジメントナレッジ";
       let bodyText = rawText;
 
-      // Extract Title
       const titleMatch = rawText.match(/【タイトル\s*[\/／]?\s*テーマ】\s*\n?([^\n]+)/);
       if (titleMatch && titleMatch[1].trim()) {
         title = titleMatch[1].trim();
       } else {
-        // Fallback to first line
         const firstLine = rawText.split('\n')[0].replace(/^#*\s*/, '').trim();
         if (firstLine) title = firstLine;
       }
 
-      // Extract URL
       const urlMatch = rawText.match(/(https?:\/\/[^\s]+)/);
-      if (urlMatch) {
-        url = urlMatch[1].trim();
-      }
+      if (urlMatch) url = urlMatch[1].trim();
 
-      // Extract Category
       const catMatch = rawText.match(/【カテゴリタグ】\s*\n?([^\n]+)/);
-      if (catMatch && catMatch[1].trim()) {
-        category = catMatch[1].trim();
-      }
+      if (catMatch && catMatch[1].trim()) category = catMatch[1].trim();
 
-      // Extract Body Text if structured header exists
       const bodyMatch = rawText.match(/【要約・ノウハウ本文】\s*\n?([\s\S]+)/);
-      if (bodyMatch && bodyMatch[1].trim()) {
-        bodyText = bodyMatch[1].trim();
-      }
+      if (bodyMatch && bodyMatch[1].trim()) bodyText = bodyMatch[1].trim();
 
       knowledgeList.unshift({
         title,
@@ -577,134 +486,8 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
       localStorage.setItem('MG_KNOWLEDGE_LIST', JSON.stringify(knowledgeList));
       renderKnowledgeList();
       
-      // Clear Input
       document.getElementById('knowledge-bulk-input').value = '';
-
       showToast(`💾 ナレッジ『${title.slice(0, 15)}...』を一括解析・蓄積保存しました！`);
-    });
-  }
-
-  // Knowledge Studio Handlers (URL Extraction with Direct Gemini 3.5 Flash API)
-  const btnExtract = document.getElementById('btn-extract-knowledge');
-  if (btnExtract) {
-    btnExtract.addEventListener('click', async () => {
-      const urlInput = document.getElementById('knowledge-url-input').value.trim();
-      if (!urlInput) {
-        showToast('⚠️ YouTube動画などのURLを入力してください');
-        return;
-      }
-
-      if (!geminiApiKey) {
-        showToast('⚠️ 本物のGemini 3.5 Flashで解析するには、上のボックスにGemini APIキーを入力して保存してください！', 6000);
-        return;
-      }
-
-      btnExtract.disabled = true;
-      btnExtract.textContent = '⏳ 本物 Gemini 3.5 Flash 解析中...';
-
-      try {
-        // 1. Fetch Video Title & oEmbed info
-        let videoTitle = "YouTubeマネジメント動画";
-        let authorName = "専門チャンネル";
-        let videoId = "";
-        const m = urlInput.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
-        if (m) videoId = m[1];
-
-        try {
-          const ores = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
-          if (ores.ok) {
-            const odata = await ores.json();
-            videoTitle = odata.title || videoTitle;
-            authorName = odata.author_name || authorName;
-          }
-        } catch (oe) {}
-
-        // 2. High-Density Prompt for Gemini 3.5 Flash
-        const promptText = `
-動画タイトル: 『${videoTitle}』（投稿者: ${authorName}）
-YouTube動画URL: ${urlInput}
-
-上記動画の内容を詳しく解析・要約し、マネジメントサポートAIの「参謀知識ベース（ナレッジ）」として構造化してください。
-
-【出力の必須目的】
-この要約は、後からアプリ使用者（現場リーダー・管理者）がAIパートナーに悩みを相談してきた時に、「AIが根拠と一緒に使用者に最適な解決策を提案できる知識ベース」として使用できる形にまとめてください。
-また、使用者が自ら元ソースの動画を確認できるように、「どの動画の何分何秒のところにあるのか（タイムスタンプ [[分:秒]]）」を必ず含めて整理してください。
-
-【出力フォーマット】
-🎥 動画の全体概要と核心メッセージ
-[動画『${videoTitle}』の本質的な要約メッセージを3〜4行で記述]
-
-🔑 使用者の相談時にAIが根拠として提案できる知識ポイント（5〜6選）
-1. 【[テーマ・知識名]】
-・使用者に提案できる解決策: [使用者の悩みを解決する具体的なアドバイス]
-・根拠・事例・理由: [動画内で語られている具体的な歴史的事例、研究データ、思想]
-・元ソースの該当位置: [[分:秒]]（動画のこの位置で確認可能）
-
-2. 【[テーマ・知識名]】
-...
-`;
-
-        // 3. Direct Gemini API Call (Primarily gemini-3.5-flash)
-        let geminiResponseText = "";
-        const modelsToTry = ["gemini-3.5-flash", "gemini-2.5-flash", "gemini-1.5-flash"];
-
-        for (const model of modelsToTry) {
-          if (geminiResponseText) break;
-          try {
-            const gRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                contents: [{ parts: [{ text: promptText }] }]
-              })
-            });
-            if (gRes.ok) {
-              const gData = await gRes.json();
-              if (gData.candidates && gData.candidates[0]?.content?.parts[0]?.text) {
-                geminiResponseText = gData.candidates[0].content.parts[0].text;
-              }
-            }
-          } catch (err) {
-            console.error(`Gemini API Model Error (${model}):`, err);
-          }
-        }
-
-        if (geminiResponseText) {
-          document.getElementById('knowledge-preview-card').style.display = 'block';
-          document.getElementById('prev-title').value = videoTitle;
-          document.getElementById('prev-summary').value = geminiResponseText;
-          showToast('✨ 本物Gemini 3.5 Flashによるリアルタイム要約解析が完了しました！');
-        } else {
-          showToast('❌ Gemini 3.5 Flash APIの呼び出しに失敗しました。APIキーが正しいかご確認ください。', 6000);
-        }
-
-      } catch (err) {
-        showToast('❌ 解析エラー: ' + err.message);
-      } finally {
-        btnExtract.disabled = false;
-        btnExtract.textContent = '✨ 本物Gemini AI解析';
-      }
-    });
-  }
-
-  const btnSaveK = document.getElementById('btn-save-knowledge');
-  if (btnSaveK) {
-    btnSaveK.addEventListener('click', () => {
-      const title = document.getElementById('prev-title').value;
-      const summary = document.getElementById('prev-summary').value;
-
-      knowledgeList.unshift({
-        title,
-        category: '動画学習ナレッジ',
-        summary
-      });
-
-      localStorage.setItem('MG_KNOWLEDGE_LIST', JSON.stringify(knowledgeList));
-      renderKnowledgeList();
-      document.getElementById('knowledge-preview-card').style.display = 'none';
-      document.getElementById('knowledge-url-input').value = '';
-      addExp(50); // Add 50 EXP for registering knowledge
-      showToast('💾 ナレッジデータベースへ正常に登録蓄積されました！ (+50 EXP)');
     });
   }
 
@@ -718,16 +501,16 @@ YouTube動画URL: ${urlInput}
           登録されたナレッジはまだありません。上のフォームにテキストをコピペして登録してください。
         </div>
       `;
-      document.getElementById('knowledge-count').textContent = 0;
+      if (document.getElementById('knowledge-count')) document.getElementById('knowledge-count').textContent = 0;
       return;
     }
+
+    if (document.getElementById('knowledge-count')) document.getElementById('knowledge-count').textContent = knowledgeList.length;
 
     function formatMarkdownText(str) {
       if (!str) return '';
       let formatted = escapeHtml(str);
-      // Format Markdown Links [text](url)
       formatted = formatted.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" style="color: #059669; font-weight: 700; text-decoration: underline;">$1</a>');
-      // Format Raw URLs
       formatted = formatted.replace(/(^|[^"])((https?:\/\/[^\s<]+))/g, '$1<a href="$2" target="_blank" style="color: #059669; font-weight: 700; text-decoration: underline;">$2</a>');
       return formatted;
     }
@@ -748,18 +531,16 @@ YouTube動画URL: ${urlInput}
       </div>
     `).join('');
 
-    document.getElementById('knowledge-count').textContent = knowledgeList.length;
-
-    // Attach Delete Event Listeners
-    const deleteBtns = document.querySelectorAll('.btn-delete-k');
-    deleteBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
+    const deleteButtons = listGrid.querySelectorAll('.btn-delete-k');
+    deleteButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
         const idx = parseInt(btn.getAttribute('data-index'), 10);
-        const deletedTitle = knowledgeList[idx].title;
-        knowledgeList.splice(idx, 1);
-        localStorage.setItem('MG_KNOWLEDGE_LIST', JSON.stringify(knowledgeList));
-        renderKnowledgeList();
-        showToast(`🗑️ ナレッジ『${deletedTitle.slice(0, 15)}...』を削除しました`);
+        if (confirm(`ナレッジ『${knowledgeList[idx].title}』を削除してよろしいですか？`)) {
+          knowledgeList.splice(idx, 1);
+          localStorage.setItem('MG_KNOWLEDGE_LIST', JSON.stringify(knowledgeList));
+          renderKnowledgeList();
+          showToast('🗑️ ナレッジを削除しました');
+        }
       });
     });
   }
@@ -769,25 +550,40 @@ YouTube動画URL: ${urlInput}
   }
 
   function showToast(msg, duration = 4000) {
-    const container = document.getElementById('toast-container');
-    if (!container) return;
+    let container = document.getElementById('toast-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'toast-container';
+      container.style.cssText = 'position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 8px;';
+      document.body.appendChild(container);
+    }
+
     const toast = document.createElement('div');
-    toast.className = 'toast show';
-    toast.style.background = '#10b981';
+    toast.style.cssText = 'background: #0f172a; color: #fff; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: all 0.3s ease;';
     toast.textContent = msg;
     container.appendChild(toast);
+
     setTimeout(() => {
-      toast.remove();
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(10px)';
+      setTimeout(() => toast.remove(), 300);
     }, duration);
   }
 
   function escapeHtml(str) {
-    return str.replace(/[&<>"']/g, m => ({
-      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
-    })[m]);
+    if (!str) return '';
+    return str.replace(/[&<>"']/g, function(m) {
+      return {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      }[m];
+    });
   }
 
-  // Initialize
+  // Initial UI Render Calls
   updateRoleUI();
   updatePartnerUI();
   updateGamificationUI();
