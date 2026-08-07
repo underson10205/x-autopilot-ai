@@ -157,7 +157,16 @@
           </div>
 
           <!-- Chat Conversation Window -->
-          <div class="chat-window-container" style="display: flex; flex-direction: column; height: 480px;">
+          <div class="chat-window-container" style="display: flex; flex-direction: column; height: 520px; background: #ffffff; border: 1px solid var(--mg-border); border-radius: 16px; overflow: hidden; box-shadow: var(--mg-shadow);">
+            
+            <!-- Chat Header with Clear Button -->
+            <div style="padding: 12px 20px; background: #f8f6f0; border-bottom: 1px solid var(--mg-border); display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 13px; font-weight: 700; color: #047857;">💬 リアルタイム参謀相談チャット (履歴自動保存中)</span>
+              <button id="btn-clear-chat-history" class="btn btn-secondary btn-sm" style="background: #ffffff; color: #64748b; border: 1px solid #cbd5e1; font-size: 11px; padding: 4px 10px; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                🧹 相談履歴をクリア
+              </button>
+            </div>
+
             <div id="chat-messages-body" style="flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px;">
               
               <!-- Initial Welcome Message from Partner -->

@@ -211,7 +211,76 @@ https://www.youtube.com/watch?v=t-H3VsCcijM
   }
 
   // Session Chat History for 3-Step Dialog Flow
-  let currentChatHistory = [];
+  
+  // Chat History LocalStorage Persistence Logic
+  let storedChatHistory = JSON.parse(localStorage.getItem('MG_CHAT_HISTORY')) || [];
+  currentChatHistory = storedChatHistory;
+
+  function renderStoredChatHistory() {
+    const chatBody = document.getElementById('chat-messages-body');
+    if (!chatBody) return;
+    const partner = partnerData[userState.partnerId] || partnerData['早苗'];
+
+    if (storedChatHistory.length === 0) {
+      chatBody.innerHTML = `
+        <div class="chat-bubble-row partner">
+          <div class="chat-avatar" style="background: ${partner.color};">${partner.avatar}</div>
+          <div class="chat-bubble-content">
+            <div class="chat-sender-name">${partner.name}</div>
+            <div class="chat-bubble-text">
+              ${escapeHtml(partner.greeting).replace(/\n/g, '<br>')}
+            </div>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    chatBody.innerHTML = storedChatHistory.map(m => {
+      if (m.role === 'user') {
+        return `
+          <div class="chat-bubble-row user">
+            <div class="chat-avatar" style="background: #059669;">アン</div>
+            <div class="chat-bubble-content">
+              <div class="chat-sender-name">アンダーソンさん</div>
+              <div class="chat-bubble-text">${escapeHtml(m.content)}</div>
+            </div>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="chat-bubble-row partner">
+            <div class="chat-avatar" style="background: ${partner.color};">${partner.avatar}</div>
+            <div class="chat-bubble-content">
+              <div class="chat-sender-name">${partner.name}</div>
+              <div class="chat-bubble-text">${m.content}</div>
+            </div>
+          </div>
+        `;
+      }
+    }).join('');
+
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+
+  function saveChatHistory() {
+    localStorage.setItem('MG_CHAT_HISTORY', JSON.stringify(currentChatHistory));
+  }
+
+  const btnClearChat = document.getElementById('btn-clear-chat-history');
+  if (btnClearChat) {
+    btnClearChat.addEventListener('click', () => {
+      if (confirm('チャットの相談履歴をクリアして、新しい相談を開始しますか？')) {
+        currentChatHistory = [];
+        storedChatHistory = [];
+        localStorage.removeItem('MG_CHAT_HISTORY');
+        renderStoredChatHistory();
+        document.getElementById('feedback-panel').style.display = 'none';
+        showToast('🧹 相談履歴をクリアしました。新しい相談を開始できます。');
+      }
+    });
+  }
+
 
   // Quick Question Card Handlers
   const quickCards = document.querySelectorAll('.quick-question-card');
@@ -252,7 +321,7 @@ https://www.youtube.com/watch?v=t-H3VsCcijM
     chatBody.scrollTop = chatBody.scrollHeight;
 
     // Record User Query in History
-    currentChatHistory.push({ role: 'user', content: query });
+    currentChatHistory.push({ role: 'user', content: query }); saveChatHistory();
 
     // Show AI Partner Thinking State
     const thinkingRow = document.createElement('div');
@@ -332,7 +401,7 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
     let finalContent = "";
     if (aiResponseText) {
       finalContent = escapeHtml(aiResponseText);
-      currentChatHistory.push({ role: 'assistant', content: aiResponseText });
+      currentChatHistory.push({ role: 'assistant', content: aiResponseText }); saveChatHistory();
     } else {
       if (currentChatHistory.length <= 1) {
         finalContent = `アンダーソンさん、日々現場のチームを支えておられて本当にお疲れ様です。<br><br>部下の方のやる気や行動を感じられないのは心配ですね...。<br><br>差し支えなければ、それは具体的にどのような場面（例: 指示を出した時、会議中、1on1の場など）で一番感じられますか？相手がどんな状態か、詳しく教えていただけますか？`;
@@ -341,7 +410,7 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
       } else {
         finalContent = `認識を共有していただきありがとうございます！<br><br>その『最低限の行動で終わってしまう悩み』に対して、蓄積ナレッジ（バーナードの貢献と誘因の法則など）に基づいた効果的な解決案を3つ提案いたします。<br><br><div class="option-proposal-box"><div class="option-title">💡 提案①：『命令の受容化チェック』</div><div class="option-reason">背景・目的・優先順位をセットで伝えて「納得・実行できる指示」にブラッシュアップします（[00:06:22]）。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案②：『貢献への誘因提供』</div><div class="option-reason">隙間タスクの消化や気遣いを可視化し、適切な承認や評価を与えて自発性を促します（[00:10:16]）。</div></div><div class="option-proposal-box"><div class="option-title">💡 提案③：『協力の損の解消』</div><div class="option-reason">意見を出した人だけに負担が偏らないタスク分散を図り、不協力な態度を防ぎます（[00:11:41]）。</div></div>`;
       }
-      currentChatHistory.push({ role: 'assistant', content: finalContent });
+      currentChatHistory.push({ role: 'assistant', content: finalContent }); saveChatHistory();
     }
 
     aiRow.innerHTML = `
@@ -484,7 +553,7 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
       });
 
       localStorage.setItem('MG_KNOWLEDGE_LIST', JSON.stringify(knowledgeList));
-      renderKnowledgeList();
+      renderKnowledgeList(); renderStoredChatHistory();
       
       document.getElementById('knowledge-bulk-input').value = '';
       showToast(`💾 ナレッジ『${title.slice(0, 15)}...』を一括解析・蓄積保存しました！`);
