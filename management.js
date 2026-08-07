@@ -309,9 +309,13 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
 ・いきなり提案をせず、「なるほど...！つまり『〇〇』という点に一番頭を悩ませていらっしゃるのですね？」と短く要約して【悩みと認識の合わせ】を行ってください。
 
 ■【ステップ3：認識一致後の提案フェーズ】（相談者が「そう、まさにそこ！」と認めた後、または悩みの本質が完全に確定している場合）
-・「認識を共有していただきありがとうございます！」と述べた上で、上記の【蓄積ナレッジデータベース】を参照し、以下の2つを必ず提示してください：
-  1. **【根拠と学習用リンク】**: 参照したナレッジの動画タイトルと、データベースに保存されている【対象動画URL】（例: https://www.youtube.com/watch?v=...）のみを正確に提示してください。※タイムスタンプ秒数（02:15等）はハルシネーション防止のため出力を絶対禁止とします。
-  2. **【具体策（3案）＋ そのまま使える会話セリフ（台本）】**: 提案ごとに、「💬 明日そのまま使える会話セリフ: 『〇〇』」を具体的に含めて提示してください。
+・「認識を共有していただきありがとうございます！」と述べた上で、上記の【蓄積ナレッジデータベース】を参照し、具体的な【解決案（3案）】を提示してください。
+・【必須ルール：各提案カードへの動画紐付け＆学習ポイント提示】:
+  提案①、提案②、提案③の「それぞれの提案カードの中」に、以下のセットを必ず直接含めて出力してください：
+  - 💬 **明日そのまま使える会話セリフ:** 『〇〇』
+  - 🎥 **参照動画:** [動画タイトル](対象動画URL)
+  - 💡 **なぜこの動画が参考になるか (学びのポイント):** 「なぜこの動画の考え方が提案①の解決策に繋がるのか、どの部分が参考になるのか」の解説文（1〜2行）
+  ※冒頭にURLを単独で置くのではなく、必ず【各提案カードの中に紐付けて】出力してください。秒数タイムスタンプはハルシネーション防止のため出力禁止です。
 `;
 
     let aiResponseText = "";
@@ -353,7 +357,7 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
       } else if (currentChatHistory.length <= 3) {
         finalContent = `なるほど...！教えていただきありがとうございます。<br><br>つまり『指示を出した時に表面上は「はい」と返答するものの、自発的な行動が見られず最低限の作業で終わってしまうこと』に一番頭を悩ませていらっしゃるのですね？<br><br>この認識でお間違いありませんでしょうか？`;
       } else {
-        finalContent = `認識を共有していただきありがとうございます！<br><br>📚 <strong>参照根拠・動画リンク:</strong> <a href="https://www.youtube.com/watch?v=t-H3VsCcijM" target="_blank" style="color:#059669; font-weight:700; text-decoration:underline;">『組織は命令ではなく協力で動く』（バーナード理論）</a><br><br>その『最低限の行動で終わってしまう悩み』に対して、明日そのまま使える会話セリフ付きの解決案を3つ提案いたします。<br><br><div class="option-proposal-box"><div class="option-title">💡 提案①：『命令の受容化チェック』</div><div class="option-reason">背景・目的・優先順位をセットで伝えて「納得・実行できる指示」にブラッシュアップします。<br>💬 <strong>明日そのまま使える会話セリフ:</strong> 『〇〇さん、今回の件は現場の信頼を守るために凄く重要なんだ。今どんな風に聞こえたか教えてくれる？』</div></div><div class="option-proposal-box"><div class="option-title">💡 提案②：『貢献への誘因提供』</div><div class="option-reason">隙間タスクの消化や気遣いを可視化し、適切な承認や評価を与えて自発性を促します。<br>💬 <strong>明日そのまま使える会話セリフ:</strong> 『誰も気づかない細かい調整を拾ってくれて助かったよ。いつも見てるからね。』</div></div><div class="option-proposal-box"><div class="option-title">💡 提案③：『協力の損の解消』</div><div class="option-reason">意見を出した人だけに負担が偏らないタスク分散を図り、不協力な態度を防ぎます。<br>💬 <strong>明日そのまま使える会話セリフ:</strong> 『いつも意見を出してくれるからって君だけに任せちゃダメだな。チームで分担しよう。』</div></div><br><button id="btn-open-agenda-modal" class="btn btn-primary btn-sm" style="background:#059669; border-radius:10px; font-weight:700; padding:10px 18px; margin-top:10px; cursor:pointer;">📄 この提案で明日の1on1事前準備シートを出力する</button>`;
+        finalContent = `認識を共有していただきありがとうございます！<br><br>その『最低限の行動で終わってしまう悩み』に対して、参照動画・学びのポイント付きの具体策を3つ提案いたします。<br><br><div class="option-proposal-box"><div class="option-title">💡 提案①：『命令の受容化チェック』</div><div class="option-reason">背景・目的・優先順位をセットで伝えて「納得・実行できる指示」にブラッシュアップします。<br><br>💬 <strong>明日そのまま使える会話セリフ:</strong> 『〇〇さん、今回の件は現場の信頼を守るために凄く重要なんだ。今どんな風に聞こえたか教えてくれる？』<br><br><div style="background: #f0fdf4; border: 1px solid #a7f3d0; border-radius: 8px; padding: 10px 14px; margin-top: 8px; font-size: 12px; color: #047857;">🎥 <strong>参照動画:</strong> <a href="https://www.youtube.com/watch?v=t-H3VsCcijM" target="_blank" style="color:#059669; font-weight:700; text-decoration:underline;">『組織は命令ではなく協力で動く』（バーナード理論）</a><br>💡 <strong>なぜ参考になるか (学びのポイント):</strong> 動画内の「権威受容論」が直結します！部下が「なぜ指示を受け入れられないのか」の構造を動画で確認すると、指示出しのコツがよく分かります。</div></div></div><div class="option-proposal-box"><div class="option-title">💡 提案②：『貢献への誘因提供』</div><div class="option-reason">隙間タスクの消化や気遣いを可視化し、適切な承認や評価を与えて自発性を促します。<br><br>💬 <strong>明日そのまま使える会話セリフ:</strong> 『誰も気づかない細かい調整を拾ってくれて助かったよ。いつも見てるからね。』<br><br><div style="background: #f0fdf4; border: 1px solid #a7f3d0; border-radius: 8px; padding: 10px 14px; margin-top: 8px; font-size: 12px; color: #047857;">🎥 <strong>参照動画:</strong> <a href="https://www.youtube.com/watch?v=t-H3VsCcijM" target="_blank" style="color:#059669; font-weight:700; text-decoration:underline;">『組織は命令ではなく協力で動く』（バーナード理論）</a><br>💡 <strong>なぜ参考になるか (学びのポイント):</strong> 動画内の「貢献と誘因のバランス」が直結します！見えない気遣いや努力に報いる評価の重要性が理解できます。</div></div></div><div class="option-proposal-box"><div class="option-title">💡 提案③：『協力の損の解消』</div><div class="option-reason">意見を出した人だけに負担が偏らないタスク分散を図り、不協力な態度を防ぎます。<br><br>💬 <strong>明日そのまま使える会話セリフ:</strong> 『いつも意見を出してくれるからって君だけに任せちゃダメだな。チームで分担しよう。』<br><br><div style="background: #f0fdf4; border: 1px solid #a7f3d0; border-radius: 8px; padding: 10px 14px; margin-top: 8px; font-size: 12px; color: #047857;">🎥 <strong>参照動画:</strong> <a href="https://www.youtube.com/watch?v=t-H3VsCcijM" target="_blank" style="color:#059669; font-weight:700; text-decoration:underline;">『組織は命令ではなく協力で動く』（バーナード理論）</a><br>💡 <strong>なぜ参考になるか (学びのポイント):</strong> 「協力した人が損をする構造」に関する解説が直結します！チームの不協力態度を防ぐ知恵が学べます。</div></div></div><br><button id="btn-open-agenda-modal" class="btn btn-primary btn-sm" style="background:#059669; border-radius:10px; font-weight:700; padding:10px 18px; margin-top:10px; cursor:pointer;">📄 この提案で明日の1on1事前準備シートを出力する</button>`;
       }
       currentChatHistory.push({ role: 'assistant', content: finalContent });
       saveChatHistory();
@@ -408,7 +412,7 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
         </div>
 
         <div style="margin-bottom: 20px;">
-          <h4 style="font-size: 13px; color: #047857; font-weight: 700; margin-bottom: 6px;">💬 明日面談で直接使う言葉かけセリフ (台本)</h4>
+          <h4 style="font-size: 13px; color: #047857; font-weight: 700; margin-bottom: 6px;">💬 明日面談で直接使う会話セリフ (台本)</h4>
           <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 14px; font-size: 13px; color: #92400e; line-height: 1.7;">
             1. 『〇〇さん、今回の件はチームの現場の信頼を守るために凄く重要なんだ。今どんな風に聞こえたか教えてほしいな。』<br>
             2. 『いつも誰も気づかない細かい調整を拾ってくれて本当に助かってるよ。いつも見てるからね。』<br>
@@ -417,10 +421,12 @@ ${knContext ? knContext : "基本マネジメント原則を適用"}
         </div>
 
         <div style="margin-bottom: 20px;">
-          <h4 style="font-size: 13px; color: #047857; font-weight: 700; margin-bottom: 6px;">📚 バックボーン根拠ナレッジ・学習リンク</h4>
-          <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; font-size: 12px;">
-            ・<strong>参考理論:</strong> 『組織は命令ではなく協力で動く』（チェスター・バーナード理論）<br>
-            ・<strong>根拠動画直リンク:</strong> <a href="https://www.youtube.com/watch?v=t-H3VsCcijM" target="_blank" style="color:#059669; font-weight:700; text-decoration:underline;">https://www.youtube.com/watch?v=t-H3VsCcijM</a>
+          <h4 style="font-size: 13px; color: #047857; font-weight: 700; margin-bottom: 6px;">📚 提案別 根拠動画＆学びのポイント</h4>
+          <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.7;">
+            ・<strong>提案①の根拠:</strong> <a href="https://www.youtube.com/watch?v=t-H3VsCcijM" target="_blank" style="color:#059669; font-weight:700; text-decoration:underline;">『組織は命令ではなく協力で動く』</a><br>
+            &nbsp;&nbsp;💡 <em>権威受容論の部分が直結！部下が指示を受け入れられる構造を動画で学習。</em><br><br>
+            ・<strong>提案②の根拠:</strong> <a href="https://www.youtube.com/watch?v=t-H3VsCcijM" target="_blank" style="color:#059669; font-weight:700; text-decoration:underline;">『組織は命令ではなく協力で動く』</a><br>
+            &nbsp;&nbsp;💡 <em>貢献と誘因のバランスが直結！非公式な貢献を承認する大切さを学習。</em>
           </div>
         </div>
 
