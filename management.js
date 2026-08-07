@@ -3,6 +3,40 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Tab Navigation Handler (Restored)
+  const navButtons = document.querySelectorAll('.nav-item');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  function switchTab(tabId) {
+    navButtons.forEach(b => {
+      if (b.getAttribute('data-tab') === tabId) {
+        b.classList.add('active');
+      } else {
+        b.classList.remove('active');
+      }
+    });
+
+    tabContents.forEach(c => {
+      if (c.id === 'tab-' + tabId) {
+        c.style.display = 'block';
+        c.classList.add('active');
+      } else {
+        c.style.display = 'none';
+        c.classList.remove('active');
+      }
+    });
+  }
+
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const tabId = btn.getAttribute('data-tab');
+      if (tabId) {
+        switchTab(tabId);
+      }
+    });
+  });
+
   // State Storage
   let currentChatHistory = [];
   let userState = JSON.parse(localStorage.getItem('MG_USER_STATE')) || {
