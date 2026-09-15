@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>議会ディベート漫画化 ＆ 議員パラメーター分析 | 市民参加型ガバナンスWeb</title>
+  <link rel="stylesheet" href="debate_manga.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Header Nav -->
+  <header class="top-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-badge">プロダクト #8</span>
+        <h1 class="brand-title">🏛️ 議会ディベート漫画化 ＆ 議員パラメーター分析</h1>
+      </div>
+      <div class="header-actions">
+        <button id="btn-sample-input" class="btn btn-secondary">📋 廿日市市議会・宮島訪問税サンプル入力</button>
+        <button id="btn-open-settings" class="btn btn-outline">🔑 Gemini APIキー設定</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    
+    <!-- Left Sidebar: Controls & Input Area -->
+    <aside class="sidebar-panel">
+      <div class="panel-card">
+        <h2 class="panel-title">📥 議事録データ入力パイプライン</h2>
+        <p class="panel-desc">自治体名と議事録テキストをペーストしてください。AIが自動的に論点を抽出して4コマ漫画化 ＆ 公正なパラメータ算出を行います。</p>
+        
+        <div class="form-group">
+          <label for="input-municipality">自治体名 / 議会名</label>
+          <input type="text" id="input-municipality" value="広島県廿日市市議会（定例会）" placeholder="例: 広島県廿日市市議会">
+        </div>
+
+        <div class="form-group">
+          <label for="input-topic">論点テーマ</label>
+          <input type="text" id="input-topic" value="宮島訪問税の活用方法と観光インフラ整備" placeholder="例: 宮島訪問税の活用について">
+        </div>
+
+        <div class="form-group">
+          <label for="input-transcript">議事録テキスト（質問 ＆ 行政答弁）</label>
+          <textarea id="input-transcript" rows="10" placeholder="議事録のやり取りをそのまま貼り付けてください..."></textarea>
+        </div>
+
+        <button id="btn-generate-manga" class="btn btn-primary btn-block">
+          ⚡️ 4コマ漫画 ＆ 議員分析を自動生成する
+        </button>
+      </div>
+
+      <!-- Human-in-the-Loop Governance Card -->
+      <div class="panel-card governance-card">
+        <div class="gov-header">
+          <span class="gov-icon">🛡️</span>
+          <h3 class="gov-title">Human-in-the-Loop ガバナンス</h3>
+        </div>
+        <p class="gov-text">AIの生成結果は一度「ドラフトステータス」で保存されます。市民公開前に管理者の確認・承認プロセスを経る安全設計です。</p>
+        <div class="status-pill" id="status-pill">ステータス: 📝 ドラフト確認中</div>
+        <button id="btn-approve-data" class="btn btn-sm btn-success" style="margin-top: 10px; width: 100%;">
+          ✅ 管理者承認を行って公開ステータスへ移行
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Tab Controls -->
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="manga">🎨 ディベート4コマ漫画ビューアー</button>
+        <button class="tab-btn" data-tab="metrics">📊 公正な議員パラメーター分析</button>
+        <button class="tab-btn" data-tab="raw">📄 構造化共通JSONデータ</button>
+      </div>
+
+      <!-- TAB 1: 4コマ漫画ビューアー -->
+      <div id="tab-manga" class="tab-page active">
+        
+        <div class="manga-header-banner">
+          <div>
+            <span class="badge badge-primary" id="badge-municipality">広島県廿日市市議会</span>
+            <h2 class="manga-main-title" id="manga-title">【4コマで分かる議会】宮島訪問税の使途を巡る論戦</h2>
+            <p class="manga-sub-desc">質問議員と行政答弁のポイントを要約コミック化しました</p>
+          </div>
+          <button id="btn-download-manga" class="btn btn-secondary btn-sm">🖼 4コマ漫画画像をダウンロード</button>
+        </div>
+
+        <!-- Canvas Rendering Container -->
+        <div class="comic-container">
+          <canvas id="manga-canvas" width="760" height="1280"></canvas>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: 議員パラメーター分析 -->
+      <div id="tab-metrics" class="tab-page">
+        
+        <div class="metrics-header-banner">
+          <h2 class="section-title">⚖️ フェアネス担保・議員分析ダッシュボード</h2>
+          <p class="section-desc">単なる発言文字数に依存せず、発言密度（重要キーワード比率）・登壇率・具体策提示率を客観評価しています。</p>
+        </div>
+
+        <div class="metrics-grid">
+          
+          <!-- Speaker 1 Metrics Card -->
+          <div class="speaker-card">
+            <div class="speaker-header">
+              <div class="avatar-circle speaker">問</div>
+              <div>
+                <h3 class="speaker-name">秋月 仁 議員</h3>
+                <span class="speaker-role">会派: 市民DX推進会 / 一般質問者</span>
+              </div>
+              <div class="score-badge">総合スコア: 88 pts</div>
+            </div>
+
+            <div class="metric-bars">
+              <div class="metric-row">
+                <span class="metric-label">課題キーワード発言密度</span>
+                <div class="bar-container"><div class="bar-fill" style="width: 92%;"></div></div>
+                <span class="metric-val">92%</span>
+              </div>
+
+              <div class="metric-row">
+                <span class="metric-label">具体策・対案提示率</span>
+                <div class="bar-container"><div class="bar-fill" style="width: 85%;"></div></div>
+                <span class="metric-val">85%</span>
+              </div>
+
+              <div class="metric-row">
+                <span class="metric-label">定例会一般質問 登壇率</span>
+                <div class="bar-container"><div class="bar-fill" style="width: 100%;"></div></div>
+                <span class="metric-val">100%</span>
+              </div>
+            </div>
+
+            <div class="metric-summary">
+              <strong>💡 AI分析インサイト:</strong><br>
+              持ち時間の中で「宮島訪問税」「DXオンデマンド交通」などの具体的地域課題を高密度に発言。単なる行政批判にとどまらず、他自治体事例を交えた対案提示を行っています。
+            </div>
+          </div>
+
+          <!-- Speaker 2 Metrics Card -->
+          <div class="speaker-card">
+            <div class="speaker-header">
+              <div class="avatar-circle admin">答</div>
+              <div>
+                <h3 class="speaker-name">行政側（答弁担当課長）</h3>
+                <span class="speaker-role">廿日市市 企画振興部</span>
+              </div>
+              <div class="score-badge secondary">答弁明瞭度: 82 pts</div>
+            </div>
+
+            <div class="metric-bars">
+              <div class="metric-row">
+                <span class="metric-label">質問に対する回答直接率</span>
+                <div class="bar-container"><div class="bar-fill" style="width: 80%;"></div></div>
+                <span class="metric-val">80%</span>
+              </div>
+
+              <div class="metric-row">
+                <span class="metric-label">数値・スケジュール提示度</span>
+                <div class="bar-container"><div class="bar-fill" style="width: 78%;"></div></div>
+                <span class="metric-val">78%</span>
+              </div>
+
+              <div class="metric-row">
+                <span class="metric-label">前向き検討姿勢スコア</span>
+                <div class="bar-container"><div class="bar-fill" style="width: 88%;"></div></div>
+                <span class="metric-val">88%</span>
+              </div>
+            </div>
+
+            <div class="metric-summary">
+              <strong>💡 AI分析インサイト:</strong><br>
+              議員の指摘に対して「令和8年度中の実証実験開始」と具体的なタイムラインを示して前向きに答弁。根拠データの透明性が確保されています。
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Disclaimer Banner -->
+        <div class="disclaimer-banner">
+          ⚠️ <strong>免責事項・フェアネス補足:</strong><br>
+          本パラメーターはAIによる議事録テキストの客観的解析結果であり、議長などの進行役の役割差や持ち時間制限を考慮して算出されています。議員個人の総合的な人柄や全活動価値を断定するものではありません。
+        </div>
+
+      </div>
+
+      <!-- TAB 3: 共通JSONデータ -->
+      <div id="tab-raw" class="tab-page">
+        <div class="raw-data-container">
+          <h3>📄 構造化共通JSONスキーマデータ</h3>
+          <p>Gemini APIによって共通形式に正規化されたデータです。</p>
+          <pre id="json-output-code">{}</pre>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- API Key Modal -->
+  <div id="modal-api-key" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>🔑 Gemini APIキー設定</h3>
+        <button id="btn-close-modal" class="btn-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>Google Gemini APIキーを入力すると、生の議事録から全自動で4コマ脚本化 ＆ 議員パラメータ分析を行います。（未設定の場合は高度デモ解析が作動します）</p>
+        <input type="password" id="input-api-key" placeholder="AIzaSy..." class="form-input">
+      </div>
+      <div class="modal-footer">
+        <button id="btn-save-api-key" class="btn btn-primary">設定を保存する</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="debate_manga.js"></script>
+</body>
+</html>
