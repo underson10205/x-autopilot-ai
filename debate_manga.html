@@ -16,11 +16,11 @@
     <div class="header-inner">
       <div class="brand">
         <span class="brand-badge">プロダクト #8</span>
-        <h1 class="brand-title">🏛️ 議会ディベート漫画化 ＆ 議員パラメーター分析</h1>
+        <h1 class="brand-title">🏛️ 議会ディベート全編漫画化 ＆ 議員パラメーター分析</h1>
       </div>
       <div class="header-actions">
-        <button id="btn-sample-input" class="btn btn-secondary">📋 廿日市市議会・宮島訪問税サンプル入力</button>
-        <button id="btn-open-settings" class="btn btn-outline">🔑 Gemini APIキー設定</button>
+        <button id="btn-sample-input" class="btn btn-secondary">📋 廿日市市議会・全編網羅長編サンプル入力</button>
+        <button id="btn-open-settings" class="btn btn-outline">🔑 Gemini / Whisper APIキー設定</button>
       </div>
     </div>
   </header>
@@ -30,66 +30,66 @@
     <!-- Left Sidebar: Controls & Input Area -->
     <aside class="sidebar-panel">
       <div class="panel-card">
-        <h2 class="panel-title">📥 議事録・動画/音声データ取り込み</h2>
-        <p class="panel-desc">テキスト議事録、YouTube動画URL、または音声・動画ファイル（.mp3 / .mp4）からAIが自動文字起こし ＆ 全編コミック化を行います。</p>
+        <h2 class="panel-title">📥 議会データ取り込みパイプライン</h2>
+        <p class="panel-desc">テキスト議事録、YouTube動画URL、または音声・動画ファイル（.mp3/.mp4）から全質疑を抽出して全編コミック化します。</p>
         
         <!-- Input Method Tabs -->
-        <div class="input-mode-selector">
-          <button class="mode-btn active" data-mode="text">📝 テキスト</button>
-          <button class="mode-btn" data-mode="youtube">🎥 YouTube URL</button>
-          <button class="mode-btn" data-mode="file">🎵 音声/動画</button>
+        <div class="input-method-tabs">
+          <button class="input-tab-btn active" data-input-mode="text">📄 テキスト議事録</button>
+          <button class="input-tab-btn" data-input-mode="video">🎥 YouTube / 音声ファイル</button>
         </div>
 
         <div class="form-group">
           <label for="input-municipality">自治体名 / 議会名</label>
-          <input type="text" id="input-municipality" value="広島県廿日市市議会（定例会）" placeholder="例: 広島県廿日市市議会">
+          <input type="text" id="input-municipality" value="広島県廿日市市議会（令和8年9月定例会）" placeholder="例: 広島県廿日市市議会">
         </div>
 
         <div class="form-group">
-          <label for="input-topic">主要論点テーマ</label>
-          <input type="text" id="input-topic" value="宮島訪問税・交通インフラ・防災DX全編" placeholder="例: 宮島訪問税および交通インフラ整備">
+          <label for="input-topic">全体テーマ / 議案名</label>
+          <input type="text" id="input-topic" value="令和8年度 観光インフラ・高齢者交通・防災施策の全編審議" placeholder="例: 観光インフラおよび交通政策審議">
         </div>
 
-        <!-- Mode A: Text Input -->
-        <div id="mode-text-box" class="input-mode-content active">
+        <!-- Mode A: Text Input Area -->
+        <div id="mode-text-area" class="input-mode-content active">
           <div class="form-group">
-            <label for="input-transcript">議事録テキスト（全文・複数質疑対応）</label>
-            <textarea id="input-transcript" rows="8" placeholder="議事録のやり取りを貼り付けてください..."></textarea>
+            <label for="input-transcript">議事録テキスト（全編のやり取り）</label>
+            <textarea id="input-transcript" rows="8" placeholder="議事録のやり取りをそのまま貼り付けてください..."></textarea>
           </div>
         </div>
 
-        <!-- Mode B: YouTube URL Input -->
-        <div id="mode-youtube-box" class="input-mode-content" style="display: none;">
+        <!-- Mode B: Video & Audio Input Area -->
+        <div id="mode-video-area" class="input-mode-content">
           <div class="form-group">
-            <label for="input-youtube-url">YouTube 議会中継/録画URL</label>
+            <label for="input-youtube-url">🎥 YouTube 議会配信/録画URL</label>
             <input type="text" id="input-youtube-url" placeholder="https://www.youtube.com/watch?v=...">
-            <span class="input-help">※AIが音声トラックを抽出して自動文字起こし・構造化します</span>
           </div>
-        </div>
 
-        <!-- Mode C: Media File Upload Input -->
-        <div id="mode-file-box" class="input-mode-content" style="display: none;">
           <div class="form-group">
-            <label>音声・録画ファイル (.mp3, .m4a, .mp4)</label>
-            <div class="file-drop-area" id="file-drop-area">
+            <label>🎵 音声・動画ファイル直接ドロップ (.mp3 / .mp4 / .m4a)</label>
+            <div class="drop-zone" id="drop-zone">
               <span class="drop-icon">📁</span>
-              <span class="drop-text">ファイルをドラッグ＆ドロップ<br>またはクリックして選択</span>
+              <p class="drop-text">ファイルをドラッグ＆ドロップ<br>またはクリックして選択</p>
               <input type="file" id="input-media-file" accept="audio/*,video/*" style="display: none;">
             </div>
-            <span id="selected-file-name" class="input-help" style="color: #059669; font-weight: 700;"></span>
+            <div id="file-info" class="file-info-label" style="display: none;"></div>
+          </div>
+
+          <div class="pipeline-explain-card">
+            💡 <strong>自動文字起こしパイプライン:</strong><br>
+            YouTube URLまたは音声ファイルをアップロードすると、Whisper API / Gemini 1.5 Proが全編を自動文字起こしし、論点ごとの漫画脚本へ変換します。
           </div>
         </div>
 
-        <!-- Coverage Mode Option -->
-        <div class="form-group coverage-option">
+        <!-- Options: Full Coverage Toggle -->
+        <div class="form-group-checkbox">
           <label class="checkbox-label">
             <input type="checkbox" id="check-full-coverage" checked>
-            <span>📜 議会の全質疑・全論点を最後まで網羅する（長編連載コミック）</span>
+            <span>議会の全論点を最後まで網羅する（全編連続スクロールWebコミック）</span>
           </label>
         </div>
 
         <button id="btn-generate-manga" class="btn btn-primary btn-block">
-          ⚡️ 議会全編Webコミック ＆ 議員分析を自動生成する
+          ⚡️ 議会全編コミック ＆ 議員分析を自動生成する
         </button>
       </div>
 
@@ -117,21 +117,24 @@
         <button class="tab-btn" data-tab="raw">📄 構造化共通JSONデータ</button>
       </div>
 
-      <!-- TAB 1: 全編コミックビューアー -->
+      <!-- TAB 1: 全編Webコミックビューアー -->
       <div id="tab-manga" class="tab-page active">
         
         <div class="manga-header-banner">
           <div>
             <span class="badge badge-primary" id="badge-municipality">広島県廿日市市議会</span>
-            <h2 class="manga-main-title" id="manga-title">【全編コミックで分かる議会】宮島訪問税 ＆ インフラ整備の論戦</h2>
-            <p class="manga-sub-desc">議会全編のやり取りを最後まで網羅した連載コミック形式です</p>
+            <h2 class="manga-main-title" id="manga-title">【全編網羅コミック】定例会全審議グラフィックレポート</h2>
+            <p class="manga-sub-desc">議会全編の質疑応答・各論点を最後まで網羅した連続Webコミックです</p>
           </div>
-          <button id="btn-download-manga" class="btn btn-secondary btn-sm">🖼 全編コミック画像を保存</button>
+          <div style="display: flex; gap: 8px;">
+            <span id="panel-count-badge" class="badge badge-accent">全8コマ網羅</span>
+            <button id="btn-download-manga" class="btn btn-secondary btn-sm">🖼 高解像度コミック画像を保存</button>
+          </div>
         </div>
 
         <!-- Canvas Rendering Container -->
         <div class="comic-container">
-          <canvas id="manga-canvas" width="760" height="1280"></canvas>
+          <canvas id="manga-canvas" width="760" height="2480"></canvas>
         </div>
 
       </div>
@@ -141,85 +144,11 @@
         
         <div class="metrics-header-banner">
           <h2 class="section-title">⚖️ フェアネス担保・議員分析ダッシュボード</h2>
-          <p class="section-desc">単なる発言文字数に依存せず、発言密度（重要キーワード比率）・登壇率・具体策提示率を客観評価しています。</p>
+          <p class="section-desc">単なる発言文字数に依存せず、全審議における発言密度（重要キーワード比率）・登壇率・具体策提示率を客観評価しています。</p>
         </div>
 
         <div class="metrics-grid">
-          
-          <!-- Speaker 1 Metrics Card -->
-          <div class="speaker-card">
-            <div class="speaker-header">
-              <div class="avatar-circle speaker">問</div>
-              <div>
-                <h3 class="speaker-name">秋月 仁 議員</h3>
-                <span class="speaker-role">会派: 市民DX推進会 / 一般質問者</span>
-              </div>
-              <div class="score-badge">総合スコア: 88 pts</div>
-            </div>
-
-            <div class="metric-bars">
-              <div class="metric-row">
-                <span class="metric-label">課題キーワード発言密度</span>
-                <div class="bar-container"><div class="bar-fill" style="width: 92%;"></div></div>
-                <span class="metric-val">92%</span>
-              </div>
-
-              <div class="metric-row">
-                <span class="metric-label">具体策・対案提示率</span>
-                <div class="bar-container"><div class="bar-fill" style="width: 85%;"></div></div>
-                <span class="metric-val">85%</span>
-              </div>
-
-              <div class="metric-row">
-                <span class="metric-label">定例会一般質問 登壇率</span>
-                <div class="bar-container"><div class="bar-fill" style="width: 100%;"></div></div>
-                <span class="metric-val">100%</span>
-              </div>
-            </div>
-
-            <div class="metric-summary">
-              <strong>💡 AI分析インサイト:</strong><br>
-              持ち時間の中で「宮島訪問税」「DXオンデマンド交通」などの具体的地域課題を高密度に発言。単なる行政批判にとどまらず、他自治体事例を交えた対案提示を行っています。
-            </div>
-          </div>
-
-          <!-- Speaker 2 Metrics Card -->
-          <div class="speaker-card">
-            <div class="speaker-header">
-              <div class="avatar-circle admin">答</div>
-              <div>
-                <h3 class="speaker-name">行政側（答弁担当課長）</h3>
-                <span class="speaker-role">廿日市市 企画振興部</span>
-              </div>
-              <div class="score-badge secondary">答弁明瞭度: 82 pts</div>
-            </div>
-
-            <div class="metric-bars">
-              <div class="metric-row">
-                <span class="metric-label">質問に対する回答直接率</span>
-                <div class="bar-container"><div class="bar-fill" style="width: 80%;"></div></div>
-                <span class="metric-val">80%</span>
-              </div>
-
-              <div class="metric-row">
-                <span class="metric-label">数値・スケジュール提示度</span>
-                <div class="bar-container"><div class="bar-fill" style="width: 78%;"></div></div>
-                <span class="metric-val">78%</span>
-              </div>
-
-              <div class="metric-row">
-                <span class="metric-label">前向き検討姿勢スコア</span>
-                <div class="bar-container"><div class="bar-fill" style="width: 88%;"></div></div>
-                <span class="metric-val">88%</span>
-              </div>
-            </div>
-
-            <div class="metric-summary">
-              <strong>💡 AI分析インサイト:</strong><br>
-              議員の指摘に対して「令和8年度中の実証実験開始」と具体的なタイムラインを示して前向きに答弁。根拠データの透明性が確保されています。
-            </div>
-          </div>
-
+          <!-- Speaker Cards Inserted via JS -->
         </div>
 
         <!-- Disclaimer Banner -->
@@ -247,11 +176,11 @@
   <div id="modal-api-key" class="modal-overlay" style="display: none;">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>🔑 Gemini APIキー設定</h3>
+        <h3>🔑 Gemini / Whisper APIキー設定</h3>
         <button id="btn-close-modal" class="btn-close">✕</button>
       </div>
       <div class="modal-body">
-        <p>Google Gemini APIキーを入力すると、生の議事録から全自動で4コマ脚本化 ＆ 議員パラメータ分析を行います。（未設定の場合は高度デモ解析が作動します）</p>
+        <p>Google Gemini APIキーを入力すると、議事録テキストおよび動画データから全自動で全編漫画脚本化 ＆ 議員パラメータ分析を行います。</p>
         <input type="password" id="input-api-key" placeholder="AIzaSy..." class="form-input">
       </div>
       <div class="modal-footer">
