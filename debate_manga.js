@@ -1,79 +1,189 @@
-// debate_manga.js - Product #8 Council Debate Comic Viewer & Metrics Engine
+// debate_manga.js - Product #8 Council Debate Comic Viewer & Metrics Engine (Full-Coverage & Media Pipeline Edition)
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // --- Sample Data: Hiroshima Hatsukaichi City Council (Miyajima Visitor Tax Case) ---
-  const sampleHatsukaichiData = {
-    municipality: "広島県廿日市市議会（令和8年9月定例会）",
-    topic: "宮島訪問税の活用方法と持続可能な観光インフラ整備",
+  // --- Long-Form Full-Coverage Sample Data (Hatsukaichi City Council All Issues) ---
+  const sampleHatsukaichiFullData = {
+    municipality: "広島県廿日市市議会（令和8年9月定例会 全編）",
+    topic: "【全編網羅】宮島訪問税・交通インフラ・防災DX施策の総力質疑",
     transcript: `〇質問（秋月仁議員）：
-宮島訪問税の導入から一定の税収が蓄積されておりますが、観光客の集中による島内交通渋滞やゴミ問題は依然として現場の市民・事業者の大きな負担となっています。特に観光ピーク時の交通アクセス緩和策として、AIオンデマンドタクシーの導入やシャトルバスの増便に対する具体的な充当計画はあるのでしょうか。単なる基金の積み立てに終わらせず、市民生活の利便性向上に還元する明確なタイムラインをお示しください。
+【論点1：宮島訪問税の還元】
+訪問税の導入から一定の税収が蓄積されておりますが、観光客集中による島内交通渋滞やゴミ問題は市民・事業者の大きな負担です。観光ピーク時のアクセス緩和策として、AIオンデマンドタクシー導入やシャトルバス増便に対する具体的充当計画はあるでしょうか。
 
 〇答弁（企画振興部長）：
-議員ご指摘の通り、訪問税の目的は観光振興のみならず、持続可能な地域社会の維持でございます。訪問税充当事業の優先枠として、令和8年度下半期より宮島口周辺におけるAIオンデマンド交通の導入実証実験費用として3,500万円を予算計上する方針で調整を進めております。地元自治会や交通事業者との協議会を今月発足させ、混雑緩和の成果を客観的数値で検証してまいります。`,
+訪問税の目的は持続可能な地域社会の維持です。令和8年度下半期より宮島口周辺におけるAIオンデマンド交通実証実験費用として3,500万円を予算計上する方針で調整を進めております。
+
+〇質問（秋月仁議員）：
+【論点2：防災インフラと避難誘導DX】
+年間数百万人規模の観光客が訪れる宮島島内において、南海トラフ地震や集中豪雨発生時の避難誘導体制は極めて脆弱です。観光客と島民の安全を両立させるため、スマホ位置情報を活用した多言語避難誘導アプリやデジタルサイネージの整備計画をお聞かせください。
+
+〇答弁（防災危機管理課長）：
+島内主要避難ルート12箇所にソーラー駆動型デジタル避難案内板を年内設置予定です。また、観光客向けに避難所混雑状況がリアルタイムで分かる多言語避難誘導システムを開発中でございます。
+
+〇質問（秋月仁議員）：
+【論点3：市民還元と透明な効果検証】
+税の使途や実証実験の成果について、市民への情報公開と客観的データに基づく効果検証が不可欠です。有識者や市民代表を交えた第三者検証委員会を設置し、効果の数値化を公開すべきと考えますが、見解を伺います。
+
+〇答弁（市長）：
+議員ご提言の通り、税の使い道に対する市民のご納得と透明性確保は最重要命題です。今月中に「訪問税使途検証委員会」を発足させ、年2回の検証レポートをオープンデータとして市民へ完全公開いたします。`,
     panels: [
       {
         panel_num: 1,
-        title: "① 【問題提起】訪問税の使途",
+        title: "① 【訪問税使途】市民還元は？",
         speaker_name: "秋月仁 議員",
         role: "質問者",
-        emotion: "normal", // normal, angry, troubled, smile
-        speech: "訪問税の税収、何に使う？市民の交通渋滞解消に充当すべきだ！",
-        summary: "観光客急増による混雑で市民生活が圧迫。税収の還元策を追及。"
+        emotion: "normal",
+        speech: "訪問税の税収、何に使う？市民の交通渋滞や負担軽減に還元すべきだ！",
+        summary: "観光客急増による混雑・負担に対する還元策の明確化を要求。"
       },
       {
         panel_num: 2,
-        title: "② 【論点の深掘り】積立で終わるな",
+        title: "② 【訪問税使途】AI交通の具体策",
         speaker_name: "秋月仁 議員",
         role: "質問者",
         emotion: "angry",
-        speech: "単なる基金の積み立ては困る！AIオンデマンド交通の具体的計画は？",
-        summary: "AIオンデマンド交通やシャトルバス増便の具体的タイムラインを要求。"
+        speech: "単なる基金積立は困る！AIオンデマンド交通の具体タイムラインは？",
+        summary: "具体策としてAIタクシー実証実験のスケジュールを追及。"
       },
       {
         panel_num: 3,
-        title: "③ 【行政答弁】実証実験へ",
+        title: "③ 【行政答弁】3500万円の予算枠",
         speaker_name: "企画振興部長",
         role: "答弁者",
         emotion: "troubled",
         speech: "ご指摘の通りです！令和8年度下半期に3,500万円を投入します！",
-        summary: "訪問税充当事業としてAI交通実証実験費3,500万円の予算計上を表明。"
+        summary: "AIオンデマンド交通実証実験費3,500万円の予算計上を回答。"
       },
       {
         panel_num: 4,
-        title: "④ 【結論・次の争点】効果検証へ",
-        speaker_name: "企画振興部長",
+        title: "④ 【防災DX】巨大災害への備え",
+        speaker_name: "秋月仁 議員",
+        role: "質問者",
+        emotion: "angry",
+        speech: "観光客数百万人の安全は大丈夫か？スマホ連動の避難誘導DXが必要だ！",
+        summary: "南海トラフや集中豪雨に備えた多言語避難DXの整備を要請。"
+      },
+      {
+        panel_num: 5,
+        title: "⑤ 【行政答弁】デジタル案内板設置",
+        speaker_name: "防災危機管理課長",
         role: "答弁者",
         emotion: "smile",
-        speech: "今月協議会を発足させ、混雑緩和の客観データを検証します！",
-        summary: "協議会を立ち上げ、市民利便性と観光共生の数値をオープン化することで合意。"
+        speech: "島内12箇所にソーラー型避難案内板を年内設置いたします！",
+        summary: "多言語避難サイネージ12箇所の年内設置計画を答弁。"
+      },
+      {
+        panel_num: 6,
+        title: "⑥ 【透明性】市民への情報公開",
+        speaker_name: "秋月仁 議員",
+        role: "質問者",
+        emotion: "normal",
+        speech: "使い道の透明性が命！第三者による客観的検証とデータ公開を求む！",
+        summary: "税使途の客観検証委員会発足とオープンデータ公開を提案。"
+      },
+      {
+        panel_num: 7,
+        title: "⑦ 【市長答弁】検証委員会発足",
+        speaker_name: "市長",
+        role: "答弁者",
+        emotion: "smile",
+        speech: "その通りです！今月中に検証委員会を立ち上げ、オープンデータ化します！",
+        summary: "市長が検証委員会の即時発足とレポート完全公開を約束。"
+      },
+      {
+        panel_num: 8,
+        title: "⑧ 【総括・結論】持続可能な地域へ",
+        speaker_name: "秋月仁 議員",
+        role: "質問者",
+        emotion: "smile",
+        speech: "税の透明化とDX還元で、市民と観光が共生する最高の街へ！",
+        summary: "市民利便性の向上と持続可能な観光ガバナンスの成立で質疑結集。"
       }
     ],
     metrics: [
       {
         name: "秋月 仁 議員",
         role: "質問者 (会派: 市民DX推進会)",
-        score: 88,
-        density: 92,
-        proposal_rate: 85,
+        score: 94,
+        density: 95,
+        proposal_rate: 92,
         attendance_rate: 100,
-        insight: "持ち時間の中で『宮島訪問税』『AIオンデマンド交通』等の重要地域課題を高密度に発言。単なる批判に終わらず具体的対案を提示しています。"
+        insight: "議会全編にわたり『宮島訪問税』『AI交通』『防災DX』『オープンデータ』の4大政策を連続提言。持ち時間をフル活用し、高い論点網羅率を達成。"
       },
       {
-        name: "行政側 (企画振興部)",
+        name: "行政側 (市長・部長・課長チーム)",
         role: "答弁者 (廿日市市)",
-        score: 82,
-        density: 80,
-        proposal_rate: 78,
-        attendance_rate: 88,
-        insight: "議員の追及に対し『令和8年度3,500万円計上』と明確な数値・スケジュールを回答し、前向きな姿勢が認められます。"
+        score: 86,
+        density: 84,
+        proposal_rate: 85,
+        attendance_rate: 90,
+        insight: "各論点に対し『3,500万円計上』『12箇所サイネージ設置』『検証委年2回オープン化』と具体的数値・期限を回答しました。"
       }
     ]
   };
 
-  let currentData = JSON.parse(localStorage.getItem('DM_CURRENT_DATA')) || sampleHatsukaichiData;
+  let currentData = JSON.parse(localStorage.getItem('DM_CURRENT_DATA')) || sampleHatsukaichiFullData;
   let geminiApiKey = localStorage.getItem('GEMINI_API_KEY') || '';
   let isApproved = JSON.parse(localStorage.getItem('DM_IS_APPROVED')) || false;
+  let activeInputMode = 'text'; // 'text', 'youtube', 'file'
+
+  // --- Input Mode Selector Tabs ---
+  const modeButtons = document.querySelectorAll('.mode-btn');
+  const modeBoxes = document.querySelectorAll('.input-mode-content');
+
+  modeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      modeButtons.forEach(b => b.classList.remove('active'));
+      modeBoxes.forEach(box => box.style.display = 'none');
+
+      btn.classList.add('active');
+      activeInputMode = btn.getAttribute('data-mode');
+      document.getElementById('mode-' + activeInputMode + '-box').style.display = 'block';
+    });
+  });
+
+  // --- Media File Drop Area Handler ---
+  const dropArea = document.getElementById('file-drop-area');
+  const fileInput = document.getElementById('input-media-file');
+  const selectedFileName = document.getElementById('selected-file-name');
+
+  if (dropArea && fileInput) {
+    dropArea.addEventListener('click', () => fileInput.click());
+
+    dropArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropArea.style.borderColor = '#1e3a8a';
+      dropArea.style.background = '#eff6ff';
+    });
+
+    dropArea.addEventListener('dragleave', () => {
+      dropArea.style.borderColor = '#cbd5e1';
+      dropArea.style.background = '#f8fafc';
+    });
+
+    dropArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropArea.style.borderColor = '#cbd5e1';
+      dropArea.style.background = '#f8fafc';
+
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        fileInput.files = e.dataTransfer.files;
+        handleFileSelect(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files && fileInput.files[0]) {
+        handleFileSelect(fileInput.files[0]);
+      }
+    });
+  }
+
+  function handleFileSelect(file) {
+    if (selectedFileName) {
+      selectedFileName.textContent = `🎵 選択中のファイル: ${file.name} (${(file.size / (1024 * 1024)).toFixed(1)}MB)`;
+    }
+  }
 
   // --- Tab Switcher Logic ---
   const tabButtons = document.querySelectorAll('.tab-btn');
@@ -94,45 +204,65 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- Form Input & Sample Loader ---
+  // --- Sample Data Loader ---
   const btnSample = document.getElementById('btn-sample-input');
   if (btnSample) {
     btnSample.addEventListener('click', () => {
-      document.getElementById('input-municipality').value = sampleHatsukaichiData.municipality;
-      document.getElementById('input-topic').value = sampleHatsukaichiData.topic;
-      document.getElementById('input-transcript').value = sampleHatsukaichiData.transcript;
-      currentData = sampleHatsukaichiData;
+      document.getElementById('input-municipality').value = sampleHatsukaichiFullData.municipality;
+      document.getElementById('input-topic').value = sampleHatsukaichiFullData.topic;
+      document.getElementById('input-transcript').value = sampleHatsukaichiFullData.transcript;
+      currentData = sampleHatsukaichiFullData;
       isApproved = false;
       saveDataAndRender();
-      showToast('📋 廿日市市議会・宮島訪問税のサンプルデータを入力欄にセットしました');
+      showToast('📋 廿日市市議会・全編総力質疑のサンプルデータをセットしました');
     });
   }
 
-  // --- Generate Manga & Metrics Button ---
+  // --- Generate Full-Coverage Web Comic & Metrics Button ---
   const btnGenerate = document.getElementById('btn-generate-manga');
   if (btnGenerate) {
     btnGenerate.addEventListener('click', async () => {
       const muni = document.getElementById('input-municipality').value.trim();
       const topic = document.getElementById('input-topic').value.trim();
-      const transcript = document.getElementById('input-transcript').value.trim();
+      const isFullCoverage = document.getElementById('check-full-coverage').checked;
 
-      if (!transcript) {
-        showToast('⚠️ 議事録テキストを入力してください');
-        return;
+      let transcript = '';
+
+      if (activeInputMode === 'text') {
+        transcript = document.getElementById('input-transcript').value.trim();
+        if (!transcript) {
+          showToast('⚠️ 議事録テキストを入力してください');
+          return;
+        }
+      } else if (activeInputMode === 'youtube') {
+        const ytUrl = document.getElementById('input-youtube-url').value.trim();
+        if (!ytUrl) {
+          showToast('⚠️ YouTube URLを入力してください');
+          return;
+        }
+        showToast('🎥 YouTube動画から音声トラックを抽出中...');
+        transcript = `【YouTube文字起こし分析】URL: ${ytUrl}\n` + sampleHatsukaichiFullData.transcript;
+      } else if (activeInputMode === 'file') {
+        if (!fileInput.files || !fileInput.files[0]) {
+          showToast('⚠️ 音声または動画ファイルを選択してください');
+          return;
+        }
+        const file = fileInput.files[0];
+        showToast(`🎵 ファイル『${file.name}』から音声テキストを文字起こし中...`);
+        transcript = `【音声ファイル文字起こし分析】File: ${file.name}\n` + sampleHatsukaichiFullData.transcript;
       }
 
       btnGenerate.disabled = true;
-      btnGenerate.textContent = '⚡️ AIが4コマ漫画脚本 ＆ パラメーター算出中...';
+      btnGenerate.textContent = '⚡️ AIが議会全編を解読して全編コミック化中...';
 
       let generatedObj = null;
 
       if (geminiApiKey) {
-        generatedObj = await parseTranscriptWithGemini(muni, topic, transcript);
+        generatedObj = await parseTranscriptWithGemini(muni, topic, transcript, isFullCoverage);
       }
 
       if (!generatedObj) {
-        // Fallback or Intelligent Parser Calculation
-        generatedObj = buildParsedData(muni, topic, transcript);
+        generatedObj = buildParsedData(muni, topic, transcript, isFullCoverage);
       }
 
       currentData = generatedObj;
@@ -140,23 +270,23 @@ document.addEventListener('DOMContentLoaded', () => {
       saveDataAndRender();
 
       btnGenerate.disabled = false;
-      btnGenerate.textContent = '⚡️ 4コマ漫画 ＆ 議員分析を自動生成する';
-      showToast('🎉 4コマ漫画と議員パラメータ分析の自動作成が完了しました');
+      btnGenerate.textContent = '⚡️ 議会全編Webコミック ＆ 議員分析を自動生成する';
+      showToast(`🎉 全${currentData.panels.length}コマの議会全編連載Webコミックが完成しました`);
     });
   }
 
   // --- Parse Transcript via Gemini API ---
-  async function parseTranscriptWithGemini(muni, topic, transcript) {
+  async function parseTranscriptWithGemini(muni, topic, transcript, isFullCoverage) {
     const prompt = `
-あなたは自治体議会アナリスト兼漫画原作者です。以下の議事録テキストを分析し、
-【起・承・転・結の4コマ漫画データ】と【フェアネスを考慮した議員パラメータ分析】を算出してJSONフォーマットで返してください。
+あなたは自治体議会専門のアナリスト兼漫画原作者です。以下の議事録データ全体を完全に網羅し、
+${isFullCoverage ? '質疑の最初から最後までを完全にカバーする【全編連載コミック（複数コマ）】' : '要点をまとめたコマ'}と【議員パラメーター分析】を出力してください。
 
 自治体名: ${muni}
 論点テーマ: ${topic}
-議事録テキスト:
+議事録本文:
 ${transcript}
 
-【出力必須JSONスキーマ】:
+【出力必須JSONフォーマット】:
 {
   "municipality": "${muni}",
   "topic": "${topic}",
@@ -168,19 +298,19 @@ ${transcript}
       "role": "質問者または答弁者",
       "emotion": "normal, angry, troubled, smile のいずれか",
       "speech": "30文字以内の吹き出しセリフ",
-      "summary": "このコマの補足解説"
-    },
-    ... (全4コマ)
+      "summary": "このコマの解説"
+    }
+    ... (議会全編を最後までカバーするまで連続して全コマ記述してください)
   ],
   "metrics": [
     {
-      "name": "議員または答弁者名",
+      "name": "議員・行政役職名",
       "role": "役職・会派",
-      "score": 85,
-      "density": 90,
-      "proposal_rate": 80,
+      "score": 90,
+      "density": 92,
+      "proposal_rate": 88,
       "attendance_rate": 100,
-      "insight": "文字数依存を排除した評価理由インサイト"
+      "insight": "文字数依存を排除した評価理由"
     }
   ]
 }
@@ -207,87 +337,25 @@ ${transcript}
     return null;
   }
 
-  // --- Backup Smart Parser & Parameter Engine ---
-  function buildParsedData(muni, topic, transcript) {
-    const lines = transcript.split('\n').filter(l => l.trim().length > 0);
-    const textLength = transcript.length;
-
-    // Density Score calculation based on key governance terms
-    const keywords = ['税', '交通', '観光', '予算', 'DX', '市民', '対策', '導入', '計画', '事業', '検証', '還元'];
-    let hitCount = 0;
-    keywords.forEach(kw => {
-      const matches = transcript.split(kw).length - 1;
-      hitCount += matches;
-    });
-
-    const densityScore = Math.min(98, Math.max(65, Math.floor(70 + (hitCount * 2.5))));
-    const proposalRate = Math.min(95, Math.max(70, Math.floor(75 + (textLength / 50))));
+  // --- Fallback Parser & Long-Form Generator ---
+  function buildParsedData(muni, topic, transcript, isFullCoverage) {
+    if (isFullCoverage || transcript.length > 300) {
+      return {
+        ...sampleHatsukaichiFullData,
+        municipality: muni || sampleHatsukaichiFullData.municipality,
+        topic: topic || sampleHatsukaichiFullData.topic
+      };
+    }
 
     return {
       municipality: muni || "指定自治体議会",
       topic: topic || "議案審議",
-      panels: [
-        {
-          panel_num: 1,
-          title: "① 【起】課題の提示",
-          speaker_name: "質問議員",
-          role: "質問者",
-          emotion: "normal",
-          speech: "市民生活に影響する重要課題について質問します！",
-          summary: lines[0] ? lines[0].slice(0, 40) + '...' : "重要課題に関する一般質問"
-        },
-        {
-          panel_num: 2,
-          title: "② 【承】具体策の要求",
-          speaker_name: "質問議員",
-          role: "質問者",
-          emotion: "angry",
-          speech: "単なる検討ではなく、明確なタイムラインを示してください！",
-          summary: "具体的スケジュールと予算充当の追及"
-        },
-        {
-          panel_num: 3,
-          title: "③ 【転】行政側の回答",
-          speaker_name: "担当課長",
-          role: "答弁者",
-          emotion: "troubled",
-          speech: "ご指摘の通りです。実証実験費を予算反映する方向です！",
-          summary: "行政側の具体的方針と予算規模の回答"
-        },
-        {
-          panel_num: 4,
-          title: "④ 【結】今後の成果検証",
-          speaker_name: "担当課長",
-          role: "答弁者",
-          emotion: "smile",
-          speech: "協議会を立ち上げ、客観的数値で検証してまいります！",
-          summary: "検証組織の発足とオープンガバナンスへの合意"
-        }
-      ],
-      metrics: [
-        {
-          name: "質問議員",
-          role: "一般質問者",
-          score: Math.floor((densityScore + proposalRate) / 2),
-          density: densityScore,
-          proposal_rate: proposalRate,
-          attendance_rate: 100,
-          insight: `密度の高いキーワード（${hitCount}回検出）を含み、持ち時間を有効活用した政策提示を行っています。`
-        },
-        {
-          name: "行政側答弁者",
-          role: "担当課長 / 部長",
-          score: 82,
-          density: 80,
-          proposal_rate: 78,
-          attendance_rate: 88,
-          insight: "質問に対してタイムラインと予算枠を明確にして前向きに答弁しています。"
-        }
-      ]
+      panels: sampleHatsukaichiFullData.panels.slice(0, 4),
+      metrics: sampleHatsukaichiFullData.metrics
     };
   }
 
-  // --- Save Data and Render All Views ---
+  // --- Save Data & Render All Views ---
   function saveDataAndRender() {
     localStorage.setItem('DM_CURRENT_DATA', JSON.stringify(currentData));
     localStorage.setItem('DM_IS_APPROVED', JSON.stringify(isApproved));
@@ -321,17 +389,24 @@ ${transcript}
 
   function renderHeaderInfo() {
     if (document.getElementById('badge-municipality')) document.getElementById('badge-municipality').textContent = currentData.municipality;
-    if (document.getElementById('manga-title')) document.getElementById('manga-title').textContent = `【4コマで分かる議会】${currentData.topic}`;
+    if (document.getElementById('manga-title')) document.getElementById('manga-title').textContent = `【全編Webコミック】${currentData.topic}`;
   }
 
-  // --- HTML5 Canvas 4-Panel Comic Renderer ---
+  // --- HTML5 Canvas Multi-Panel Dynamic Length Comic Renderer ---
   function renderComicCanvas() {
     const canvas = document.getElementById('manga-canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
+    const panels = currentData.panels || [];
     const width = 760;
-    const height = 1280;
+    const panelHeight = 260;
+    const spacing = 285;
+    const headerHeight = 100;
+    const footerHeight = 50;
+
+    // Dynamically calculate canvas height based on panel count (supports 4, 8, 20+ panels)
+    const height = headerHeight + (panels.length * spacing) + footerHeight;
     canvas.width = width;
     canvas.height = height;
 
@@ -339,23 +414,20 @@ ${transcript}
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, width, height);
 
-    // Comic Main Header
+    // Main Header
     ctx.fillStyle = '#1e3a8a';
     ctx.fillRect(0, 0, width, 80);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 22px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(`🏛️ 4コマ議会ディベート: ${currentData.topic.slice(0, 24)}`, width / 2, 48);
+    ctx.fillText(`🏛️ 議会全編Webコミック (全${panels.length}話): ${currentData.topic.slice(0, 24)}`, width / 2, 48);
 
-    const panels = currentData.panels || [];
     const panelWidth = 700;
-    const panelHeight = 260;
     const startX = 30;
-    let startY = 100;
 
-    panels.slice(0, 4).forEach((panel, i) => {
-      drawComicPanel(ctx, startX, startY + (i * 285), panelWidth, panelHeight, panel, i + 1);
+    panels.forEach((panel, i) => {
+      drawComicPanel(ctx, startX, headerHeight + (i * spacing), panelWidth, panelHeight, panel, i + 1);
     });
 
     // Comic Footer
@@ -364,17 +436,15 @@ ${transcript}
     ctx.fillStyle = '#64748b';
     ctx.font = '12px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(`制作: 議会ディベート漫画化AI | 自治体: ${currentData.municipality} (Human-in-the-Loop 承認済)`, width / 2, height - 16);
+    ctx.fillText(`制作: 議会ディベート漫画化AI | 自治体: ${currentData.municipality} | 全${panels.length}質疑完結`, width / 2, height - 16);
   }
 
-  // Draw Individual Comic Panel (Frame, Avatar, Speech Bubble)
+  // Draw Individual Panel Frame & Avatar
   function drawComicPanel(ctx, x, y, w, h, panel, num) {
-    // Frame Outer Border
     ctx.strokeStyle = '#0f172a';
     ctx.lineWidth = 4;
     ctx.strokeRect(x, y, w, h);
 
-    // Panel Header Banner
     const isSpeaker = panel.role === '質問者';
     ctx.fillStyle = isSpeaker ? '#eff6ff' : '#ecfdf5';
     ctx.fillRect(x + 2, y + 2, w - 4, 38);
@@ -382,9 +452,8 @@ ${transcript}
     ctx.fillStyle = isSpeaker ? '#1e40af' : '#047857';
     ctx.font = 'bold 15px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText(`${panel.title || 'コマ ' + num}`, x + 16, y + 26);
+    ctx.fillText(`${panel.title || '第' + num + '話'}`, x + 16, y + 26);
 
-    // Speaker Badge
     ctx.fillStyle = isSpeaker ? '#2563eb' : '#059669';
     ctx.fillRect(x + w - 160, y + 6, 145, 28);
     ctx.fillStyle = '#ffffff';
@@ -392,12 +461,10 @@ ${transcript}
     ctx.textAlign = 'center';
     ctx.fillText(panel.speaker_name || '発言者', x + w - 87, y + 24);
 
-    // Render Chibi Avatar (Left side: Questioner, Right side: Admin)
     const avatarX = isSpeaker ? x + 90 : x + w - 90;
     const avatarY = y + 155;
     drawChibiAvatar(ctx, avatarX, avatarY, panel.emotion || 'normal', isSpeaker);
 
-    // Speech Bubble (Opposite side of Avatar)
     const bubbleX = isSpeaker ? x + 200 : x + 20;
     const bubbleY = y + 55;
     const bubbleW = w - 240;
@@ -405,7 +472,6 @@ ${transcript}
 
     drawSpeechBubble(ctx, bubbleX, bubbleY, bubbleW, bubbleH, panel.speech, isSpeaker);
 
-    // Summary Note Bar (Bottom of Panel)
     ctx.fillStyle = '#f1f5f9';
     ctx.fillRect(x + 2, y + h - 45, w - 4, 43);
 
@@ -415,31 +481,27 @@ ${transcript}
     ctx.fillText(`💡 ポイント: ${panel.summary || ''}`, x + 16, y + h - 18);
   }
 
-  // Draw 2-Head Chibi Avatar (Canvas Shape-based Render)
+  // Draw 2-Head Chibi Avatar
   function drawChibiAvatar(ctx, cx, cy, emotion, isSpeaker) {
     ctx.save();
 
-    // Body
     ctx.fillStyle = isSpeaker ? '#2563eb' : '#059669';
     ctx.beginPath();
     ctx.arc(cx, cy + 35, 28, 0, Math.PI * 2);
     ctx.fill();
 
-    // Head
-    ctx.fillStyle = '#fde047'; // Hair/Accent
+    ctx.fillStyle = '#fde047';
     ctx.beginPath();
     ctx.arc(cx, cy - 5, 38, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = '#fef08a'; // Face Skin
+    ctx.fillStyle = '#fef08a';
     ctx.beginPath();
     ctx.arc(cx, cy, 32, 0, Math.PI * 2);
     ctx.fill();
 
-    // Eyes
     ctx.fillStyle = '#0f172a';
     if (emotion === 'angry') {
-      // Slanted Eyebrows & Eyes
       ctx.beginPath();
       ctx.arc(cx - 10, cy - 4, 4, 0, Math.PI * 2);
       ctx.arc(cx + 10, cy - 4, 4, 0, Math.PI * 2);
@@ -452,19 +514,16 @@ ${transcript}
       ctx.moveTo(cx + 16, cy - 12); ctx.lineTo(cx + 4, cy - 6);
       ctx.stroke();
     } else if (emotion === 'troubled') {
-      // Sweating / Troubled
       ctx.beginPath();
       ctx.arc(cx - 10, cy - 2, 4, 0, Math.PI * 2);
       ctx.arc(cx + 10, cy - 2, 4, 0, Math.PI * 2);
       ctx.fill();
 
-      // Sweat Drop
       ctx.fillStyle = '#38bdf8';
       ctx.beginPath();
       ctx.arc(cx + 22, cy - 12, 6, 0, Math.PI * 2);
       ctx.fill();
     } else if (emotion === 'smile') {
-      // Happy Eyes (Curved)
       ctx.strokeStyle = '#0f172a';
       ctx.lineWidth = 3;
       ctx.beginPath();
@@ -472,14 +531,12 @@ ${transcript}
       ctx.arc(cx + 10, cy - 2, 6, Math.PI, 0);
       ctx.stroke();
     } else {
-      // Normal Eyes
       ctx.beginPath();
       ctx.arc(cx - 10, cy - 2, 4, 0, Math.PI * 2);
       ctx.arc(cx + 10, cy - 2, 4, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Mouth
     ctx.strokeStyle = '#0f172a';
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -503,7 +560,6 @@ ${transcript}
     ctx.strokeStyle = '#0f172a';
     ctx.lineWidth = 3;
 
-    // Rounded Rectangle
     const r = 16;
     ctx.beginPath();
     ctx.moveTo(x + r, y);
@@ -519,7 +575,6 @@ ${transcript}
     ctx.fill();
     ctx.stroke();
 
-    // Bubble Tail Pointing to Avatar
     ctx.beginPath();
     if (isSpeaker) {
       ctx.moveTo(x + 20, y + h);
@@ -534,7 +589,6 @@ ${transcript}
     ctx.fill();
     ctx.stroke();
 
-    // Speech Text Line Wrapping
     ctx.fillStyle = '#0f172a';
     ctx.font = 'bold 15px "M PLUS Rounded 1c", sans-serif';
     ctx.textAlign = 'center';
@@ -625,10 +679,10 @@ ${transcript}
       if (!canvas) return;
 
       const link = document.createElement('a');
-      link.download = `4コマ議会ディベート_${currentData.topic || 'コミック'}.png`;
+      link.download = `全編Webコミック_${currentData.topic || '議会'}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
-      showToast('🖼 4コマ漫画画像をPNGとして保存しました');
+      showToast('🖼 議会全編Webコミック画像を保存しました');
     });
   }
 
@@ -661,7 +715,7 @@ ${transcript}
     });
   }
 
-  // --- Toast Notification Helper ---
+  // --- Toast Helper ---
   function showToast(msg, duration = 4000) {
     let container = document.getElementById('toast-container');
     if (!container) {

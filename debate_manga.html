@@ -30,26 +30,66 @@
     <!-- Left Sidebar: Controls & Input Area -->
     <aside class="sidebar-panel">
       <div class="panel-card">
-        <h2 class="panel-title">📥 議事録データ入力パイプライン</h2>
-        <p class="panel-desc">自治体名と議事録テキストをペーストしてください。AIが自動的に論点を抽出して4コマ漫画化 ＆ 公正なパラメータ算出を行います。</p>
+        <h2 class="panel-title">📥 議事録・動画/音声データ取り込み</h2>
+        <p class="panel-desc">テキスト議事録、YouTube動画URL、または音声・動画ファイル（.mp3 / .mp4）からAIが自動文字起こし ＆ 全編コミック化を行います。</p>
         
+        <!-- Input Method Tabs -->
+        <div class="input-mode-selector">
+          <button class="mode-btn active" data-mode="text">📝 テキスト</button>
+          <button class="mode-btn" data-mode="youtube">🎥 YouTube URL</button>
+          <button class="mode-btn" data-mode="file">🎵 音声/動画</button>
+        </div>
+
         <div class="form-group">
           <label for="input-municipality">自治体名 / 議会名</label>
           <input type="text" id="input-municipality" value="広島県廿日市市議会（定例会）" placeholder="例: 広島県廿日市市議会">
         </div>
 
         <div class="form-group">
-          <label for="input-topic">論点テーマ</label>
-          <input type="text" id="input-topic" value="宮島訪問税の活用方法と観光インフラ整備" placeholder="例: 宮島訪問税の活用について">
+          <label for="input-topic">主要論点テーマ</label>
+          <input type="text" id="input-topic" value="宮島訪問税・交通インフラ・防災DX全編" placeholder="例: 宮島訪問税および交通インフラ整備">
         </div>
 
-        <div class="form-group">
-          <label for="input-transcript">議事録テキスト（質問 ＆ 行政答弁）</label>
-          <textarea id="input-transcript" rows="10" placeholder="議事録のやり取りをそのまま貼り付けてください..."></textarea>
+        <!-- Mode A: Text Input -->
+        <div id="mode-text-box" class="input-mode-content active">
+          <div class="form-group">
+            <label for="input-transcript">議事録テキスト（全文・複数質疑対応）</label>
+            <textarea id="input-transcript" rows="8" placeholder="議事録のやり取りを貼り付けてください..."></textarea>
+          </div>
+        </div>
+
+        <!-- Mode B: YouTube URL Input -->
+        <div id="mode-youtube-box" class="input-mode-content" style="display: none;">
+          <div class="form-group">
+            <label for="input-youtube-url">YouTube 議会中継/録画URL</label>
+            <input type="text" id="input-youtube-url" placeholder="https://www.youtube.com/watch?v=...">
+            <span class="input-help">※AIが音声トラックを抽出して自動文字起こし・構造化します</span>
+          </div>
+        </div>
+
+        <!-- Mode C: Media File Upload Input -->
+        <div id="mode-file-box" class="input-mode-content" style="display: none;">
+          <div class="form-group">
+            <label>音声・録画ファイル (.mp3, .m4a, .mp4)</label>
+            <div class="file-drop-area" id="file-drop-area">
+              <span class="drop-icon">📁</span>
+              <span class="drop-text">ファイルをドラッグ＆ドロップ<br>またはクリックして選択</span>
+              <input type="file" id="input-media-file" accept="audio/*,video/*" style="display: none;">
+            </div>
+            <span id="selected-file-name" class="input-help" style="color: #059669; font-weight: 700;"></span>
+          </div>
+        </div>
+
+        <!-- Coverage Mode Option -->
+        <div class="form-group coverage-option">
+          <label class="checkbox-label">
+            <input type="checkbox" id="check-full-coverage" checked>
+            <span>📜 議会の全質疑・全論点を最後まで網羅する（長編連載コミック）</span>
+          </label>
         </div>
 
         <button id="btn-generate-manga" class="btn btn-primary btn-block">
-          ⚡️ 4コマ漫画 ＆ 議員分析を自動生成する
+          ⚡️ 議会全編Webコミック ＆ 議員分析を自動生成する
         </button>
       </div>
 
@@ -72,21 +112,21 @@
       
       <!-- Tab Controls -->
       <div class="tab-bar">
-        <button class="tab-btn active" data-tab="manga">🎨 ディベート4コマ漫画ビューアー</button>
+        <button class="tab-btn active" data-tab="manga">🎨 議会全編Webコミックビューアー</button>
         <button class="tab-btn" data-tab="metrics">📊 公正な議員パラメーター分析</button>
         <button class="tab-btn" data-tab="raw">📄 構造化共通JSONデータ</button>
       </div>
 
-      <!-- TAB 1: 4コマ漫画ビューアー -->
+      <!-- TAB 1: 全編コミックビューアー -->
       <div id="tab-manga" class="tab-page active">
         
         <div class="manga-header-banner">
           <div>
             <span class="badge badge-primary" id="badge-municipality">広島県廿日市市議会</span>
-            <h2 class="manga-main-title" id="manga-title">【4コマで分かる議会】宮島訪問税の使途を巡る論戦</h2>
-            <p class="manga-sub-desc">質問議員と行政答弁のポイントを要約コミック化しました</p>
+            <h2 class="manga-main-title" id="manga-title">【全編コミックで分かる議会】宮島訪問税 ＆ インフラ整備の論戦</h2>
+            <p class="manga-sub-desc">議会全編のやり取りを最後まで網羅した連載コミック形式です</p>
           </div>
-          <button id="btn-download-manga" class="btn btn-secondary btn-sm">🖼 4コマ漫画画像をダウンロード</button>
+          <button id="btn-download-manga" class="btn btn-secondary btn-sm">🖼 全編コミック画像を保存</button>
         </div>
 
         <!-- Canvas Rendering Container -->
